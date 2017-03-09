@@ -7,8 +7,7 @@ angular.module('matterMain')
               {
                   'Get': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/config/Get',
-                      isArray: true
+                      url: '/api/v1/config/Get'
                   }),                 
                   'getconfigsforspo': auth.attachCSRF({
                       method: 'POST',

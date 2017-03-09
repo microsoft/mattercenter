@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     'use strict';
     var app = angular.module("matterMain");
     app.controller('MatterUsersController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', '$location','adalAuthenticationService',
@@ -334,271 +334,286 @@
 
         //Method to remove the user from the matter
         cm.removeAssignPermissionsRow = function (index) {
+            if (!cm.disableControls) {
+                cm.disableControls = true;
+                if (index <= cm.stampedMatterUsers.length - 1) {
+                   
+                if (validateAttornyUserRolesAndPermission1(cm.assignPermissionTeams[index], 'txtUser', 'delete')) {
+                    var attornyCheck = true; //validateAttornyUserRolesAndPermissinsAfterRemoval(index);
+                    if (attornyCheck) {
+                        var remainingRows = cm.assignPermissionTeams.length;
+                        if (1 < remainingRows) {
+                            var usersToRemoveFromMatter = [];
+                            var deletedUser = cm.assignPermissionTeams[index];
+                            if (deletedUser.userAssignedToMatterStatus) {
+                                deletedUser.deleteUserForMatterList = {};
+                                deletedUser.deleteUserForMatterOneNote = {};
+                                deletedUser.deleteUserForMatterTask = {};
+                                deletedUser.deleteUserForMatterCalendar = {};
+                                deletedUser.deleteUserForMatterSpecifiedList = {};
+                                deletedUser.deleteUserForUpdateMatterStamped = {};
+                                deletedUser.deleteSuccessCallList = 0;
+                                deletedUser.status = "refresh";
+                                deletedUser.index = index;
+                                deletedUser.disable = true;
+                                var arrUsersToRemoveFromMatter = [];
+                                var userNames = getUserName(deletedUser.assignedUser.trim() + ";", false);
+                                userNames = cleanArray(userNames);
+                                arrUsersToRemoveFromMatter.push(userNames);
 
-            if (!cm.disableControls && validateAttornyUserRolesAndPermission1(cm.assignPermissionTeams[index], 'txtUser', 'delete')) {
 
-                var attornyCheck = validateAttornyUserRolesAndPermissinsAfterRemoval(index);
-                if (attornyCheck) {
-                    cm.disableControls = true;
-                    var remainingRows = cm.assignPermissionTeams.length;
-                    if (1 < remainingRows) {
-                        var usersToRemoveFromMatter = [];
-                        var deletedUser = cm.assignPermissionTeams[index];
-                        if (deletedUser.userAssignedToMatterStatus) {
-                            deletedUser.deleteUserForMatterList = {};
-                            deletedUser.deleteUserForMatterOneNote = {};
-                            deletedUser.deleteUserForMatterTask = {};
-                            deletedUser.deleteUserForMatterCalendar = {};
-                            deletedUser.deleteUserForMatterSpecifiedList = {};
-                            deletedUser.deleteUserForUpdateMatterStamped = {};
-                            deletedUser.deleteSuccessCallList = 0;
-                            deletedUser.status = "refresh";
-                            deletedUser.index = index;
-                            deletedUser.disable = true;
-                            var arrUsersToRemoveFromMatter = [];
-                            var userNames = getUserName(deletedUser.assignedUser.trim() + ";", false);
-                            userNames = cleanArray(userNames);
-                            arrUsersToRemoveFromMatter.push(userNames);
-
-
-                            deletedUser.deleteUserForMatterList = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
+                                deletedUser.deleteUserForMatterList = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
                                     },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "MatterLibrary"
-
-                            }
-                            deletedUser.deleteUserForMatterOneNote = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
                                     },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "_OneNote"
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "MatterLibrary"
 
-                            }
-                            deletedUser.deleteUserForMatterTask = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
-                                    },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "_Task"
-
-                            }
-                            deletedUser.deleteUserForMatterCalendar = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
-                                    },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "_Calendar"
-
-                            }
-                            deletedUser.deleteUserForMatterSpecifiedList = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
-                                    },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "MatterPage"
-
-                            }
-                            deletedUser.deleteUserForUpdateMatterStamped = {
-                                Client: {
-                                    Url: cm.clientUrl,
-                                    Id: "",
-                                    Name: ""
-                                },
-                                Matter: {
-                                    Name: cm.matterName,
-                                    BlockUserNames: [],
-                                    AssignUserNames: [],
-                                    AssignUserEmails: [],
-                                    Permissions: [],
-                                    Roles: [],
-                                    Conflict: {
-                                        Identified: cm.sConflictScenario
-                                    },
-                                    FolderNames: [],
-                                    DefaultContentType: "",
-                                    ContentTypes: [],
-                                    Description: "",
-                                    Id: "",
-                                    MatterGuid: cm.matterProperties.matterObject.matterGuid
-                                },
-                                MatterDetails: {
-                                    PracticeGroup: "",
-                                    AreaOfLaw: "",
-                                    SubareaOfLaw: "",
-                                    ResponsibleAttorney: "",
-                                    ResponsibleAttorneyEmail: "",
-                                    UploadBlockedUsers: [],
-                                    TeamMembers: "",
-                                    RoleInformation: ""
-                                },
-                                EditMode: cm.isEdit,
-                                UserIds: [],
-                                SerializeMatter: "",
-                                Status: "",
-                                UsersNamesToRemove: arrUsersToRemoveFromMatter,
-                                IsFullControlPresent: cm.isFullControlePresent,
-                                MatterAssociatedInfo: "StampedProperties"
-
-                            }
-
-                            for (var i = 0; i < cm.matterList.length; i++) {
-                                var listName = cm.matterList[i].toLowerCase();
-                                switch (listName.toLowerCase()) {
-                                    case "matterlibrary":
-                                        deleteUserFromMatter(deletedUser.deleteUserForMatterList, function (response) {
-                                            if (!response.isError) {
-                                                deletedUser.deleteSuccessCallList++
-                                                if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
-                                                    DeleteUserFromMatterStampedProperties(deletedUser);
-                                                }
-                                            }
-                                        });
-                                        break;
-                                    case "_onenote":
-                                        deleteUserFromMatter(deletedUser.deleteUserForMatterOneNote, function (response) {
-                                            if (!response.isError) {
-                                                deletedUser.deleteSuccessCallList++
-                                                if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
-                                                    DeleteUserFromMatterStampedProperties(deletedUser);
-                                                }
-                                            }
-
-                                        });
-                                        break;
-                                    case "_task":
-                                        deleteUserFromMatter(deletedUser.deleteUserForMatterTask, function (response) {
-                                            if (!response.isError) {
-                                                deletedUser.deleteSuccessCallList++
-                                                if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
-                                                    DeleteUserFromMatterStampedProperties(deletedUser);
-                                                }
-                                            }
-
-                                        });
-                                        break;
-                                    case "_calendar":
-                                        deleteUserFromMatter(deletedUser.deleteUserForMatterCalendar, function (response) {
-                                            if (!response.isError) {
-                                                deletedUser.deleteSuccessCallList++
-                                                if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
-                                                    DeleteUserFromMatterStampedProperties(deletedUser);
-                                                }
-                                            }
-
-                                        });
-                                        break;
-                                    case "matterpage":
-                                        deleteUserFromMatter(deletedUser.deleteUserForMatterSpecifiedList, function (response) {
-                                            if (!response.isError) {
-                                                deletedUser.deleteSuccessCallList++
-                                                if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
-                                                    DeleteUserFromMatterStampedProperties(deletedUser);
-                                                }
-                                            }
-
-                                        });
-                                        break;
                                 }
+                                deletedUser.deleteUserForMatterOneNote = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
+                                    },
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                                    },
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "_OneNote"
+
+                                }
+                                deletedUser.deleteUserForMatterTask = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
+                                    },
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                                    },
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "_Task"
+
+                                }
+                                deletedUser.deleteUserForMatterCalendar = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
+                                    },
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                                    },
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "_Calendar"
+
+                                }
+                                deletedUser.deleteUserForMatterSpecifiedList = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
+                                    },
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                                    },
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "MatterPage"
+
+                                }
+                                deletedUser.deleteUserForUpdateMatterStamped = {
+                                    Client: {
+                                        Url: cm.clientUrl,
+                                        Id: "",
+                                        Name: ""
+                                    },
+                                    Matter: {
+                                        Name: cm.matterName,
+                                        BlockUserNames: [],
+                                        AssignUserNames: [],
+                                        AssignUserEmails: [],
+                                        Permissions: [],
+                                        Roles: [],
+                                        Conflict: {
+                                            Identified: cm.sConflictScenario
+                                        },
+                                        FolderNames: [],
+                                        DefaultContentType: "",
+                                        ContentTypes: [],
+                                        Description: "",
+                                        Id: "",
+                                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                                    },
+                                    MatterDetails: {
+                                        PracticeGroup: "",
+                                        AreaOfLaw: "",
+                                        SubareaOfLaw: "",
+                                        ResponsibleAttorney: "",
+                                        ResponsibleAttorneyEmail: "",
+                                        UploadBlockedUsers: [],
+                                        TeamMembers: "",
+                                        RoleInformation: ""
+                                    },
+                                    EditMode: cm.isEdit,
+                                    UserIds: [],
+                                    SerializeMatter: "",
+                                    Status: "",
+                                    UsersNamesToRemove: arrUsersToRemoveFromMatter,
+                                    IsFullControlPresent: cm.isFullControlePresent,
+                                    MatterAssociatedInfo: "StampedProperties"
+
+                                }
+
+                                for (var i = 0; i < cm.matterList.length; i++) {
+                                    var listName = cm.matterList[i].toLowerCase();
+                                    switch (listName.toLowerCase()) {
+                                        case "matterlibrary":
+                                            deleteUserFromMatter(deletedUser.deleteUserForMatterList, function (response) {
+                                                if (!response.isError) {
+                                                    deletedUser.deleteSuccessCallList++
+                                                    if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
+                                                        DeleteUserFromMatterStampedProperties(deletedUser);
+                                                    }
+                                                }
+                                            });
+                                            break;
+                                        case "_onenote":
+                                            deleteUserFromMatter(deletedUser.deleteUserForMatterOneNote, function (response) {
+                                                if (!response.isError) {
+                                                    deletedUser.deleteSuccessCallList++
+                                                    if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
+                                                        DeleteUserFromMatterStampedProperties(deletedUser);
+                                                    }
+                                                }
+
+                                            });
+                                            break;
+                                        case "_task":
+                                            deleteUserFromMatter(deletedUser.deleteUserForMatterTask, function (response) {
+                                                if (!response.isError) {
+                                                    deletedUser.deleteSuccessCallList++
+                                                    if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
+                                                        DeleteUserFromMatterStampedProperties(deletedUser);
+                                                    }
+                                                }
+
+                                            });
+                                            break;
+                                        case "_calendar":
+                                            deleteUserFromMatter(deletedUser.deleteUserForMatterCalendar, function (response) {
+                                                if (!response.isError) {
+                                                    deletedUser.deleteSuccessCallList++
+                                                    if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
+                                                        DeleteUserFromMatterStampedProperties(deletedUser);
+                                                    }
+                                                }
+
+                                            });
+                                            break;
+                                        case "matterpage":
+                                            deleteUserFromMatter(deletedUser.deleteUserForMatterSpecifiedList, function (response) {
+                                                if (!response.isError) {
+                                                    deletedUser.deleteSuccessCallList++
+                                                    if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
+                                                        DeleteUserFromMatterStampedProperties(deletedUser);
+                                                    }
+                                                }
+
+                                            });
+                                            break;
+                                    }
+                                }
+
+
+                            }
+                            else {
+                                cm.assignPermissionTeams.splice(index, 1);
+                                cm.stampedMatterUsers.splice(index, 1);
                             }
 
-
                         }
-                        else {
-                            cm.assignPermissionTeams.splice(index, 1);
-                            cm.stampedMatterUsers.splice(index, 1);
-                        }
-
+                        cm.notificationPopUpBlock = false;
+                        cm.notificationBorder = "";
                     }
-                    cm.notificationPopUpBlock = false;
-                    cm.notificationBorder = "";
+                    else {
+                        cm.disableControls = false;
+                    }
+                }
+                else {
+                    cm.disableControls = false;
+                }
+
+                }
+                else
+                {
+                    cm.assignPermissionTeams.splice(index, 1);
+                    cm.disableControls = false;
                 }
             }
         };
@@ -986,20 +1001,26 @@
             var isValid = false;
             if (!cm.globalSettings.isBackwardCompatible) {                
                 for (var iCount = 0; iCount < cm.stampedMatterUsers.length; iCount++) {
-                    if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == "responsible attorney" && 
-                        cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control")
+                    if (iCount != team.assigneTeamRowNumber - 1)
                     {
-                        if (mode == 'delete')
-                        {
-                            if (iCount != team.assigneTeamRowNumber - 1 && cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control"
-                                && cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase() == "responsible attorney") {
-                                isValid = true;
-                            }
-                        }
-                        else if(cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control"
-                        && cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase() == "responsible attorney" )
+                        var role = $filter('filter')(cm.assignRoles, { name: cm.stampedMatterUsers[iCount].userRole });
+                        var permission = $filter('filter')(cm.assignPermissions, { name: cm.stampedMatterUsers[iCount].userPermission });
+                        cm.assignPermissionTeams[iCount].assignedPermission = permission[0];
+                        cm.assignPermissionTeams[iCount].assignedRole = role[0];
+                        cm.assignPermissionTeams[iCount].status = "success";
+                        if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == "responsible attorney" &&
+                        cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control")
                         {
                             isValid = true;
+                        }
+                    }
+                    else if (iCount == team.assigneTeamRowNumber - 1)
+                    {
+                        if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase()
+                            && cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase())
+                        {
+                            cm.assignPermissionTeams[iCount].status = "success";
+                            team.status = "success";
                         }
                     }
                 }
@@ -1007,22 +1028,25 @@
             else
             {
                 for (var iCount = 0; iCount < cm.stampedMatterUsers.length; iCount++) {
-                    if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control") {
-                        if (mode == 'delete') {
-                            if (iCount != team.assigneTeamRowNumber - 1 && iCount != team.assigneTeamRowNumber - 1 && cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control")
-                            {
-                                isValid = true;
-                            }
-                        }
-                        else if (cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control")
-                        {
+                    if (iCount != team.assigneTeamRowNumber - 1) {
+                        var permission = $filter('filter')(cm.assignPermissions, { name: cm.stampedMatterUsers[iCount].userPermission });
+                        cm.assignPermissionTeams[iCount].assignedPermission = permission[0];
+                        cm.assignPermissionTeams[iCount].status = "success";
+                        if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control") {
                             isValid = true;
+                        }
+                    }
+                    else if (iCount == team.assigneTeamRowNumber - 1) {
+                        if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase()) {
+                            cm.assignPermissionTeams[iCount].status = "success";
+                            team.status = "success";
                         }
                     }
                 }
             }
             if (team.teamUsers.length == 0) {
-                isvalid = false;
+                isValid = false;
+                drpChangeString = 'txtUser';
             }
             if (!isValid) {
                 cm.errTextMsg = cm.createContent.MsgMatterRoleAndPermission;
@@ -1798,32 +1822,15 @@
         });
 
         cm.modifiedTeamDetails = function (assignTeam, drpChangeString) {
-                var result = $filter('filter')(cm.stampedMatterUsers, { userName: assignTeam.assignedUser });
-                var isChangeValidate = validateAttornyUserRolesAndPermission1(assignTeam, drpChangeString, 'update');
-                
-                if (isChangeValidate) {
-                    var status = cm.matterList ? "add" : "refresh";
-                    assignTeam.status = status;
-                    if (result.length > 0) {
-                        if (!cm.globalSettings.isBackwardCompatible) {
-                            if (result[0].userName == assignTeam.assignedUser && result[0].userRole == assignTeam.assignedRole.name && result[0].userPermission == assignTeam.assignedPermission.name) {
-                                assignTeam.status = "success"
-                                return false;
-                            }
-                        }else
-                        {
-                            if (result[0].userName == assignTeam.assignedUser && result[0].userPermission == assignTeam.assignedPermission.name) {
-                                assignTeam.status = "success"
-                                return false;
-                            }
-                        }
-                    }
-                    //assignTeam.disable = false;
+            var result = $filter('filter')(cm.stampedMatterUsers, { userName: assignTeam.assignedUser });
+            var isChangeValidate = false;
+            var status = cm.matterList ? "add" : "refresh";
+            assignTeam.status = status;
+            isChangeValidate = validateAttornyUserRolesAndPermission1(assignTeam, drpChangeString, 'update');
+
+            if (isChangeValidate) {
+                    
                     return true;
-                    //} else {
-                    //    assignTeam.status = status;
-                    //    assignTeam.disable = false;
-                    //}
                 }
                 else {
                         return false;
@@ -1834,10 +1841,7 @@
            // if (assignTeam.assignedUser && assignTeam.assignedUser != "") {
 
                 var attornyCheck = true; //  validateAttornyUserRolesAndPermissions($event, assignTeam);
-                if (assignTeam.assigneTeamRowNumber > cm.stampedMatterUsers.length)
-                {
                     attornyCheck = validateAttornyUserRolesAndPermission1(assignTeam, 'txtUser', 'save');
-                }
 
                 if (attornyCheck) {
                     cm.disableControls = true;
@@ -2196,6 +2200,9 @@
                         assignTeam.status = "add";
                     }
                 }
+                else {
+                    cm.disableControls = false;
+                    }
            // }
         }
 

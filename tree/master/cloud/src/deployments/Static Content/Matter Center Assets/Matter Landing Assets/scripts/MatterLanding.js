@@ -3,7 +3,7 @@
 
 
 var oMatterLandingHtmlConstants = {
-    "matterInfoHtml": "<div class='documentLoadingIcon hide'><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"errorPopUpHolder hide\"><div class=\"errorPopupBackground\"></div><div class=\"errorPopUpContainer errorPopUpCenter\"><img title=\"Close\" class=\"errorPopUpCloseIcon popUpFloatRight\" alt=\"Close\" src=\"@@PopupCloseIcon\"><div class=\"errorPopUpMessage\"><span id=\"genericMessage\">Something went wrong</span><div class=\"clear\"></div><div id=\"expandCollapse\"><span class=\"inlineElement\" id=\"expandMessage\">+</span><span id=\"collapseMessage\" class=\"inlineElement hide\">-</span><span>Click here for details</span></div><div class=\"clear\"></div><span id=\"errorMessage\" class=\"hide ellipsis\"></span></div></div></div><div title='@@MatterName' class=\"matterName\">@@MatterName</div><div class=\"matterLink\"><a class=\"matterLinkPart\" title='My Matters' href=\"@@FindMatterUrl\" target=\"_self\"> @@MyMatters </a> > <a class=\"matterLinkPart\" title='@@MatterName' href=\"@@MatterUrl\" target=\"_self\"> @@MatterName </a> </div><div class=\"matterAction\"><div class=\"matterView\"><div class=\"matterProfileTitle\">@@Label1Tab1HeaderText</div><div class=\"matterDescriptionTitle changeSection\">@@Label2Tab2HeaderText</div></div>@@PinChunk</div><div class=\"clear\"></div><div class=\"matterDescriptionBody hide\"><div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div></div><div class=\"matterProfileBody\"><div class=\"matterDetails\"><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div><div class=\"clear\"></div><div class=\"editmatterDescriptionBody\"><a href=\"#\" class=\"emailSupportLink\" onclick=\"saveEmail()\">Email Support</a> <span class=\"emailSupportText\"> to edit project name.</span></div></div>",
+    "matterInfoHtml": "<div class='documentLoadingIcon hide'><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"errorPopUpHolder hide\"><div class=\"errorPopupBackground\"></div><div class=\"errorPopUpContainer errorPopUpCenter\"><img title=\"Close\" class=\"errorPopUpCloseIcon popUpFloatRight\" alt=\"Close\" src=\"@@PopupCloseIcon\"><div class=\"errorPopUpMessage\"><span id=\"genericMessage\">Something went wrong</span><div class=\"clear\"></div><div id=\"expandCollapse\"><span class=\"inlineElement\" id=\"expandMessage\">+</span><span id=\"collapseMessage\" class=\"inlineElement hide\">-</span><span>Click here for details</span></div><div class=\"clear\"></div><span id=\"errorMessage\" class=\"hide ellipsis\"></span></div></div></div><div title='@@MatterName' class=\"matterName\">@@MatterName</div><div class=\"matterLink\"><a class=\"matterLinkPart\" title='My Matters' href=\"@@FindMatterUrl\" target=\"_self\"> @@MyMatters </a> > <a class=\"matterLinkPart\" title='@@MatterName' href=\"@@MatterUrl\" target=\"_self\"> @@MatterName </a> </div><div class=\"matterAction\"><div class=\"matterView\"><div class=\"matterProfileTitle\">@@Label1Tab1HeaderText</div><div class=\"matterDescriptionTitle changeSection\">@@Label2Tab2HeaderText</div><div class=\"matterExtraPropertyTitle changeSection @@ishide\">@@Label3Tab3HeaderText</div></div>@@PinChunk</div><div class=\"clear\"></div><div class=\"matterDescriptionBody hide\"><div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div></div><div class=\"matterExtraPropertyBody hide\"></div><div class=\"matterProfileBody\"><div class=\"matterDetails\"><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div><div class=\"clear\"></div><div class=\"editmatterDescriptionBody\"><a href=\"#\" class=\"emailSupportLink\" onclick=\"saveEmail()\">Email Support</a> <span class=\"emailSupportText\"> to edit project name.</span></div></div>",
     "taskSectionHtml": "<div class=\"taskHeading\"> <div class=\"headingText\" title='Task'> Task </div> <div class=\"taskOption\"> <a href=\"@@TaskLink\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.Task)\" title= \"View / Edit\" target =\"_self\">View / Edit </a></div> </div> <div class=\"taskBoard\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div>",
     "calendarSectionHtml": "<div class=\"calenderHeading\"> <div title='Calendar' class=\"headingText\"> Calendar Events </div><div class=\"calenderOption\"><a href=\"@@TaskLink\" title= \"View / Edit\" target =\"_self\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.Calendar)\" >View / Edit </a></div></div><div class=\"eventBoard\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div>",
     "rssSectionHtml": "<div class=\"taskHeading\"><div title='Related News (RSS)' class=\"headingText\"> Related News (RSS) </div></div><div class=\"clear\"></div>",
@@ -14,6 +14,7 @@ var oMatterLandingHtmlConstants = {
     "manageUsersHtml": "<div title='Manage users' class=\"manageUsers\"><a href=\"javascript:createModalDialog(true)\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.ManageTeam)\">Manage users</a></div>",
     "noTasksHtml": "<div class='emptyItems'>@@NoTasksMessage</div>",
     "pinHtml": "<div class=\"pinIcon\"><div title=\"Pin\" id=\"PinMatter\" class=\"hide\" onclick=\"pinUnpinMatter()\"><img id=\"pinImg\" alt=\"Pin\" class=\"hide\" src=\"@@PinIcon\"><img id=\"unPinImg\" alt=\"Unpin\" class=\"hide\" src=\"@@UnpinIcon\"></div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\"></div>",
+    "matterExtraPropertiesHtml": "<div class='matterPropertyDetailsColumn'><div class='matterDetailTitle'>@@PropertyName</div>  <div class='matterDetailText' title='@@PropertyValue'><div>@@PropertyValue</div></div></div>",
     "matterInformationItemHtml": "<div class='matterDetailsColumn  @@matterDetailClass'><div class='matterDetailTitle'>@@PropertyName</div>  <div class='matterDetailText' title='@@PropertyValue'><div>@@PropertyValue</div></div></div>",
     "matterInformationClientHtml": "<div class='matterDetailsColumn  @@matterDetailClass'><div class='matterDetailTitle'>@@PropertyName</div>  <div class='matterDetailText' title='@@PropertyValue'><div><a href=\"@@TeamUrl\">@@PropertyValue</a></div></div></div>",
     "oneNoteHtml": "<a href=\"@@OneNoteLink\" target=\"_self\" title=\"@@oneNoteTitle\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.OneNote)\"><img src=\"@@OneNoteIcon\" alt=\"@@oneNoteAlt\" />@@oneNoteText</a>",
@@ -462,6 +463,17 @@ function displayContent() {
 			
 			sMatterInformationText  = sMatterInformationText.replace("@@Label1Tab1HeaderText", uiconfigs.MatterLanding.Label1Tab1HeaderText); 
 			sMatterInformationText  = sMatterInformationText.replace("@@Label2Tab2HeaderText", uiconfigs.MatterLanding.Label2Tab2HeaderText);
+			if(matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '' )
+			{
+				sMatterInformationText  = sMatterInformationText.replace("@@ishide", "");
+				sMatterInformationText  = sMatterInformationText.replace("@@Label3Tab3HeaderText", uiconfigs.MatterLanding.Label3Tab3HeaderText);
+			}
+			else
+			{
+				sMatterInformationText  = sMatterInformationText.replace("@@ishide", "hide");
+				sMatterInformationText  = sMatterInformationText.replace("@@Label3Tab3HeaderText", "");
+			}
+
 			sMatterInformationText  = sMatterInformationText.replace("@@MyMatters", uiconfigs.MatterLanding.Label18MenuText);
 	        sMatterInformationText = sMatterInformationText.replace("title='My Matters'", "title='" + uiconfigs.MatterLanding.Label18MenuText + "'");
 			
@@ -469,11 +481,24 @@ function displayContent() {
 				    	    	    	    	    	    
 		    $("#matterInfo").html(sMatterInformationText);
 		    $("#matterInfo").parent().append(oMatterLandingHtmlConstants.hierarchyHtml.replace(/@@MatterName/g, oMatterLandingCommonObjects.hierarchyLibraryName));
+   		    //unctionality to display matter properties by spliting MatterExtraProperties values injected at time of matter landing page creation.
+		    if(matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '' )
+			{
+			   var values = matterExtraProperties.split('|');
+			   for(var i = 0; i < values.length; i++)
+			   {
+			   		var property = values[i].split(':');
+			   		var newString = '';
+			   		newString  = oMatterLandingHtmlConstants.matterExtraPropertiesHtml.replace("@@PropertyName", property[0].toString());
+			   		newString   = newString.replace(/@@PropertyValue/g, property[1].toString());
+					$(".matterExtraPropertyBody").append(newString);
+			   }
+		    }
 		
 		    /* Set the task panel html text */
 		    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
 		    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
-		    $.get(calendarUrl).done(function () {
+   		    $.get(taskUrl).done(function () {
 			  	sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
 			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
 			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
@@ -554,22 +579,36 @@ function displayContent() {
 		    $("#oneNotePane").html(oMatterLandingHtmlConstants.oneNoteLoadingHtml.replace("@@LoadingImage", 
 		    	oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage));
 		    	
-		    // Cache the pin element
+   		    // Cache the pin element
+   		    //ogic to display correct tab on selection of tab like Matter Properties, Matter Description etc.
 	    	oElement = $("#PinMatter");
-			$(".matterDescriptionTitle, .matterProfileTitle").click(function () {
+			$(".matterDescriptionTitle, .matterProfileTitle, .matterExtraPropertyTitle").click(function () {
 		        var className = $(this)[0].className;
 		        if (-1 !== className.indexOf("matterDescriptionTitle")) {
 		            $(".matterDescriptionTitle").removeClass("changeSection");
 		            $(".matterProfileTitle").addClass("changeSection");
+		            $(".matterExtraPropertyTitle").addClass("changeSection");
 		            $(".matterDescriptionBody").removeClass("hide");
 		            $(".matterProfileBody").addClass("hide");
+		            $(".matterExtraPropertyBody").addClass("hide");
 		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
 		      	}
-				else {
+				else if (-1 !== className.indexOf("matterProfileTitle")) {
 		            $(".matterDescriptionTitle").addClass("changeSection");
 		            $(".matterProfileTitle").removeClass("changeSection");
+		            $(".matterExtraPropertyTitle").addClass("changeSection");
 		            $(".matterDescriptionBody").addClass("hide");
 		            $(".matterProfileBody").removeClass("hide");
+		            $(".matterExtraPropertyBody").addClass("hide");
+		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
+	        	}
+	        	else if (-1 !== className.indexOf("matterExtraPropertyTitle")) {
+		            $(".matterDescriptionTitle").addClass("changeSection");
+		            $(".matterProfileTitle").addClass("changeSection");
+		            $(".matterExtraPropertyTitle").removeClass("changeSection");
+		            $(".matterDescriptionBody").addClass("hide");
+		            $(".matterProfileBody").addClass("hide");
+		            $(".matterExtraPropertyBody").removeClass("hide");
 		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
 	        	}
 	    	});

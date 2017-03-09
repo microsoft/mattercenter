@@ -106,7 +106,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
                 CreateConfig(configResultsVM, "uiconfig.js", false);
-                return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+                var genericResponse = new GenericResponseVM
+                {
+                    Code = HttpStatusCode.OK.ToString(),
+                    Value = "",
+                    IsError = false
+
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             catch (Exception exception)
             {

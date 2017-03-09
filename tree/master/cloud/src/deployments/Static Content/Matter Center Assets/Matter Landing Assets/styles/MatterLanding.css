@@ -304,7 +304,7 @@
     min-width: 720px;
 }
 
-.matterDescriptionTitle, .matterProfileTitle {
+.matterDescriptionTitle, .matterProfileTitle, .matterExtraPropertyTitle {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     border-bottom: none;
@@ -320,13 +320,17 @@
     margin-left: 120px;
     width: 135px;
 }
+.matterExtraPropertyTitle {
+    margin-left: 270px;
+    width: 135px;
+}
 
 .oneNoteIcon, .pinIcon {
     float: right;
     margin-left: 15px;
 }
 
-.matterDescriptionBody, .matterProfileBody {
+.matterDescriptionBody, .matterProfileBody, .matterExtraPropertyBody {
     height: 65px;
 }
 
@@ -467,6 +471,11 @@
     width: 148px;
 }
 
+.matterPropertyDetailsColumn {
+    float: left;
+    padding: 0 10px 0 0;
+    width: 190px;
+}
 .matterDetails {
     width: 750px;
 }
@@ -497,7 +506,7 @@
     padding-top: 5px;
 }
 
-#menu, .errorPopUpCloseIcon, .userIcon, .matterLink, .matterDescriptionTitle, .matterProfileTitle, .flyoutColumnData, .teamSection, .blockedUserSection, .selectedUserIcon, .unPinImg, .pinImg, .searchIcon, .closeIcon {
+#menu, .errorPopUpCloseIcon, .userIcon, .matterLink, .matterDescriptionTitle, .matterProfileTitle,.matterExtraPropertyTitle, .flyoutColumnData, .teamSection, .blockedUserSection, .selectedUserIcon, .unPinImg, .pinImg, .searchIcon, .closeIcon {
     cursor: pointer;
 }
 
@@ -749,3 +758,6 @@
     text-decoration: none;
 }
 
+button:focus{
+    outline:dotted 3px;
+}

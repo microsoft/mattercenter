@@ -1130,7 +1130,7 @@
 
 .buttonPrev {
     background-color: rgb(230,230,230); /* Green */
-    border: none;
+    border-color: rgb(230,230,230);
     color: rgb(77,77,77);
     width: 100px;
     height: 30px;
@@ -1140,7 +1140,6 @@
     font-size: 1em;
     font-family: 'Segoe UI';
     cursor: pointer;
-    outline: none !important;
 }
 
    
@@ -1575,6 +1574,46 @@ left: -19px;
     -o-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
 }
+.directiveFormFields{
+    width:180px;
+}
+.multiSelectHeight{
+    height:100px;
+}
+.directiveFormFieldsLableWidth{
+    width:180px;
+    overflow:hidden;
+}
+.loadGlyphIconSettings{
+       left: -35px;
+    top: 11px;
+}
+
+.directiveMatterExtraFields{
+    padding-right:190px;
+    float:right;
+}
+
+.directiveMatterExtraBoolField{
+    padding-left:60px;
+    padding-bottom:13px;
+    padding-top:8px;
+    float:left;
+}
+
+.directiveMatterExtraBoolLabel{
+    padding-top:6px;
+    float:left;
+}
+
+#SettingsPermissions .dropdown-menu li {
+        max-width: 295px;
+    min-width: 295px;
+}
+.settingsLabelTeam{
+    min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px
+}
+
 
 
 

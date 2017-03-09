@@ -78,6 +78,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM SaveConfigurations(ClientContext clientContext, MatterConfigurations matterConfigurations);
 
         bool OneNoteUrlExists(MatterInformationVM matterInformation);
-        GenericResponseVM DeleteUserFromMatter(MatterInformationVM matterInformation);
+       string GetMatterProvisionExtraProperties(string contentTypeName, Client client);
+	    GenericResponseVM DeleteUserFromMatter(MatterInformationVM matterInformation);
     }
 }

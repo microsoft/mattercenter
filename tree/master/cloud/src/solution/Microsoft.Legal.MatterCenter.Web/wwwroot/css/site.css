@@ -1401,6 +1401,10 @@ textarea {
     outline: none !important;
 }
 
+#matterCenterHeader div :focus {
+    outline: dotted !important;
+}
+
 .mainsort {
     position: absolute;
     top: 0px;
@@ -1580,3 +1584,9 @@ textarea {
     opacity: 0.45;
     cursor: default;
 }
+
+input[type=checkbox]:focus, input[type=radio]:focus,a.ms-Button:focus, button:focus, li:focus,#viewMatters:focus,#uploadToMatter:focus{
+    outline:dotted 3px !important;
+}
+
+

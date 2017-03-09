@@ -6,6 +6,8 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.WebParts;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -143,6 +145,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public string[] ConfigureXMLCodeOfWebParts(Client client, Matter matter, ClientContext clientContext, string pageName, Uri uri, 
             Web web, MatterConfigurations matterConfigurations)
         {
+            //injecting matterextraproperties as string while creating matter landing page.
+            string matterExtraPropertiesValues = string.Empty;
+            if (matterConfigurations != null && matterConfigurations.AdditionalFieldValues != null)
+            {
+                matterExtraPropertiesValues = DisplayAllExtraMatterProperties(matterConfigurations.AdditionalFieldValues);
+            }
             string[] result = null;
             try
             {
@@ -191,7 +199,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string footerWebPartSection = string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.FooterPanel, CultureInfo.InvariantCulture)]);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, cssLink), headerWebPartSection);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, commonCssLink), headerWebPartSection);
-                headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG_WITH_CONTENTS, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_STAMP_PROPERTIES, matter.Name, matter.MatterGuid)), headerWebPartSection);
+                headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG_WITH_CONTENTS, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_STAMP_PROPERTIES, matter.Name, matter.MatterGuid, matterExtraPropertiesValues)), headerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkMatterLandingPage), footerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkCommon), footerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkJQuery), footerWebPartSection);
@@ -365,6 +373,53 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     clientFile.DeleteObject();
                     clientContext.ExecuteQuery();
                 }
+            }
+        }
+
+        /// <summary>
+        /// This method return string collection of matter extra properties which is used in matter landing page.
+        /// </summary>
+        /// <param name="objValues"></param>
+        /// <returns></returns>
+        private string DisplayAllExtraMatterProperties(IList<MatterExtraFields> objValues)
+        {
+            try
+            {
+                StringBuilder sbr = new StringBuilder(string.Empty);
+                var totalCount = objValues.Count;
+                for (int i = 0; i < totalCount; i++)
+                {
+                    objValues[i].FieldValue = objValues[i].FieldValue == null ? "" : objValues[i].FieldValue;
+
+                    if (objValues[i].IsDisplayInUI == "true")
+                    {
+                        string fieldVal = objValues[i].FieldValue.Trim();
+
+                        if (objValues[i].Type.ToString().Trim().Equals("DateTime"))
+                        {
+                            DateTime date;
+                            bool isDateTime = DateTime.TryParse(fieldVal, out date);
+                            if (isDateTime)
+                            {
+                                fieldVal = String.Format("{0:MMMM yyyy, d}", date);
+                            }
+                            else
+                            {
+                                fieldVal = String.Format("{0:MMMM yyyy, d}", DateTime.Now);
+                            }
+                        }
+                        string concatedString = i == totalCount - 1 ? objValues[i].FieldDisplayName + ":" + fieldVal : objValues[i].FieldDisplayName + ":" + fieldVal + "|";
+                        sbr.AppendLine(concatedString.Trim());
+                    }
+                }
+                string strReturnValue = sbr.ToString();
+                strReturnValue = strReturnValue.Replace("\r\n", "");
+                return strReturnValue;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
     }

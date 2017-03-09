@@ -11,6 +11,10 @@ namespace Microsoft.Legal.MatterCenter.Models
     public class MatterMetadata
     {
         /// <summary>
+        /// Get or Set Matter Extra Properties
+        /// </summary>
+        public MatterExtraProperties MatterExtraProperties { get; set; }
+        /// <summary>
         /// Gets or sets the matter property
         /// </summary>
         public Matter Matter
