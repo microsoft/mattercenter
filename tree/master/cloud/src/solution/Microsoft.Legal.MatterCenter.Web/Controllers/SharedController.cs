@@ -89,11 +89,6 @@ namespace Microsoft.Legal.MatterCenter.Web
             {                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
 
                 if (client == null && string.IsNullOrWhiteSpace(selectedPage))
                 {

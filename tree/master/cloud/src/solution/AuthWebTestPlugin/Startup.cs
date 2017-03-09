@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 #endregion
 
 
-namespace JWTokenWebTestPlugin
+namespace Matter.Legal.MatterCenter.PerfTestPlugins
 {
     public class Startup
     {
@@ -23,11 +23,7 @@ namespace JWTokenWebTestPlugin
         public Startup(IHostingEnvironment env, ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
-            this.LoggerFactory = logger;
-
-
-            
-
+            this.LoggerFactory = logger;          
         }
 
         public void ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
@@ -37,13 +33,10 @@ namespace JWTokenWebTestPlugin
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-         
-
             var log = loggerFactory.CreateLogger<Startup>();
             try
             {
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                                
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));                              
             }
             catch (System.Exception ex)
             {
@@ -54,7 +47,6 @@ namespace JWTokenWebTestPlugin
         
         private void ConfigureMatterPackages(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
         {
-
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 

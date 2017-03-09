@@ -375,7 +375,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpClientExtensions.cs" />
+    <Compile Include="GetServer.cs" />
     <Compile Include="JWTokenWebTestPlugin.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>

@@ -60,10 +60,10 @@
   </Items>
   <ContextParameters>
     <ContextParameter Name="TokenValue" Value="" />
-    <ContextParameter Name="WebServer1" Value="https://matterwebapp.azurewebsites.net" />
+    <ContextParameter Name="WebServer1" Value="" />
   </ContextParameters>
   <WebTestPlugins>
-    <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
+    <WebTestPlugin Classname="Matter.Legal.MatterCenter.PerfTestPlugins.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
       <RuleParameters>
         <RuleParameter Name="ClientId" Value="" />
         <RuleParameter Name="AppKey" Value="" />
@@ -71,6 +71,13 @@
         <RuleParameter Name="Tenant" Value="" />
         <RuleParameter Name="AadInstance" Value="" />
         <RuleParameter Name="ToDoResourceId" Value="" />
+        <RuleParameter Name="UserName" Value="" />
+        <RuleParameter Name="PassWord" Value="" />
+      </RuleParameters>
+    </WebTestPlugin>
+    <WebTestPlugin Classname="Matter.Legal.MatterCenter.PerfTestPlugins.GetServer, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="GetServer" Description="">
+      <RuleParameters>
+        <RuleParameter Name="WebServer" Value="WebServer1" />
       </RuleParameters>
     </WebTestPlugin>
   </WebTestPlugins>

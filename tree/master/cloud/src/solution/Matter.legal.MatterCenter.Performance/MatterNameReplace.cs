@@ -8,7 +8,6 @@ namespace Matter.legal.MatterCenter.Performance
     public class MatterNameReplace : WebTestRequestPlugin
     {
 
-
         public override void PreRequest(object sender, PreRequestEventArgs e)
         {
             if (e.Request.Body == null) { return; }
@@ -24,12 +23,11 @@ namespace Matter.legal.MatterCenter.Performance
             e.Request.Body = newBody;
         }
 
-
-
         private string UpdateBody(string body)
         {
         
             Guid id = Guid.NewGuid();
+            
             string newName = RandomString(15);
           
             var data = JObject.Parse(body);
@@ -40,7 +38,7 @@ namespace Matter.legal.MatterCenter.Performance
 
             tokenName = "Matter." + "MatterGuid";
             value = (data.SelectToken(tokenName) ?? JValue.CreateNull()).ToObject<string>();
-            var updatedBodyGUID = UpdateBodyGUID(updatedBodyName, value, id.ToString());
+            var updatedBodyGUID = UpdateBodyGUID(updatedBodyName, value, id.ToString().Replace("-",""));
 
             return updatedBodyGUID;
         }
@@ -104,14 +102,14 @@ namespace Matter.legal.MatterCenter.Performance
             {
                 string tokenName = "";
 
-                if (e.WebTest.Context.TryGetValue("MatterName", out mattername))
+                if (e.WebTest.Context.TryGetValue("Name", out mattername))
                 {
                     tokenName = "Matter." + "Name";
                     value = (data.SelectToken(tokenName) ?? JValue.CreateNull()).ToObject<string>();
                     updatedBodyName = UpdateBodyName(body, value, mattername.ToString());
                 }
 
-                if (e.WebTest.Context.TryGetValue("MatterGUID", out matterguid))
+                if (e.WebTest.Context.TryGetValue("MatterGuid", out matterguid))
                 {
                     tokenName = "Matter." + "MatterGuid";
                     value = (data.SelectToken(tokenName) ?? JValue.CreateNull()).ToObject<string>();
@@ -125,7 +123,6 @@ namespace Matter.legal.MatterCenter.Performance
                 e.Request.Body = newBody;
             }
         }
-
 
 
         private string UpdateBodyName(string body, string value, string newName)
@@ -159,7 +156,6 @@ namespace Matter.legal.MatterCenter.Performance
 
             return builder.ToString();
         }
-
 
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 
 
-namespace JWTokenWebTestPlugin
+namespace Matter.Legal.MatterCenter.PerfTestPlugins
 { 
     public class Program
     {

@@ -66,6 +66,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigurationBuilder.cs" />
     <Compile Include="JsonExtractionRule.cs" />
     <Compile Include="MatterNameReplace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,12 +85,9 @@
     <None Include="CreateMatter.webtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="HomePageMatter.webtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="LoginHomePage.webtest" />
     <None Include="MyDocuments.webtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="MyMatters.webtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -112,9 +110,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AuthWebTestPlugin\AuthWebTestPlugin.csproj">
+    <ProjectReference Include="..\AuthWebTestPlugin\Matter.Legal.MatterCenter.PerfTestPlugins.csproj">
       <Project>{de8ea61a-69e5-4262-9210-66d826a25f65}</Project>
-      <Name>AuthWebTestPlugin</Name>
+      <Name>Matter.Legal.MatterCenter.PerfTestPlugins</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
