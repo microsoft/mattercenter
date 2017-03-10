@@ -332,8 +332,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     //HTTP / 1.1 401 Unauthorized
                     //WWW - Authenticate: Bearer
                     AutomaticChallenge = true,
-                    SaveToken = true,
-
+                
                     Authority = String.Format(CultureInfo.InvariantCulture,
                         this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
                         this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),

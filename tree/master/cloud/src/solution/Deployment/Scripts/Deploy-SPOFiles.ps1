@@ -12,7 +12,8 @@ Add-Type -TypeDefinition @"
 Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true)
 {
 	# Set log file path
-	$LogFile = "$ScriptDirectory\Logs\Log.txt"
+	$logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".txt"
+	$LogFile = "$ScriptDirectory\Logs\" + $logFileName
 	$timestamp = Get-Date -Format G
 	$Message = $timestamp + " - " + $Message
 	switch ($Type)
@@ -58,7 +59,8 @@ $ScriptDirectory = (ScriptRoot)
 
 
 # Set log file path
-$LogFile = "$ScriptDirectory\Logs\Log.txt"
+$logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".txt"
+$LogFile = "$ScriptDirectory\Logs\" + $logFileName
 
 
 # Get the parent directory of the script
@@ -83,7 +85,8 @@ If (-not (Test-Path -Path $LogFolder -PathType Container))
 }
 
 # Set error log file path
-$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt" 
+$ErrorlogFileName = "MCDeployError"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".txt"
+$ErrorLogFile = "$ScriptDirectory\Logs\" + $logFileName
 
 if (!(Test-Path "$ErrorLogFile"))
 {
