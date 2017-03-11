@@ -116,18 +116,17 @@
         //#endregion
 
         //#region to announce document type to Jaws tool.
-        vm.getDocumentName = function (docExtension)
-        {
+        vm.getDocumentName = function (docExtension) {
             var docName = '';
             switch (docExtension) {
                 case 'docx':
                     docName = 'Word document';
                     break;
                 case 'eml':
-                    docName ='Email document';
+                    docName = 'Email document';
                     break;
                 case 'xls':
-                    docName ='Excel document';
+                    docName = 'Excel document';
                     break;
                 case 'txt':
                     docName = 'Text document';
@@ -1535,7 +1534,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3);}, 500);
                 }
             });
         }
@@ -2266,6 +2265,12 @@
         $rootScope.$on('disableOverlay', function (event, data) {
             vm.lazyloader = true;
         });
+
+        vm.closeHeaderPopup = function () {
+            vm.documentheader = true;
+            vm.documentdateheader = true;
+        }
+
         //#region For clearing all the column filter search textboxes 
         vm.clearAllFilterForSearch = function () {
             vm.searchTerm = "";
