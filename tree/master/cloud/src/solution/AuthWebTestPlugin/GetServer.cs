@@ -15,7 +15,7 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
         public GetServer()
         {
             var builder = new ConfigurationBuilder()
-              .SetBasePath("C:\\Repos\\mattercenter\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
+              .SetBasePath("C:\\Repos\\mattercenter2\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
              .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
            
             Configuration = builder.Build();

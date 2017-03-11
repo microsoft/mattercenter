@@ -46,6 +46,10 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
         [Description("PassWord")]
         public string PassWord { get; set; }
 
+        [DisplayName("PerfAppId")]
+        [Description("PerfAppId")]
+        public string PerfAppId { get; set; }
+
         [DisplayName("ContextParamaterName")]
         [Description("ContextParamaterName")]
         public string ContextParamaterName { get; private set; }
@@ -76,7 +80,7 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
             //string basePath = path.Remove(last);
 
             var builder = new ConfigurationBuilder()
-                 .SetBasePath("C:\\Repos\\mattercenter\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
+                 .SetBasePath("C:\\Repos\\mattercenter2\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
@@ -98,13 +102,14 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
             ToDoResourceId = Configuration["General:SiteURL"];
             UserName = Configuration["General:AdminUserName"];
             PassWord = Configuration["General:AdminPassword"];
+            PerfAppId = Configuration["General:PerfAppID"];
 
             Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authority);
             ClientCredential clientCredential = new ClientCredential(ClientId, AppKey);
           
             UserPasswordCredential user = new UserPasswordCredential(UserName, PassWord);
 
-            var result = authContext.AcquireTokenAsync(ClientId, "12e2877a-b640-4d09-8e03-8ff0db4bfcd2", user).Result;
+            var result = authContext.AcquireTokenAsync(ClientId, PerfAppId, user).Result;
             e.WebTest.Context[TokenValue] = "Bearer " + result.AccessToken;
         } 
     }
