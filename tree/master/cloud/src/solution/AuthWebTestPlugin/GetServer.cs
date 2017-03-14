@@ -14,10 +14,19 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
 
         public GetServer()
         {
+
+            var projectName = "AuthWebTestPlugin";
+            var solLength = "solution".Length;
+            var path = System.IO.Directory.GetCurrentDirectory();
+            int index = path.IndexOf("solution");
+            int last = index + solLength;
+            string basePath = path.Remove(last);
+            path = basePath + "\\" + projectName;
+
             var builder = new ConfigurationBuilder()
-              .SetBasePath("C:\\Repos\\mattercenter2\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
-             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-           
+                 .SetBasePath(path)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                 
             Configuration = builder.Build();
         }
 

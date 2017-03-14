@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
+using System.IO;
 
 namespace Matter.Legal.MatterCenter.PerfTestPlugins
 {
@@ -71,16 +72,16 @@ namespace Matter.Legal.MatterCenter.PerfTestPlugins
         public JWTokenWebTestPlugin()
         {
 
-            // this.httpContextAccessor = httpContextAccessor;
-            //string projectName = env.ApplicationName;
-            //int projLength = projectName.Length;
-            //string path = env.ContentRootPath;
-            //int index = path.IndexOf(projectName);
-            //int last = index + projLength;
-            //string basePath = path.Remove(last);
+            var projectName = "AuthWebTestPlugin";
+            var solLength = "solution".Length;
+            var path = Directory.GetCurrentDirectory();
+            int index = path.IndexOf("solution");
+            int last = index + solLength;
+            string basePath = path.Remove(last);
+            path = basePath + "\\" +  projectName;
 
             var builder = new ConfigurationBuilder()
-                 .SetBasePath("C:\\Repos\\mattercenter2\\tree\\master\\cloud\\src\\solution\\AuthWebTestPlugin")
+                 .SetBasePath(path)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
