@@ -70,3 +70,4 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Performance/Properties/AssemblyInfo.cs
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Performance/Microsoft.Legal.MatterCenter.Performance.csproj
 /tree/master/cloud/src/solution/Local.testsettings
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/MatterControllerUnitTests.cs
