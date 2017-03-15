@@ -12,7 +12,7 @@ Add-Type -TypeDefinition @"
 Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true)
 {
 	# Set log file path
-	$LogFile = "$ScriptDirectory\Logs\Log.txt
+	$LogFile = "$ScriptDirectory\Logs\Log.txt"
 	$timestamp = Get-Date -Format G
 	$Message = $timestamp + " - " + $Message
 	switch ($Type)
@@ -58,7 +58,7 @@ $ScriptDirectory = (ScriptRoot)
 
 
 # Set log file path
-$LogFile = "$ScriptDirectory\Logs\Log.txt
+$LogFile = "$ScriptDirectory\Logs\Log.txt"
 
 
 # Get the parent directory of the script
@@ -83,7 +83,7 @@ If (-not (Test-Path -Path $LogFolder -PathType Container))
 }
 
 # Set error log file path
-$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt
+$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt"
 
 if (!(Test-Path "$ErrorLogFile"))
 {
