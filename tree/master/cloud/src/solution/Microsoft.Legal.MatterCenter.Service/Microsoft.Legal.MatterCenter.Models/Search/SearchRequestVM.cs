@@ -11,6 +11,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// <summary>
         /// Client info object
         /// </summary>
-        public Client Client { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

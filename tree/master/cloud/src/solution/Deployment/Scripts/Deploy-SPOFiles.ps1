@@ -83,7 +83,7 @@ If (-not (Test-Path -Path $LogFolder -PathType Container))
 }
 
 # Set error log file path
-$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt" 
+$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt"
 
 if (!(Test-Path "$ErrorLogFile"))
 {

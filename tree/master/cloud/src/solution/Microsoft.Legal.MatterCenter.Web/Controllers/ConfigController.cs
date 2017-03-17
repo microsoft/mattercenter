@@ -101,6 +101,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                         Description = "No filter was passed"
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                   // return "error";
                 }
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
@@ -120,7 +121,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 throw;
             }
         }
-
+          
 
         /// <summary>
         /// Returns all the entries for Configuring the UI for sharepoint online

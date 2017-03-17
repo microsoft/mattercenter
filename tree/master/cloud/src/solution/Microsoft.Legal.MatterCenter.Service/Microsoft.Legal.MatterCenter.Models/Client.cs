@@ -44,7 +44,7 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// </summary>
         /// <value>The client URL.</value>
 
-        public string Url
+        public virtual string Url
         {
             get;
             set;

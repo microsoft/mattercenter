@@ -332,7 +332,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     //HTTP / 1.1 401 Unauthorized
                     //WWW - Authenticate: Bearer
                     AutomaticChallenge = true,
-                    
+                
                     Authority = String.Format(CultureInfo.InvariantCulture,
                         this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
                         this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
@@ -349,6 +349,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                             //    var claimsIdentity = (ClaimsIdentity)ctx.Ticket.Principal.Identity;
                             //    claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, nameClaim.Value));
                             //}
+                          
                             return Task.FromResult(0);
                         },
                         OnAuthenticationFailed = context =>
