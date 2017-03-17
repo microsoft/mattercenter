@@ -495,25 +495,7 @@ function displayContent() {
 			   }
 		    }
 		
-		    /* Set the task panel html text */
-		    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
-		    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
-		    $.get(calendarUrl).done(function () {
-			  	sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			}).fail(function () {
-			    taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
-				sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			});
+		    
 		    
 		    noItemsMessage.noTasks =  uiconfigs.MatterLanding.ErrMsg1NoTask;
 			noItemsMessage.errorMsgTask = uiconfigs.MatterLanding.ErrMsg2FetchTask;
@@ -549,23 +531,7 @@ function displayContent() {
 			
 	        oGlobalConstants.sMatterIdAndClientIdTitle  = uiconfigs.MatterLanding.Label4Tab1Column2Text;
 	
-	        /* Set the calendar panel html text */
-		    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
-		    var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;		    
-		    $.get(calendarUrl).done(function () {
-			  	sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			}).fail(function () {
-			    calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
-				sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			});
+	        
 		
 		    /* Set the rss panel html text */
 		    var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
@@ -631,10 +597,50 @@ function displayContent() {
 		        var $task = $("#taskPane");
 		        var $calendar = $("#calenderPane");
 		        if ($task) {
-		            retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+					/* Set the task panel html text */
+					var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
+					var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
+					$.get(calendarUrl).done(function () {
+					sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+					sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+					sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
+					sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+					sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
+					$("#taskPane").html(sTaskPanelText);
+					retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+				}).fail(function () {
+			    		taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
+					sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+				    	sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+				    	sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
+				    	sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+				    	sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
+				    	$("#taskPane").html(sTaskPanelText);
+				   	retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+				});
+		            
 		        }
 		        if ($calendar) {
-		            retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+				/* Set the calendar panel html text */
+		    		var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
+		    		var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;		    
+		    		$.get(calendarUrl).done(function () {
+			  		sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+			    		sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+					sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
+					sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+					$("#calendarPane").html(sCalendarPanelText);
+					retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+				}).fail(function () {
+			    		calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
+					sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+			    		sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+		        		sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
+		        		sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+		        		$("#calendarPane").html(sCalendarPanelText);
+					retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+				});
+		            
 		        }
 		        getMetaDataProperties(clientUrl, documentLibraryName);
 		        getUserData();
