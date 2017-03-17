@@ -1,7 +1,5 @@
 /// <disable>JS1003,JS2005,JS2024,JS2027,JS2031,JS2032,JS2052,JS2053,JS2064,JS2073,JS2074,JS2076,JS2085,JS3054,JS3057,JS3085,JS3116,JS3056,JS3058,JS3092</disable>
 /* Matter Center constants */
-
-
 var oMatterLandingHtmlConstants = {
     "matterInfoHtml": "<div class='documentLoadingIcon hide'><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"errorPopUpHolder hide\"><div class=\"errorPopupBackground\"></div><div class=\"errorPopUpContainer errorPopUpCenter\"><img title=\"Close\" class=\"errorPopUpCloseIcon popUpFloatRight\" alt=\"Close\" src=\"@@PopupCloseIcon\"><div class=\"errorPopUpMessage\"><span id=\"genericMessage\">Something went wrong</span><div class=\"clear\"></div><div id=\"expandCollapse\"><span class=\"inlineElement\" id=\"expandMessage\">+</span><span id=\"collapseMessage\" class=\"inlineElement hide\">-</span><span>Click here for details</span></div><div class=\"clear\"></div><span id=\"errorMessage\" class=\"hide ellipsis\"></span></div></div></div><div title='@@MatterName' class=\"matterName\">@@MatterName</div><div class=\"matterLink\"><a class=\"matterLinkPart\" title='My Matters' href=\"@@FindMatterUrl\" target=\"_self\"> @@MyMatters </a> > <a class=\"matterLinkPart\" title='@@MatterName' href=\"@@MatterUrl\" target=\"_self\"> @@MatterName </a> </div><div class=\"matterAction\"><div class=\"matterView\"><div class=\"matterProfileTitle\">@@Label1Tab1HeaderText</div><div class=\"matterDescriptionTitle changeSection\">@@Label2Tab2HeaderText</div><div class=\"matterExtraPropertyTitle changeSection @@ishide\">@@Label3Tab3HeaderText</div></div>@@PinChunk</div><div class=\"clear\"></div><div class=\"matterDescriptionBody hide\"><div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div></div><div class=\"matterExtraPropertyBody hide\"></div><div class=\"matterProfileBody\"><div class=\"matterDetails\"><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div><div class=\"clear\"></div><div class=\"editmatterDescriptionBody\"><a href=\"#\" class=\"emailSupportLink\" onclick=\"saveEmail()\">Email Support</a> <span class=\"emailSupportText\"> to edit project name.</span></div></div>",
     "taskSectionHtml": "<div class=\"taskHeading\"> <div class=\"headingText\" title='Task'> Task </div> <div class=\"taskOption\"> <a href=\"@@TaskLink\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.Task)\" title= \"View / Edit\" target =\"_self\">View / Edit </a></div> </div> <div class=\"taskBoard\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div>",
@@ -495,25 +493,7 @@ function displayContent() {
 			   }
 		    }
 		
-		    /* Set the task panel html text */
-		    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
-		    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
-   		    $.get(taskUrl).done(function () {
-			  	sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			}).fail(function () {
-			    taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
-				sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			});
+		    
 		    
 		    noItemsMessage.noTasks =  uiconfigs.MatterLanding.ErrMsg1NoTask;
 			noItemsMessage.errorMsgTask = uiconfigs.MatterLanding.ErrMsg2FetchTask;
@@ -549,23 +529,7 @@ function displayContent() {
 			
 	        oGlobalConstants.sMatterIdAndClientIdTitle  = uiconfigs.MatterLanding.Label4Tab1Column2Text;
 	
-	        /* Set the calendar panel html text */
-		    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
-		    var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;		    
-		    $.get(calendarUrl).done(function () {
-			  	sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			}).fail(function () {
-			    calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
-				sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			});
+	       
 		
 		    /* Set the rss panel html text */
 		    var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
@@ -631,10 +595,50 @@ function displayContent() {
 		        var $task = $("#taskPane");
 		        var $calendar = $("#calenderPane");
 		        if ($task) {
-		            retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+		            /* Set the task panel html text */
+		            var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
+		            var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;
+		            $.get(taskUrl).done(function () {
+		                sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+		                sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+		                sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> " + uiconfigs.MatterLanding.Label14TaskeTitleText + " </div>");
+		                sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+		                sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+		                $("#taskPane").html(sTaskPanelText);
+		                retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+		            }).fail(function () {
+		                taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
+		                sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+		                sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+		                sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> " + uiconfigs.MatterLanding.Label14TaskeTitleText + " </div>");
+		                sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+		                sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+		                $("#taskPane").html(sTaskPanelText);
+		                retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+		            });
+		            
 		        }
 		        if ($calendar) {
-		            retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+		            /* Set the calendar panel html text */
+		            var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
+		            var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;
+		            $.get(calendarUrl).done(function () {
+		                sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+		                sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+		                sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+		                sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+		                $("#calendarPane").html(sCalendarPanelText);
+		                retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+		            }).fail(function () {
+		                calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
+		                sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+		                sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+		                sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+		                sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+		                $("#calendarPane").html(sCalendarPanelText);
+		                retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+		            });
+		            
 		        }
 		        getMetaDataProperties(clientUrl, documentLibraryName);
 		        getUserData();
