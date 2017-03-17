@@ -2,8 +2,8 @@
     'use strict';
 
     var app = angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', 'adalAuthenticationService',
-        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService) {
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', 'adalAuthenticationService', '$timeout',
+        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService,$timeout) {
             ///All Variables
             var cm = this;
             $rootScope.pageIndex = "4";
@@ -125,7 +125,7 @@
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
             cm.matterGUID = "";
-            cm.iCurrentPage = 1;
+            cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
             cm.assignPermissionTeams = [{ assignedUser: '', assignedAllUserNamesAndEmails: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1, userConfirmation: false, teamUsers: [] }];
             cm.conflictUsers = { assignedUser: '', assignedAllUserNamesAndEmails: '', teamUsers: [] }
             cm.blockedUserName = cm.conflictUsers.assignedUser;
@@ -134,6 +134,7 @@
             cm.secureMatterCheck = true;
             cm.conflictRadioCheck = false;
             cm.includeTasks = false;
+	        cm.errorPopUpBlock = false;
 
             ///* Function to generate 32 bit GUID */
             function get_GUID() {
@@ -444,6 +445,7 @@
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
                 cm.successBanner = false;
+		         $timeout(function () { angular.element("#selectPG").focus(); }, 200);
             }
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {
@@ -470,7 +472,7 @@
                             cm.errPermissionMessage = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.canCreateMatterPermission = false;
                         }
                         else {
@@ -624,7 +626,7 @@
                     });
                 }
                 else {
-                    localStorage.iLivePage = cm.iCurrentPage = 1;
+                    localStorage.iLivePage = cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                     cm.matterName = "";
                     cm.matterId = "";
                     cm.matterDescription = "";
@@ -864,7 +866,7 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
                                         //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                 cm.errorBorder = "mattername"; showErrorNotification("mattername");
-                                cm.errorPopUpBlock = true;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                 oPageOneState.oValidMatterName = false;
                             }
                             return false;
@@ -891,7 +893,7 @@
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
-                        cm.iCurrentPage = 2;
+                        cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     }
@@ -902,7 +904,7 @@
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
                             cm.sectionName = sectionName;
-                            cm.iCurrentPage = 3;
+                            cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                             localStorage.iLivePage = 3;
                             makePrevOrNextButton();
                     }
@@ -911,7 +913,7 @@
                 else if (sectionName == "snConfigSection" && cm.iCurrentPage !== 3 && cm.inputs.length > 0) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
-                        cm.iCurrentPage = 3;
+                        cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                         localStorage.iLivePage = 3;
                         makePrevOrNextButton();
                     }
@@ -922,14 +924,14 @@
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
                             cm.sectionName = sectionName;
-                            cm.iCurrentPage = 4;
+                            cm.iCurrentPage = 4;$timeout(function(){angular.element('#divTab4').focus();},500);
                             localStorage.iLivePage = 4;
                             makePrevOrNextButton();
                         }
                     }
                 }
                 else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
-                    cm.iCurrentPage = 1; cm.sectionName = sectionName;
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500); cm.sectionName = sectionName;
                     localStorage.iLivePage = 1;
                     makePrevOrNextButton();
                 }
@@ -993,12 +995,12 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityPermission;
                                     //"Please provide at least one permission on this  matter. ";
                                 cm.errorBorder = "";
-                                cm.errorPopUpBlock = true;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                 return false;
                             }
                         }
                         else {
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamRole1;
                                 //"Enter at least one role for this matter.";
                             cm.errorBorder = "";
@@ -1009,7 +1011,7 @@
                         cm.errTextMsg = cm.createContent.ErrorMessageTeamMember1;
                         cm.errorBorder = "";
                         showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }             
@@ -1022,7 +1024,7 @@
                             //"Please provide at least one user who has Full Control permission on this  matter.";
                         cm.errorBorder = "permUser" + teamRowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "perm");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -1031,7 +1033,7 @@
                         //"Enter at least one Responsible Attorney for this matter.";
                     cm.errorBorder = "roleUser" + teamRowNumber;
                     showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "role");
-                    cm.errorPopUpBlock = true;
+                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                     return false;
                 }
             }
@@ -1073,7 +1075,7 @@
                         //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                     if (cm.conflictRadioCheck) {
@@ -1082,7 +1084,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1095,7 +1097,7 @@
                             //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                     username = getUserName(cm.selectedConflictCheckUser + ";", true);
@@ -1104,7 +1106,7 @@
                         //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -1118,7 +1120,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1131,7 +1133,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1158,7 +1160,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
-                                                        cm.errorPopUpBlock = true;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                         showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                         cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                         return false;
@@ -1167,7 +1169,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
-                                                        cm.errorPopUpBlock = true;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                         showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                         cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                         return false;
@@ -1181,7 +1183,7 @@
                                                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers2;
                                                                 //"Please enter individual who is not conflicted.";
                                                                 cm.errorBorder = "";
-                                                                cm.errorPopUpBlock = true;
+                                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                                 return false;
@@ -1403,13 +1405,13 @@
                         }
                         cm.errorBorder = "";
                         cm.errorStatus = true;
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         
                         cm.errorBorder = "txtUser" + rowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, rowNumber, "securityuser")
                         cm.popupContainerBackground = "hide";
                         cm.sectionName = "snConflictCheck";
-                        cm.iCurrentPage = 2;
+                        cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     } else {
@@ -1489,7 +1491,7 @@
                     cm.assignPermissionTeams.splice(index, 1);
                 }
                 cm.notificationPopUpBlock = false;
-                cm.notificationBorder = "";                
+                cm.notificationBorder = "";
             };
 
             if (localStorage.getItem("iLivePage")) {
@@ -1520,7 +1522,7 @@
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
-                    cm.iCurrentPage = 2;
+                    cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                     cm.includeRssFeeds = (localStorage.getItem("IsRSSSelected") === "true");
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
@@ -1535,7 +1537,7 @@
                     cm.nextButtonDisabled = false; cm.prevButtonDisabled = false;
                 }
                 if (localStorage.getItem("iLivePage") == 3) {
-                    cm.iCurrentPage = 1;
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
                     if (oPageData && oPageData !== null) {
                         cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
@@ -1553,7 +1555,7 @@
                         cm.oSiteUsers = oPageData.oSiteUsers;
                         cm.oSiteUserNames = oPageData.oSiteUserNames;
                         cm.nextButtonDisabled = true;
-                        cm.iCurrentPage = 3;
+                        cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                     }
                     if (cm.includeEmail) {
                         cm.createButton = "Create and Notify";
@@ -1835,7 +1837,7 @@
                                  //   "Please enter a valid email address.";
                                     cm.errorBorder = "";
                                     cm.errorStatus = true;
-                                    cm.errorPopUpBlock = true;
+                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                     showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                     team.userConfirmation = false;
                                     angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm', "false");
@@ -1884,7 +1886,7 @@
                     isPageValid = validateCurrentPage(2);
                 } else {
                     cm.sectionName = "snOpenMatter";
-                    cm.iCurrentPage = 1; makePrevOrNextButton();
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500); makePrevOrNextButton();
                 }
 
                 if (isPageValid) {                   
@@ -1927,7 +1929,7 @@
                                 //"Error in creation of matter: Incorrect inputs.";
                             showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
                             cm.errorBorder = "";
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.popupContainerBackground = "hide";
                             $event.stopPropagation(); cm.createBtnDisabled = false; cm.successBanner = false;
                             bValid = false;
@@ -1996,7 +1998,7 @@
                 }
                 else {
                     cm.sectionName = "snConflictCheck";
-                    cm.iCurrentPage = 2;
+                    cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                     makePrevOrNextButton();
                 }
             }
@@ -2641,7 +2643,7 @@
                 cm.removeDTItem = false;
                 cm.primaryMatterType = cm.errorPopUp = false;
                 cm.matterGUID = "";
-                cm.iCurrentPage = 1;
+                cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                 cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
                 cm.conflictUsers.assignedUser = '';
                 cm.conflictUsers.assignedAllUserNamesAndEmails = "";
@@ -2790,7 +2792,7 @@
                                                 //"Enter a matter ID.";
                                                 cm.errorBorder = "matterid";
                                                 showErrorNotification("matterid");
-                                                cm.errorPopUpBlock = true; return false;
+                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                             }
                                             if (bInValid) {
                                                 if (cm.isMatterDescriptionMandatory) {
@@ -2814,7 +2816,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageSelectType;
                                                         //"Select matter type by area of law for this matter";
                                                         cm.errorBorder = ""; showErrorNotification("selecttemp");
-                                                        cm.errorPopUpBlock = true; return false;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                                     }
                                                 }
                                                 else {
@@ -2823,7 +2825,7 @@
                                                     //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
                                                     showErrorNotification("matterdescription");
                                                     cm.errorBorder = "matterdescription";
-                                                    cm.errorPopUpBlock = true; return false;
+                                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                                 }
                                             }
                                             else {
@@ -2831,7 +2833,7 @@
                                                 //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen.";
                                                 cm.errorBorder = "matterid";
                                                 showErrorNotification("matterid");
-                                                cm.errorPopUpBlock = true; return false;
+                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                             }
                                         }
                                         else {
@@ -2839,7 +2841,7 @@
                                             //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                             cm.errorBorder = "mattername";
                                             showErrorNotification("mattername");
-                                            cm.errorPopUpBlock = true; return false;
+                                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                         }
                                     }
                                 }
@@ -2848,7 +2850,7 @@
                                     //"Please enter a valid Matter name which contains only alphanumeric characters and spaces";
                                     cm.errorBorder = "mattername";
                                     showErrorNotification("mattername");
-                                    cm.errorPopUpBlock = true; return false;
+                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                 }
                             }
                             else {
@@ -2856,7 +2858,7 @@
                                 //"Selected  client for this matter clientId is null ";
                                 showErrorNotification("client");
                                 cm.errorBorder = "client";
-                                cm.errorPopUpBlock = true; return false;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                             }
                         }
                         else {
@@ -2864,7 +2866,7 @@
                             //"Selected  client for this matter clientId is null ";
                             showErrorNotification("client");
                             cm.errorBorder = "client";
-                            cm.errorPopUpBlock = true; return false;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                         }
                     }
                     else {
@@ -2872,7 +2874,7 @@
                             //"Select a client for this matter ";
                         cm.errorBorder = "client";
                         showErrorNotification("client");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -2903,7 +2905,7 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityDate;
                                     //"Enter the date on which the conflict check was performed ";
                                 cm.errorBorder = "cdate"; showErrorNotification("cdate");
-                                cm.errorPopUpBlock = true; return false;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                             }
                         }
                         else {
@@ -2911,7 +2913,7 @@
                                 //"A confilct check must be completed prior to provisioning this matter ";
                             cm.errorBorder = "";
                             showErrorNotification("conflictcheck");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         }
                     } else {
                         var validUsers = validateUsers();
@@ -2973,7 +2975,7 @@
                     //"Enter a description for this matter.";
                     showErrorNotification("matterdescription");
                     cm.errorBorder = "matterdescription";
-                    cm.errorPopUpBlock = true; return false;
+                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                 }
             }
 
@@ -3145,7 +3147,7 @@
                 document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);   
                 cm.errTextMsg = errorMsg;
-                cm.errorPopUpBlock = true;
+                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                 matterErrorEle.classList.add("errPopUpCAttorny");
                 matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
                 matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
@@ -3424,7 +3426,7 @@
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
                 }
                 else {
-                    cm.errorPopUp = true;
+                    cm.errorPopUp = true; $timeout(function(){angular.element('#errorPopUpMatterTypeBlock').focus();},500);
                 }
             }
             //#endregion
@@ -3582,6 +3584,9 @@
                 });
                 return Fields;
             }
+
+            angular.element("#conflictCheck ul li a").prop("tabindex", "0");
+
         }]);
 
     app.filter('getAssociatedDocumentTemplatesCount', function () {

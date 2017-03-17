@@ -4,26 +4,26 @@
 -->
 <div ng-class="{'dashboardXOverFlow':$root.displayOverflow!=''}">
     <div class="row {{$root.profileClass}} topheader">
-        <div class="col-xs-10 AppHeader">
-            <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
-                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
+        <div tabindex="-1" class="col-xs-10 AppHeader">
+            <div tabindex="-1" class="AppSwitcherContainer" ng-click="vm.menuClick()">
+                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelOpenMenu}}" class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
+                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelCloseMenu}}" class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
                 <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
             </div>
             <div class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
-                <div class="AppMenuFlyoutPriLinks">
-                    <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
-                    <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
-                    <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
-                    <a ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
+                <div tabindex="-1" class="AppMenuFlyoutPriLinks">
+                    <a tabindex="0" role="listitem" ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
+                    <a tabindex="0" role="listitem"  ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
+                    <a tabindex="0" role="listitem"  ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
+                    <a  tabindex="0" role="listitem"  ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
 
                 </div>
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
-                <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
-                    <img ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
-                    <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
-                    <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
+                <span tabindex="-1" class="AppLogoContainer">
+                    <img tabindex="0" ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                    <span ng-if="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
+                    <span ng-if="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
                 </span>
             </div>
         </div>
@@ -86,7 +86,7 @@
                             <img class="headerActions pull-left" title="{{vm.header.ImageCloseHamburgerTitle}}" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
                         </div>
                         <img class="floatLeft" id="matterCenterHome" title="{{vm.header.DashboardMenuImageUpperCaption}}" alt="" src="Images/MC_homepage_Logo.png" />
-                        <div class="floatLeft" style="color:#fff">
+                        <div class="floatLeft" style="color:#fff" id="divMatterHome" tabindex="0" aria-label="{{vm.header.DashboardMenuImageUpperCaption}} {{vm.header.DashboardMenuImageLowerCaption}}">
                             <div class="upperSubText">{{vm.header.DashboardMenuImageUpperCaption}}</div>
                             <div class="lowerSubText">{{vm.header.DashboardMenuImageLowerCaption}}</div>
                         </div>

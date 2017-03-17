@@ -14,6 +14,7 @@
         //#region Variables for dynamic content
         vm.navigationContent = uiconfigs.Navigation;
         vm.header = uiconfigs.Header;
+        vm.navigationContent = uiconfigs.Navigation;
         vm.documentConfigContent = uiconfigs.Documents;
         vm.uploadMessages = uiconfigs.uploadMessages;
         vm.configSearchContent = configs.search;
@@ -111,6 +112,37 @@
             vm.documentdateheader = true;
             angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
             angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
+        }
+        //#endregion
+
+        //#region to announce document type to Jaws tool.
+        vm.getDocumentName = function (docExtension) {
+            var docName = '';
+            switch (docExtension) {
+                case 'docx':
+                    docName = 'Word document';
+                    break;
+                case 'eml':
+                    docName = 'Email document';
+                    break;
+                case 'xls':
+                    docName = 'Excel document';
+                    break;
+                case 'txt':
+                    docName = 'Text document';
+                    break;
+                case 'pdf':
+                    docName = 'PDF document';
+                    break;
+                case 'zip':
+                    docName = 'Zip file document';
+                    break;
+                default:
+                    docName = docExtension
+                    break;
+            }
+
+            return docName;
         }
         //#endregion
 
@@ -1502,7 +1534,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3);}, 500);
                 }
             });
         }
@@ -2233,6 +2265,12 @@
         $rootScope.$on('disableOverlay', function (event, data) {
             vm.lazyloader = true;
         });
+
+        vm.closeHeaderPopup = function () {
+            vm.documentheader = true;
+            vm.documentdateheader = true;
+        }
+
         //#region For clearing all the column filter search textboxes 
         vm.clearAllFilterForSearch = function () {
             vm.searchTerm = "";

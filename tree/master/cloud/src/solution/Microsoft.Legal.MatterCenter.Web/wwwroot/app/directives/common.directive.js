@@ -156,7 +156,7 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
                                           <input type="text" value="' + matterUrl + '"><br/>\
                                        </div>\<a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
-                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                 </div>';
 
@@ -291,7 +291,7 @@
                                           <div class="ms-font-m FlyoutContent" datefilter title="' + obj.documentCreatedDate + '" date=' + obj.documentCreatedDate + '>' + obj.documentCreatedDate + '</div>\
                                        </div>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" href="" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
@@ -431,7 +431,7 @@
                     if (windowHeight >= 322 && windowHeight <= 637 && obj.top > 273) {
                         $(this).parent().addClass('dropup');
                     }
-                   
+
                     if (obj.top > 450) {
                         $(this).parent().addClass('dropup');
                     }
@@ -512,6 +512,18 @@
             }
         }
     }
+
+    'use strict';
+    function uibTypeaheadPopup() {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                if ($(element).find("li")) {
+
+                }
+            }
+        }
+    }
     //Directive to render matter extra properties with different data types and controls.
     'use strict';
     function matteradditionalfieldsdirective($compile) {
@@ -530,13 +542,12 @@
                            '<span ng-hide="' + scope.input.required + '" class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
                            '<label class="directiveFormFieldsLableWidth" >{{input.name}}: </label></div>');
                     }
-                    else
-                    {
+                    else {
                         el.append('<div><span ng-show="' + scope.input.required + '" class="mandatory pull-left">*&nbsp;</span>' +
                            '<span ng-hide="' + scope.input.required + '" class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
                            '<label class="directiveFormFieldsLableWidth" >{{input.name}}: </label></div>');
                     }
-                    
+
                     switch (scope.input.type.toLowerCase()) {
                         case 'boolean':
                             el.append('<div class="directiveMatterExtraBoolField"><input id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
@@ -548,8 +559,7 @@
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}"  required type="text" ng-model="input.value"/></div>');
                             }
-                            else
-                            {
+                            else {
                                 el.append('<div class="directiveMatterExtraFields"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" type="text" ng-model="input.value"/></div>');
                             }
                             break;
@@ -579,8 +589,7 @@
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
                             }
-                            else
-                            {
+                            else {
                                 el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
                             }
                             break;
@@ -588,8 +597,7 @@
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
                             }
-                            else
-                            {
+                            else {
                                 el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
                             }
                             break;
@@ -680,6 +688,28 @@
         }
     }
 
+
+    //Directive for escape key
+    'use strict';
+    function ngEsc() {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, element, attrs) {
+                element.bind("keydown keypress keyup", function (event) {
+                    if (event.which === 27) {
+                        scope.$apply(function () {
+                            scope.$eval(attrs.ngEsc);
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            }
+        }
+    }
+
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -690,6 +720,7 @@
     app.directive('documentflyout', ['$http', '$compile', '$templateCache', '$rootScope', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
+    app.directive('ngEsc', [ngEsc]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
@@ -698,6 +729,7 @@
     app.directive('showupload', [showupload]);
     app.directive('matteradditionalfieldsdirective', ['$compile', matteradditionalfieldsdirective]);
     app.directive('extramatterpropertiefiledsinsettings', ['$compile', extramatterpropertiefiledsinsettings]);
+    app.directive('uibTypeaheadPopup', [uibTypeaheadPopup]);
 })();
 
 

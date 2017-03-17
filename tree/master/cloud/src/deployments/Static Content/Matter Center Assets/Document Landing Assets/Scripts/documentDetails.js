@@ -664,7 +664,7 @@ function getAllFieldsInContentType(contentTypeName,oData){
 	                	prpValue = oCommonFunctions.getDate(prpValue);
 					}
 					if (oField.get_typeAsString() == 'MultiChoice') {
-					    if (prpValue.split(";#").length > 0) {
+					    if (prpValue != undefined && prpValue.split(";#").length > 0) {
 					        prpValue = prpValue + "-";
 					        prpValue = prpValue.replace(";#", "").replace(";#-", "").replace(/;#/g, ", ");
 					    }
