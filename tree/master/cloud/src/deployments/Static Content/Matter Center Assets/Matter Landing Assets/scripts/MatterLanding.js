@@ -90,18 +90,18 @@ var oPropertyNameMapping = {
     "MatterName": "Matter Name",
     "ClientName": "Client Name",
     "AreaOfLaw": "Area of Law",
-    "SubareaOfLaw":"Sub Area of Law",
+    "SubareaOfLaw": "Sub Area of Law",
     "ClientID": "Client Id",
     "MatterID": "Matter Id",
     "PracticeGroup": "Practice Group",
     "ResponsibleAttorney": "Responsible Attorney",
-    "Description": "Description", 
+    "Description": "Description",
     "ProjectName": "Matter Name",
-    "TeamName": "Team Name",    
+    "TeamName": "Team Name",
     "TeamID": "Client Id",
     "ProjectID": "Matter Id",
     "LPCPracticeGroup": "Practice Group",
-    "ProjectType":"Project Type"
+    "ProjectType": "Project Type"
 
 };
 
@@ -206,17 +206,17 @@ function getMatterName() {
 var clientUrl = '';
 /* Document ready function */
 $(document).ready(function () {
-	
+
 
     "use strict";
-    
+
     clientUrl = _spPageContextInfo.webServerRelativeUrl + "/";
     LogEvent(appInsightsMatterLandingText + appInsightsOperations.PageLoad);
     /* Make a call to display content on the page */
     //documentLibraryGUID = window.location.pathname.split('/').pop().replace('.aspx', '')
     displayContent();
     /* Register the click event for Matter Information section */
-   
+
 
     $("#matterLink").click(function (event) {
         LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterLink);
@@ -242,12 +242,12 @@ $(document).ready(function () {
     $("#termsOfUse").click(function () {
         LogEvent(appInsightsOperations.TermsOfUse);
     });
-    
 
-    
 
-    
-    
+
+
+
+
 });
 $(window).on("resize", function (event) {
     adjustFooter();
@@ -303,8 +303,8 @@ function setEllipsis($childContainer, itemID) {
 
 }
 
-function reloadContent(result, targrt){	
-	location.reload();
+function reloadContent(result, targrt) {
+    location.reload();
 }
 
 /* Create modal dialog for displaying the dialog box with manage permission page opened in it */
@@ -319,7 +319,7 @@ function createModalDialog(isEdit) {
     var options = SP.UI.$create_DialogOptions();
     options.title = title;
     options.url = oGlobalModalDialog.url + "?" + querystring;
-	options.dialogReturnValueCallback = Function.createDelegate(null, reloadContent)
+    options.dialogReturnValueCallback = Function.createDelegate(null, reloadContent)
     options.width = oGlobalModalDialog.width;
     options.height = oGlobalModalDialog.height;
     if ("addEventListener" in window) { // All browsers except IE before version 9
@@ -353,302 +353,304 @@ function receiveMessage(event) {
 
 /* Attaches all the content on the page */
 function displayContent() {
-   "use strict";    
-   var url = "[[[Catalog site Url]]]/SiteAssets/Matter Center Assets/Common Assets/Scripts/uiconfigforspo.js";
-   var configJSUrl = "[[[Catalog site Url]]]/SiteAssets/Matter Center Assets/Common Assets/Scripts/config.js";
+    "use strict";
+    var url = "[[[Catalog site Url]]]/SiteAssets/Matter Center Assets/Common Assets/Scripts/uiconfigforspo.js";
+    var configJSUrl = "[[[Catalog site Url]]]/SiteAssets/Matter Center Assets/Common Assets/Scripts/config.js";
 
-   $.getScript( url, function() {
-   		$.getScript( configJSUrl, function() {
-   			displayHeaderAndFooterContent(configs.global.isBackwardCompatible);
-			
-			/* Register the click event for user icon */
-			$(".userIcon").click(function (event) {
-				$(".selectedUserIcon").removeClass("hide");
-				$(".popupBackground").removeClass("hide");
-				$(".teamFlyout").removeClass("hide");
-				increasePopUpheight();
-				LogEvent(appInsightsMatterLandingText + appInsightsOperations.Users);
-				event && event.stopPropagation();
-			});
+    $.getScript(url, function () {
+        $.getScript(configJSUrl, function () {
+            displayHeaderAndFooterContent(configs.global.isBackwardCompatible);
 
-			/* Register the click event for selected user icon section */
-			$(".selectedUserIcon").click(function () {
-				$(this).addClass("hide");
-				$(".popupBackground").addClass("hide");
-				$(".teamFlyout").addClass("hide");
-			});
+            /* Register the click event for user icon */
+            $(".userIcon").click(function (event) {
+                $(".selectedUserIcon").removeClass("hide");
+                $(".popupBackground").removeClass("hide");
+                $(".teamFlyout").removeClass("hide");
+                increasePopUpheight();
+                LogEvent(appInsightsMatterLandingText + appInsightsOperations.Users);
+                event && event.stopPropagation();
+            });
 
-			/* Register the click event for menu icon section */
-			$("#menu").click(function (event) {
-				increasePopUpheight();
-			});
+            /* Register the click event for selected user icon section */
+            $(".selectedUserIcon").click(function () {
+                $(this).addClass("hide");
+                $(".popupBackground").addClass("hide");
+                $(".teamFlyout").addClass("hide");
+            });
 
-			/* Register the click event for team user section */
-			$(".teamSection").click(function () {
-				$(".blockedUserSection").removeClass("selectedSection");
-				$(".teamFlyoutData").removeClass("hide");
-				$(".blockedFlyoutData").addClass("hide");
-				$(this).addClass("selectedSection");
-			});
+            /* Register the click event for menu icon section */
+            $("#menu").click(function (event) {
+                increasePopUpheight();
+            });
 
-			/* Register the click event for blocked user section */
-			$(".blockedUserSection").click(function () {
-				$(".teamSection").removeClass("selectedSection");
-				$(".teamFlyoutData").addClass("hide");
-				$(".blockedFlyoutData").removeClass("hide");
-				$(this).addClass("selectedSection");
+            /* Register the click event for team user section */
+            $(".teamSection").click(function () {
+                $(".blockedUserSection").removeClass("selectedSection");
+                $(".teamFlyoutData").removeClass("hide");
+                $(".blockedFlyoutData").addClass("hide");
+                $(this).addClass("selectedSection");
+            });
 
-			});
+            /* Register the click event for blocked user section */
+            $(".blockedUserSection").click(function () {
+                $(".teamSection").removeClass("selectedSection");
+                $(".teamFlyoutData").addClass("hide");
+                $(".blockedFlyoutData").removeClass("hide");
+                $(this).addClass("selectedSection");
 
-			/* Register the click event for background */
-			$(".popupBackground , .errorPopupBackground").on("click", function (event) {
-				closeAllPopup(event);
-			});
+            });
 
-			/* Set max height on the basis of height of the window */
-			$(".teamFlyoutData").css("max-height", oMatterLandingCommonObjects.windowHeight - 343);
+            /* Register the click event for background */
+            $(".popupBackground , .errorPopupBackground").on("click", function (event) {
+                closeAllPopup(event);
+            });
 
-			/* Register the click event for search icon */
-			$(".searchIcon").on("click", function (event) {
-				var sSearchText = $("#searchText").val().trim();
-				if (sSearchText && "" !== sSearchText) {
-					LogEvent(appInsightsMatterLandingText + appInsightsOperations.Search);
-				}
-			});
+            /* Set max height on the basis of height of the window */
+            $(".teamFlyoutData").css("max-height", oMatterLandingCommonObjects.windowHeight - 343);
 
-			/* Register the click event for error popup expand message option */
-			$("#expandMessage, #collapseMessage").click(function () {
-				if ($("#errorMessage").is(":visible")) {
-					$("#errorMessage, #collapseMessage").addClass("hide");
-					$("#expandMessage").removeClass("hide");
-				} else {
-					$("#errorMessage, #collapseMessage").removeClass("hide");
-					$("#expandMessage").addClass("hide");
-				}
-			});
+            /* Register the click event for search icon */
+            $(".searchIcon").on("click", function (event) {
+                var sSearchText = $("#searchText").val().trim();
+                if (sSearchText && "" !== sSearchText) {
+                    LogEvent(appInsightsMatterLandingText + appInsightsOperations.Search);
+                }
+            });
 
-			// Register the close event of error popup
-			$(".errorPopUpCloseIcon").on("click", function (event) {
-				"use strict";
-				$(".errorPopUpHolder").addClass("hide");
-			});
-			
-			
-			if(configs.global.isBackwardCompatible){
-   				oGlobalConstants.sListName = "UserPinnedProject"
-   			}
-   			else{
-   				oGlobalConstants.sListName = "UserPinnedMatter"
-   			}
-		    /* Remove the hierarchy div if it already exists */
-		    var hierarchyDiv = $("#documentLibraryTitle");
-		    if (hierarchyDiv) {
-		        $(hierarchyDiv).remove();
-		    }
-		
-		    var listUrl = _spPageContextInfo.webAbsoluteUrl + "/Lists";
-		    //alert(uiconfigs.MatterLanding.Label1Tab1HeaderText);
-		
-		   oMatterLandingCommonObjects.hierarchyLibraryName = uiconfigs.MatterLanding.Label19Section4Text;
-		    /* Set the matter information html */
-		    var pinChunk = oMatterLandingHtmlConstants.pinHtml.replace("@@PinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.pinIcon);
-		    pinChunk = pinChunk.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-		    pinChunk = pinChunk.replace("@@UnpinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.unPinIcon);
-		    var sMatterInformationText = oMatterLandingHtmlConstants.matterInfoHtml.replace("@@PinChunk", pinChunk);
-		    sMatterInformationText = sMatterInformationText.replace("@@FindMatterUrl", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
-		    sMatterInformationText = sMatterInformationText.replace("@@MatterUrl", _spPageContextInfo.siteServerRelativeUrl + "/" + getMatterName() + oGlobalConstants.sUrlExtension);
-		    sMatterInformationText = sMatterInformationText.replace(/@@MatterName/g, documentLibraryName);
-		    sMatterInformationText = sMatterInformationText.replace(/@@LoadingImage/g, oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-		    sMatterInformationText = sMatterInformationText.replace(/@@PopupCloseIcon/g, oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.popupCloseIcon);
-			
-			sMatterInformationText  = sMatterInformationText.replace("@@Label1Tab1HeaderText", uiconfigs.MatterLanding.Label1Tab1HeaderText); 
-			sMatterInformationText  = sMatterInformationText.replace("@@Label2Tab2HeaderText", uiconfigs.MatterLanding.Label2Tab2HeaderText);
-			if(matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '' )
-			{
-				sMatterInformationText  = sMatterInformationText.replace("@@ishide", "");
-				sMatterInformationText  = sMatterInformationText.replace("@@Label3Tab3HeaderText", uiconfigs.MatterLanding.Label3Tab3HeaderText);
-			}
-			else
-			{
-				sMatterInformationText  = sMatterInformationText.replace("@@ishide", "hide");
-				sMatterInformationText  = sMatterInformationText.replace("@@Label3Tab3HeaderText", "");
-			}
+            /* Register the click event for error popup expand message option */
+            $("#expandMessage, #collapseMessage").click(function () {
+                if ($("#errorMessage").is(":visible")) {
+                    $("#errorMessage, #collapseMessage").addClass("hide");
+                    $("#expandMessage").removeClass("hide");
+                } else {
+                    $("#errorMessage, #collapseMessage").removeClass("hide");
+                    $("#expandMessage").addClass("hide");
+                }
+            });
 
-			sMatterInformationText  = sMatterInformationText.replace("@@MyMatters", uiconfigs.MatterLanding.Label18MenuText);
-	        sMatterInformationText = sMatterInformationText.replace("title='My Matters'", "title='" + uiconfigs.MatterLanding.Label18MenuText + "'");
-			
-	
-				    	    	    	    	    	    
-		    $("#matterInfo").html(sMatterInformationText);
-		    $("#matterInfo").parent().append(oMatterLandingHtmlConstants.hierarchyHtml.replace(/@@MatterName/g, oMatterLandingCommonObjects.hierarchyLibraryName));
-   		    //unctionality to display matter properties by spliting MatterExtraProperties values injected at time of matter landing page creation.
-		    if(matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '' )
-			{
-			   var values = matterExtraProperties.split('|');
-			   for(var i = 0; i < values.length; i++)
-			   {
-			   		var property = values[i].split(':');
-			   		var newString = '';
-			   		newString  = oMatterLandingHtmlConstants.matterExtraPropertiesHtml.replace("@@PropertyName", property[0].toString());
-			   		newString   = newString.replace(/@@PropertyValue/g, property[1].toString());
-					$(".matterExtraPropertyBody").append(newString);
-			   }
-		    }
-		
-		    /* Set the task panel html text */
-		    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
-		    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
-   		    $.get(taskUrl).done(function () {
-			  	sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			}).fail(function () {
-			    taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
-				sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
-			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
-			    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-			    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-			    $("#taskPane").html(sTaskPanelText);
-			});
-		    
-		    noItemsMessage.noTasks =  uiconfigs.MatterLanding.ErrMsg1NoTask;
-			noItemsMessage.errorMsgTask = uiconfigs.MatterLanding.ErrMsg2FetchTask;
-			noItemsMessage.errorMsgCalendar = uiconfigs.MatterLanding.ErrMsg3CreateEvent; 
-			noItemsMessage.noEvents = uiconfigs.MatterLanding.ErrMsg4ActiveEvents; 
-			noItemsMessage.noDescription = uiconfigs.MatterLanding.ErrMsg5NoMatterDescription;
-			noItemsMessage.errorRetrieveFails = uiconfigs.MatterLanding.ErrMsg6ForPinUnpinMatters; 
-			noItemsMessage.errorMatterInfo = uiconfigs.MatterLanding.ErrMsg7MatterInformation;
-			noItemsMessage.errorMatterDesc = uiconfigs.MatterLanding.ErrMsg8MatterDescription; 
-			noItemsMessage.errorPinUnpinData = uiconfigs.MatterLanding.ErrMsg9NoPinUnpinMatter;
-			
-			oPropertyNameMapping.MatterName =  uiconfigs.MatterLanding.Label1MenuText;
-			oPropertyNameMapping.ClientName = uiconfigs.MatterLanding.Label3Tab1Column1Text;
-			oPropertyNameMapping.AreaOfLaw = uiconfigs.MatterLanding.Label6Tab1Column4Text;
-			oPropertyNameMapping.ClientID = uiconfigs.MatterLanding.Label10Section1Text;
-			oPropertyNameMapping.MatterID =  uiconfigs.MatterLanding.Label9Section1Text;
-			oPropertyNameMapping.PracticeGroup= uiconfigs.MatterLanding.Label5Tab1Column3Text;
-			if(configs.search.Schema.toLowerCase()==="mattercenter"){
-				oPropertyNameMapping.ResponsibleAttorney = uiconfigs.MatterLanding.Label7Tab1Column5Text;
-				$('.blockedUserSection').show();
-			}
-			else{
-				$('.blockedUserSection').hide();
-			}
-			
-			oPropertyNameMapping.Description = uiconfigs.MatterLanding.Label11Section1Text;
-			
-			oPropertyNameMapping.ProjectName = uiconfigs.MatterLanding.Label1MenuText;
-		    oPropertyNameMapping.TeamName= uiconfigs.MatterLanding.Label3Tab1Column1Text;
-		    oPropertyNameMapping.TeamID= uiconfigs.MatterLanding.Label10Section1Text;
-		    oPropertyNameMapping.ProjectID= uiconfigs.MatterLanding.Label9Section1Text;
-		    oPropertyNameMapping.LPCPracticeGroup= uiconfigs.MatterLanding.Label5Tab1Column3Text;			
-			
-	        oGlobalConstants.sMatterIdAndClientIdTitle  = uiconfigs.MatterLanding.Label4Tab1Column2Text;
-	
-	        /* Set the calendar panel html text */
-		    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
-		    var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;		    
-		    $.get(calendarUrl).done(function () {
-			  	sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			}).fail(function () {
-			    calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
-				sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
-			    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
-		        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
-		        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
-		        $("#calendarPane").html(sCalendarPanelText);
-			});
-		
-		    /* Set the rss panel html text */
-		    var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
-		    sRSSText = sRSSText.replace("Related News (RSS) </div>", "" + uiconfigs.MatterLanding.Label16RSSFeedTitleText+ "</a>");
-	        sRSSText = sRSSText.replace("title='Related News (RSS)'", "title='" +  uiconfigs.MatterLanding.Label16RSSFeedTitleText + "'");
-	
-	
-		    $("#rssPane").html(sRSSText);
-		
-		    /* Add loading image to OneNote section */
-		    $("#oneNotePane").html(oMatterLandingHtmlConstants.oneNoteLoadingHtml.replace("@@LoadingImage", 
+            // Register the close event of error popup
+            $(".errorPopUpCloseIcon").on("click", function (event) {
+                "use strict";
+                $(".errorPopUpHolder").addClass("hide");
+            });
+
+
+            if (configs.global.isBackwardCompatible) {
+                oGlobalConstants.sListName = "UserPinnedProject"
+            }
+            else {
+                oGlobalConstants.sListName = "UserPinnedMatter"
+            }
+            /* Remove the hierarchy div if it already exists */
+            var hierarchyDiv = $("#documentLibraryTitle");
+            if (hierarchyDiv) {
+                $(hierarchyDiv).remove();
+            }
+
+            var listUrl = _spPageContextInfo.webAbsoluteUrl + "/Lists";
+            //alert(uiconfigs.MatterLanding.Label1Tab1HeaderText);
+
+            oMatterLandingCommonObjects.hierarchyLibraryName = uiconfigs.MatterLanding.Label19Section4Text;
+            /* Set the matter information html */
+            var pinChunk = oMatterLandingHtmlConstants.pinHtml.replace("@@PinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.pinIcon);
+            pinChunk = pinChunk.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+            pinChunk = pinChunk.replace("@@UnpinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.unPinIcon);
+            var sMatterInformationText = oMatterLandingHtmlConstants.matterInfoHtml.replace("@@PinChunk", pinChunk);
+            sMatterInformationText = sMatterInformationText.replace("@@FindMatterUrl", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
+            sMatterInformationText = sMatterInformationText.replace("@@MatterUrl", _spPageContextInfo.siteServerRelativeUrl + "/" + getMatterName() + oGlobalConstants.sUrlExtension);
+            sMatterInformationText = sMatterInformationText.replace(/@@MatterName/g, documentLibraryName);
+            sMatterInformationText = sMatterInformationText.replace(/@@LoadingImage/g, oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+            sMatterInformationText = sMatterInformationText.replace(/@@PopupCloseIcon/g, oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.popupCloseIcon);
+
+            sMatterInformationText = sMatterInformationText.replace("@@Label1Tab1HeaderText", uiconfigs.MatterLanding.Label1Tab1HeaderText);
+            sMatterInformationText = sMatterInformationText.replace("@@Label2Tab2HeaderText", uiconfigs.MatterLanding.Label2Tab2HeaderText);
+            if (matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '') {
+                sMatterInformationText = sMatterInformationText.replace("@@ishide", "");
+                sMatterInformationText = sMatterInformationText.replace("@@Label3Tab3HeaderText", uiconfigs.MatterLanding.Label3Tab3HeaderText);
+            }
+            else {
+                sMatterInformationText = sMatterInformationText.replace("@@ishide", "hide");
+                sMatterInformationText = sMatterInformationText.replace("@@Label3Tab3HeaderText", "");
+            }
+
+            sMatterInformationText = sMatterInformationText.replace("@@MyMatters", uiconfigs.MatterLanding.Label18MenuText);
+            sMatterInformationText = sMatterInformationText.replace("title='My Matters'", "title='" + uiconfigs.MatterLanding.Label18MenuText + "'");
+
+
+
+            $("#matterInfo").html(sMatterInformationText);
+            $("#matterInfo").parent().append(oMatterLandingHtmlConstants.hierarchyHtml.replace(/@@MatterName/g, oMatterLandingCommonObjects.hierarchyLibraryName));
+            //unctionality to display matter properties by spliting MatterExtraProperties values injected at time of matter landing page creation.
+            if (matterExtraProperties != null && matterExtraProperties != undefined && matterExtraProperties != '') {
+                var values = matterExtraProperties.split('|');
+                for (var i = 0; i < values.length; i++) {
+                    var property = values[i].split(':');
+                    var newString = '';
+                    newString = oMatterLandingHtmlConstants.matterExtraPropertiesHtml.replace("@@PropertyName", property[0].toString());
+                    newString = newString.replace(/@@PropertyValue/g, property[1].toString());
+                    $(".matterExtraPropertyBody").append(newString);
+                }
+            }
+
+            
+
+            noItemsMessage.noTasks = uiconfigs.MatterLanding.ErrMsg1NoTask;
+            noItemsMessage.errorMsgTask = uiconfigs.MatterLanding.ErrMsg2FetchTask;
+            noItemsMessage.errorMsgCalendar = uiconfigs.MatterLanding.ErrMsg3CreateEvent;
+            noItemsMessage.noEvents = uiconfigs.MatterLanding.ErrMsg4ActiveEvents;
+            noItemsMessage.noDescription = uiconfigs.MatterLanding.ErrMsg5NoMatterDescription;
+            noItemsMessage.errorRetrieveFails = uiconfigs.MatterLanding.ErrMsg6ForPinUnpinMatters;
+            noItemsMessage.errorMatterInfo = uiconfigs.MatterLanding.ErrMsg7MatterInformation;
+            noItemsMessage.errorMatterDesc = uiconfigs.MatterLanding.ErrMsg8MatterDescription;
+            noItemsMessage.errorPinUnpinData = uiconfigs.MatterLanding.ErrMsg9NoPinUnpinMatter;
+
+            oPropertyNameMapping.MatterName = uiconfigs.MatterLanding.Label1MenuText;
+            oPropertyNameMapping.ClientName = uiconfigs.MatterLanding.Label3Tab1Column1Text;
+            oPropertyNameMapping.AreaOfLaw = uiconfigs.MatterLanding.Label6Tab1Column4Text;
+            oPropertyNameMapping.ClientID = uiconfigs.MatterLanding.Label10Section1Text;
+            oPropertyNameMapping.MatterID = uiconfigs.MatterLanding.Label9Section1Text;
+            oPropertyNameMapping.PracticeGroup = uiconfigs.MatterLanding.Label5Tab1Column3Text;
+            if (configs.search.Schema.toLowerCase() === "mattercenter") {
+                oPropertyNameMapping.ResponsibleAttorney = uiconfigs.MatterLanding.Label7Tab1Column5Text;
+                $('.blockedUserSection').show();
+            }
+            else {
+                $('.blockedUserSection').hide();
+            }
+
+            oPropertyNameMapping.Description = uiconfigs.MatterLanding.Label11Section1Text;
+
+            oPropertyNameMapping.ProjectName = uiconfigs.MatterLanding.Label1MenuText;
+            oPropertyNameMapping.TeamName = uiconfigs.MatterLanding.Label3Tab1Column1Text;
+            oPropertyNameMapping.TeamID = uiconfigs.MatterLanding.Label10Section1Text;
+            oPropertyNameMapping.ProjectID = uiconfigs.MatterLanding.Label9Section1Text;
+            oPropertyNameMapping.LPCPracticeGroup = uiconfigs.MatterLanding.Label5Tab1Column3Text;
+
+            oGlobalConstants.sMatterIdAndClientIdTitle = uiconfigs.MatterLanding.Label4Tab1Column2Text;
+
+            
+
+            /* Set the rss panel html text */
+            var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
+            sRSSText = sRSSText.replace("Related News (RSS) </div>", "" + uiconfigs.MatterLanding.Label16RSSFeedTitleText + "</a>");
+            sRSSText = sRSSText.replace("title='Related News (RSS)'", "title='" + uiconfigs.MatterLanding.Label16RSSFeedTitleText + "'");
+
+
+            $("#rssPane").html(sRSSText);
+
+            /* Add loading image to OneNote section */
+            $("#oneNotePane").html(oMatterLandingHtmlConstants.oneNoteLoadingHtml.replace("@@LoadingImage",
 		    	oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage));
-		    	
-   		    // Cache the pin element
-   		    //ogic to display correct tab on selection of tab like Matter Properties, Matter Description etc.
-	    	oElement = $("#PinMatter");
-			$(".matterDescriptionTitle, .matterProfileTitle, .matterExtraPropertyTitle").click(function () {
-		        var className = $(this)[0].className;
-		        if (-1 !== className.indexOf("matterDescriptionTitle")) {
-		            $(".matterDescriptionTitle").removeClass("changeSection");
-		            $(".matterProfileTitle").addClass("changeSection");
-		            $(".matterExtraPropertyTitle").addClass("changeSection");
-		            $(".matterDescriptionBody").removeClass("hide");
-		            $(".matterProfileBody").addClass("hide");
-		            $(".matterExtraPropertyBody").addClass("hide");
-		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
-		      	}
-				else if (-1 !== className.indexOf("matterProfileTitle")) {
-		            $(".matterDescriptionTitle").addClass("changeSection");
-		            $(".matterProfileTitle").removeClass("changeSection");
-		            $(".matterExtraPropertyTitle").addClass("changeSection");
-		            $(".matterDescriptionBody").addClass("hide");
-		            $(".matterProfileBody").removeClass("hide");
-		            $(".matterExtraPropertyBody").addClass("hide");
-		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
-	        	}
-	        	else if (-1 !== className.indexOf("matterExtraPropertyTitle")) {
-		            $(".matterDescriptionTitle").addClass("changeSection");
-		            $(".matterProfileTitle").addClass("changeSection");
-		            $(".matterExtraPropertyTitle").removeClass("changeSection");
-		            $(".matterDescriptionBody").addClass("hide");
-		            $(".matterProfileBody").addClass("hide");
-		            $(".matterExtraPropertyBody").removeClass("hide");
-		            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
-	        	}
-	    	});
-	    	
-	    	$("#matterLink").text(uiconfigs.MatterLanding.Menu1Option1Text);
-	    	$("#matterLink").attr('title', uiconfigs.MatterLanding.Menu1Option1Text);
-	    	
-	    	$("#documentLink").text(uiconfigs.MatterLanding.Menu1Option2Text);
-	    	$("#documentLink").attr('title', uiconfigs.MatterLanding.Menu1Option2Text);
-	
-	    	$("#settingsLink").text(uiconfigs.MatterLanding.Menu1Option3Text);
-	    	$("#settingsLink").attr('title', uiconfigs.MatterLanding.Menu1Option3Text);
-	    	
-	    	$(".iconText .mainText")[0].innerHTML =  uiconfigs.MatterLanding.MenuImageUpperCaption;
-	    	$(".iconText .subText")[0].innerHTML =  uiconfigs.MatterLanding.MenuImageLowerCaption;	    	
-	    	//$("#searchText").attr('placeholder', uiconfigs.MatterLanding.Menu1Option3Text);
-	    	
-	    	// Make a call to SharePoint functions
-		    ExecuteOrDelayUntilScriptLoaded(function () {
-		        var $task = $("#taskPane");
-		        var $calendar = $("#calenderPane");
-		        if ($task) {
-		            retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
-		        }
-		        if ($calendar) {
-		            retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
-		        }
-		        getMetaDataProperties(clientUrl, documentLibraryName);
-		        getUserData();
-		        checkUserExistsInSharePointGroup();
-		        getCurrentUserTitle();
-		        retrievePinListItems();
-		        
-		    }, "sp.js");
-		    
-		    if(configs.search.Schema.toLowerCase()!='mattercenter'){
-		    	$('.responsibleAttorney').hide();
-		    }
-	    	
-		});
+
+            // Cache the pin element
+            //ogic to display correct tab on selection of tab like Matter Properties, Matter Description etc.
+            oElement = $("#PinMatter");
+            $(".matterDescriptionTitle, .matterProfileTitle, .matterExtraPropertyTitle").click(function () {
+                var className = $(this)[0].className;
+                if (-1 !== className.indexOf("matterDescriptionTitle")) {
+                    $(".matterDescriptionTitle").removeClass("changeSection");
+                    $(".matterProfileTitle").addClass("changeSection");
+                    $(".matterExtraPropertyTitle").addClass("changeSection");
+                    $(".matterDescriptionBody").removeClass("hide");
+                    $(".matterProfileBody").addClass("hide");
+                    $(".matterExtraPropertyBody").addClass("hide");
+                    LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
+                }
+                else if (-1 !== className.indexOf("matterProfileTitle")) {
+                    $(".matterDescriptionTitle").addClass("changeSection");
+                    $(".matterProfileTitle").removeClass("changeSection");
+                    $(".matterExtraPropertyTitle").addClass("changeSection");
+                    $(".matterDescriptionBody").addClass("hide");
+                    $(".matterProfileBody").removeClass("hide");
+                    $(".matterExtraPropertyBody").addClass("hide");
+                    LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
+                }
+                else if (-1 !== className.indexOf("matterExtraPropertyTitle")) {
+                    $(".matterDescriptionTitle").addClass("changeSection");
+                    $(".matterProfileTitle").addClass("changeSection");
+                    $(".matterExtraPropertyTitle").removeClass("changeSection");
+                    $(".matterDescriptionBody").addClass("hide");
+                    $(".matterProfileBody").addClass("hide");
+                    $(".matterExtraPropertyBody").removeClass("hide");
+                    LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
+                }
+            });
+
+            $("#matterLink").text(uiconfigs.MatterLanding.Menu1Option1Text);
+            $("#matterLink").attr('title', uiconfigs.MatterLanding.Menu1Option1Text);
+
+            $("#documentLink").text(uiconfigs.MatterLanding.Menu1Option2Text);
+            $("#documentLink").attr('title', uiconfigs.MatterLanding.Menu1Option2Text);
+
+            $("#settingsLink").text(uiconfigs.MatterLanding.Menu1Option3Text);
+            $("#settingsLink").attr('title', uiconfigs.MatterLanding.Menu1Option3Text);
+
+            $(".iconText .mainText")[0].innerHTML = uiconfigs.MatterLanding.MenuImageUpperCaption;
+            $(".iconText .subText")[0].innerHTML = uiconfigs.MatterLanding.MenuImageLowerCaption;
+            //$("#searchText").attr('placeholder', uiconfigs.MatterLanding.Menu1Option3Text);
+
+            // Make a call to SharePoint functions
+            ExecuteOrDelayUntilScriptLoaded(function () {
+                var $task = $("#taskPane");
+                var $calendar = $("#calenderPane");
+                if ($task) {
+                    /* Set the task panel html text */
+                    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
+                    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;
+                    $.get(taskUrl).done(function () {
+                        sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+                        sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+                        sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> " + uiconfigs.MatterLanding.Label14TaskeTitleText + " </div>");
+                        sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+                        sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+                        $("#taskPane").html(sTaskPanelText);
+                        retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+                    }).fail(function () {
+                        taskUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.taskSuffix;
+                        sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+                        sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
+                        sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> " + uiconfigs.MatterLanding.Label14TaskeTitleText + " </div>");
+                        sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+                        sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+                        $("#taskPane").html(sTaskPanelText);
+                        retrieveListItems(libraryNameSuffix.taskSuffix, oMatterLandingCommonObjects.tasksListQuery, false);
+                    });
+                    
+                }
+                if ($calendar) {
+                    /* Set the calendar panel html text */
+                    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
+                    var calendarUrl = listUrl + getMatterName() + libraryNameSuffix.calendarSuffix;
+                    $.get(calendarUrl).done(function () {
+                        sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+                        sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+                        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+                        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+                        $("#calendarPane").html(sCalendarPanelText);
+                        retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+                    }).fail(function () {
+                        calendarUrl = listUrl + "/" + getMatterName() + libraryNameSuffix.calendarSuffix;
+                        sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", calendarUrl);
+                        sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+                        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"", "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText + "\"");
+                        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+                        $("#calendarPane").html(sCalendarPanelText);
+                        retrieveListItems(libraryNameSuffix.calendarSuffix, oMatterLandingCommonObjects.calendarListQuery, true);
+                    });
+                    
+                }
+                getMetaDataProperties(clientUrl, documentLibraryName);
+                getUserData();
+                checkUserExistsInSharePointGroup();
+                getCurrentUserTitle();
+                retrievePinListItems();
+
+            }, "sp.js");
+
+            if (configs.search.Schema.toLowerCase() != 'mattercenter') {
+                $('.responsibleAttorney').hide();
+            }
+
+        });
     });
 }
 
@@ -825,22 +827,22 @@ function getMetaDataProperties(sClientPath, sMatterName) {
     oPinProperties["MatterUrl"] = oPinProperties["MatterClientUrl"] + getMatterName() + oGlobalConstants.sUrlExtension;
     oMatterDetails.MatterUrl = oPinProperties["MatterUrl"];
     iFlag = 0;
-    oPropertiesList = [configs.matter.StampedPropertyMatterName, 
-						    configs.matter.StampedPropertyClientID, 
-						    configs.matter.StampedPropertyMatterID, 
-						    configs.contentTypes.managedColumns.ColumnName1, 
-						    configs.contentTypes.managedColumns.ColumnName2, 
+    oPropertiesList = [configs.matter.StampedPropertyMatterName,
+						    configs.matter.StampedPropertyClientID,
+						    configs.matter.StampedPropertyMatterID,
+						    configs.contentTypes.managedColumns.ColumnName1,
+						    configs.contentTypes.managedColumns.ColumnName2,
 						    configs.contentTypes.managedColumns.ColumnName3,
 						    configs.matter.StampedPropertyResponsibleAttorney];
-	if(configs.search.Schema.toLowerCase()!=="mattercenter"){
-		oPropertiesList = [configs.matter.StampedPropertyMatterName, 
-						    configs.matter.StampedPropertyClientID, 
-						    configs.matter.StampedPropertyMatterID, 
-						    configs.contentTypes.managedStampedColumns.ColumnName1, 
+    if (configs.search.Schema.toLowerCase() !== "mattercenter") {
+        oPropertiesList = [configs.matter.StampedPropertyMatterName,
+						    configs.matter.StampedPropertyClientID,
+						    configs.matter.StampedPropertyMatterID,
+						    configs.contentTypes.managedStampedColumns.ColumnName1,
 						    configs.contentTypes.managedStampedColumns.ColumnName2,
 						    configs.contentTypes.managedStampedColumns.ColumnName3];
 
-	}
+    }
     var clientUrl = sDomainAddress + sClientPath + oGlobalConstants.sGetTitle + sMatterName + oGlobalConstants.sGetProperties;
     getPropertiesForMatter(clientUrl, iFlag, oPropertiesList);
 
@@ -878,22 +880,22 @@ function processXML(xml, iFlag, oPropertiesList) {
     var oProcessedXml, iLength, oElements, iterator, iPropertiesLength, iPropertyIterator, oPinPropertiesList, sTextContent, sClientId;
     oProcessedXml = $.parseXML(xml);
     var oMatterInfoCount = 0;
-    oPinPropertiesList = [configs.matter.StampedPropertyMatterName, 
-    					configs.contentTypes.managedStampedColumns.ColumnName1, 
+    oPinPropertiesList = [configs.matter.StampedPropertyMatterName,
+    					configs.contentTypes.managedStampedColumns.ColumnName1,
     					configs.contentTypes.managedStampedColumns.ColumnName2,
-    					configs.contentTypes.managedStampedColumns.ColumnName3,    					
+    					configs.contentTypes.managedStampedColumns.ColumnName3,
     					configs.matter.StampedPropertyResponsibleAttorney,
-    					configs.matter.StampedPropertyResponsibleAttorney, 
-    					configs.matter.StampedPropertyTeamMembers, 
-    					configs.matter.StampedPropertyIsMatter, 
-    					configs.matter.StampedPropertyOpenDate, 
-    					configs.matter.StampedPropertyClientID, 
-    					configs.matter.StampedPropertyMatterID, 
+    					configs.matter.StampedPropertyResponsibleAttorney,
+    					configs.matter.StampedPropertyTeamMembers,
+    					configs.matter.StampedPropertyIsMatter,
+    					configs.matter.StampedPropertyOpenDate,
+    					configs.matter.StampedPropertyClientID,
+    					configs.matter.StampedPropertyMatterID,
     					configs.matter.StampedPropertyBlockedUploadUsers,
-    					configs.matter.StampedPropertyClientName, 
-    					configs.matter.StampedPropertyBlockedUsers, 
-    					"LastItemModifiedDate", 
-    					configs.matter.StampedPropertyMatterCenterUserEmails, 
+    					configs.matter.StampedPropertyClientName,
+    					configs.matter.StampedPropertyBlockedUsers,
+    					"LastItemModifiedDate",
+    					configs.matter.StampedPropertyMatterCenterUserEmails,
     					configs.matter.StampedPropertyResponsibleAttorneyEmail];  // Properties that are required for Pinning matter
     iLength = oProcessedXml.firstChild.lastChild.firstChild.childElementCount;
     oElements = oProcessedXml.firstChild.lastChild.firstChild;
@@ -901,36 +903,35 @@ function processXML(xml, iFlag, oPropertiesList) {
     iPropertiesLength = oPropertiesList.length;
     iPropertyIterator = 0;
     $(".matterDetails .loadingIcon").hide();
-    var practiceGroup='';
-    var matterType='';
-    var teamName='';
+    var practiceGroup = '';
+    var matterType = '';
+    var teamName = '';
     var clientColumnName = '';
     for (iPropertyIterator = 0; iPropertyIterator < iPropertiesLength; iPropertyIterator++) {
         for (iterator = 0; iterator < iLength; iterator++) {
             if (oElements.childNodes[iterator].localName === oPropertiesList[iPropertyIterator]) {  // Comparing XML properties with the properties we required
                 if (0 === iFlag) {
                     sTextContent = oElements.childNodes[iterator].textContent;
-                    if(configs.search.Schema.toLowerCase()!=="mattercenter" && ("ResponsibleAttorney").toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase()){
-                    	sTextContent = '';
+                    if (configs.search.Schema.toLowerCase() !== "mattercenter" && ("ResponsibleAttorney").toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase()) {
+                        sTextContent = '';
                     }
-                    
-                    if ((configs.contentTypes.managedColumns.ColumnName2).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent || 
-                    	(configs.contentTypes.managedColumns.ColumnName1).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent || 
+
+                    if ((configs.contentTypes.managedColumns.ColumnName2).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent ||
+                    	(configs.contentTypes.managedColumns.ColumnName1).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent ||
                     		(configs.matter.StampedPropertyResponsibleAttorney).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent) {
                         if (sTextContent.lastIndexOf(";") === sTextContent.length - 1) {
                             sTextContent = sTextContent.substring(0, sTextContent.length - 1);  // Use substring to remove ; at the end of the string
                         } else if (sTextContent.lastIndexOf(";") === sTextContent.length - 2) {
                             sTextContent = sTextContent.substring(0, sTextContent.length - 2);  // Use substring to remove ; at the end of the string
                         }
-                        if(configs.search.Schema.toLowerCase()==="mattercenter")
-                        {
-	                        if (("ResponsibleAttorney").toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent) {
-	                            var arrResponsibleAttorney = sTextContent.split(";");
-	                            arrResponsibleAttorney = $.map(arrResponsibleAttorney, function (n) { return n.trim(); });
-	                            sTextContent = unique(arrResponsibleAttorney).toString();
-	                        }
+                        if (configs.search.Schema.toLowerCase() === "mattercenter") {
+                            if (("ResponsibleAttorney").toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase() && sTextContent) {
+                                var arrResponsibleAttorney = sTextContent.split(";");
+                                arrResponsibleAttorney = $.map(arrResponsibleAttorney, function (n) { return n.trim(); });
+                                sTextContent = unique(arrResponsibleAttorney).toString();
+                            }
                         }
-                        
+
                     } else if ((configs.matter.StampedPropertyClientID).toLowerCase() === (oPropertiesList[iPropertyIterator]).toLowerCase()) {
                         sClientId = sTextContent;
                         continue;
@@ -938,57 +939,56 @@ function processXML(xml, iFlag, oPropertiesList) {
                         sTextContent = sClientId + oGlobalConstants.sClientIdAndMatterIdSeperator + sTextContent;
                         oPropertyNameMapping[oPropertiesList[iPropertyIterator]] = oGlobalConstants.sMatterIdAndClientIdTitle;
                     }
-                    
-                    if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='practice group'){
-                    	$(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationItemHtml.replace("@@PropertyName", oPropertyNameMapping[oPropertiesList[iPropertyIterator]]).replace(/@@PropertyValue/g, sTextContent).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]));
+
+                    if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'practice group') {
+                        $(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationItemHtml.replace("@@PropertyName", oPropertyNameMapping[oPropertiesList[iPropertyIterator]]).replace(/@@PropertyValue/g, sTextContent).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]));
                     }
-                                        
-                    if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='practice group' || 
-                    	oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='team name' || 
-                    	oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='project type'){
-                    	
-                    	if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='practice group'){
-                    		practiceGroup=sTextContent;
-                    	}
-                    	
-                    	if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='team name'){
-                    		clientColumnName = oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim()
-                    		teamName=sTextContent;
-                    	}
-                    	
-                    	if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()==='project type'){
-	                    	matterType = sTextContent;
-	                    }
-                    	
-                    	if(practiceGroup != '' && teamName!= ''  && matterType != '')
-                    	{
-                    			if (!window.location.origin) {
-								  window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
-								}
-		                    	var queryStringParameters = "section=1&teamname="+ teamName.trim()  + "&practicegroup=" + practiceGroup.trim() + "&mattertype=" + matterType.trim() ;
-		                    	var teamUrl ='' 
-		                    	if(!configs.global.isBackwardCompatible){
-		                    		teamUrl = window.location.origin+"/sitepages/mattercenterhome.aspx?"+queryStringParameters;
-		                    	}
-		                    	else{
-		                    		teamUrl = configs.global.repositoryUrl+"/sitepages/mattercenterhome.aspx?"+queryStringParameters;
-		                    	}
-		                    	
-		                    	$(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationClientHtml
-		                    					.replace("@@PropertyName", clientColumnName)
-		                    					.replace(/@@PropertyValue/g, teamName).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]).replace("@@TeamUrl", teamUrl))
-		                    					;
-                    	}
+
+                    if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'practice group' ||
+                    	oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'team name' ||
+                    	oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'project type') {
+
+                        if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'practice group') {
+                            practiceGroup = sTextContent;
+                        }
+
+                        if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'team name') {
+                            clientColumnName = oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim()
+                            teamName = sTextContent;
+                        }
+
+                        if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() === 'project type') {
+                            matterType = sTextContent;
+                        }
+
+                        if (practiceGroup != '' && teamName != '' && matterType != '') {
+                            if (!window.location.origin) {
+                                window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+                            }
+                            var queryStringParameters = "section=1&teamname=" + teamName.trim() + "&practicegroup=" + practiceGroup.trim() + "&mattertype=" + matterType.trim();
+                            var teamUrl = ''
+                            if (!configs.global.isBackwardCompatible) {
+                                teamUrl = window.location.origin + "/sitepages/mattercenterhome.aspx?" + queryStringParameters;
+                            }
+                            else {
+                                teamUrl = configs.global.repositoryUrl + "/sitepages/mattercenterhome.aspx?" + queryStringParameters;
+                            }
+
+                            $(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationClientHtml
+                                            .replace("@@PropertyName", clientColumnName)
+                                            .replace(/@@PropertyValue/g, teamName).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]).replace("@@TeamUrl", teamUrl))
+                            ;
+                        }
                     }
-                    else{
-                    	if(oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase()!=='project type'){
-                    		$(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationItemHtml.replace("@@PropertyName", oPropertyNameMapping[oPropertiesList[iPropertyIterator]]).replace(/@@PropertyValue/g, sTextContent).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]));
-                    	}
-                    }                    
-                    
-                    
-                   
-                    
+                    else {
+                        if (oPropertyNameMapping[oPropertiesList[iPropertyIterator]].trim().toLowerCase() !== 'project type') {
+                            $(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationItemHtml.replace("@@PropertyName", oPropertyNameMapping[oPropertiesList[iPropertyIterator]]).replace(/@@PropertyValue/g, sTextContent).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]));
+                        }
+                    }
+
+
+
+
                     setEllipsis($(".matterDetailText div"), oMatterInfoCount);
                     oMatterInfoCount++;
                 }
@@ -1053,27 +1053,27 @@ function getUserData() {
         var arrBlockUserName, arrUserNames, arrTeamMembers = [], arrUsersIds = [], arrResponsibleAttorney = [];
         if (oPinProperties.MatterCenterUserEmails) {
             arrTeamMembers = htmlDecode(oPinProperties.MatterCenterUserEmails).split("$|$");
-        } 
+        }
         else if (oPinProperties.ProjectCenterUserEmails) {
             arrTeamMembers = htmlDecode(oPinProperties.ProjectCenterUserEmails).split("$|$");
         }
         else {
             arrTeamMembers = trimEndChar(htmlDecode(oPinProperties.TeamMembers.trim()), ";").split(";");
         }
-        
-        if(oPinProperties.ResponsibleAttorneyEmail.indexOf('$|$')>0){
-        	if (oPinProperties.ResponsibleAttorneyEmail) {
-            	arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split("$|$");
-	        } else if (oPinProperties.ResponsibleAttorney) {
-	            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split("$|$");
-	        }
+
+        if (oPinProperties.ResponsibleAttorneyEmail.indexOf('$|$') > 0) {
+            if (oPinProperties.ResponsibleAttorneyEmail) {
+                arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split("$|$");
+            } else if (oPinProperties.ResponsibleAttorney) {
+                arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split("$|$");
+            }
         }
-        else{
-        	if (oPinProperties.ResponsibleAttorneyEmail) {
-            	arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split(";");
-	        } else if (oPinProperties.ResponsibleAttorney) {
-	            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
-	        }
+        else {
+            if (oPinProperties.ResponsibleAttorneyEmail) {
+                arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split(";");
+            } else if (oPinProperties.ResponsibleAttorney) {
+                arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
+            }
         }
         arrUserNames = $.merge(arrTeamMembers, arrResponsibleAttorney);
         if (oPinProperties.BlockedUsers && trimEndChar(htmlDecode(oPinProperties.BlockedUsers.trim()), ";").length > 0) {
@@ -1094,9 +1094,9 @@ function getUserData() {
             });
             arrUsersIds = unique($.map(arrUsersIds, function (item) { return item.trim() !== "" ? item.trim() : null; }));
             oGlobalConstants.iTeamMembersCount = arrUsersIds.length;
-            if(configs.global.isBackwardCompatible){
-            	$(".teamSection").css('cursor', 'default');
-			}
+            if (configs.global.isBackwardCompatible) {
+                $(".teamSection").css('cursor', 'default');
+            }
 
             $(".teamSection .userNumber").text("(" + oGlobalConstants.iTeamMembersCount + ")");
             $(".teamFlyoutData").find(".loadingIcon").addClass("hide");
@@ -1534,7 +1534,7 @@ function pinItemsSuccess() {
     if ("" !== oGlobalConstants.sOperationType) {
         if (0 === iCount) {
             if (oGlobalConstants.sOperationPin === oGlobalConstants.sOperationType) {
-            	oMatterDetails.LastItemModifiedDate = oMatterDetails.OpenDate
+                oMatterDetails.LastItemModifiedDate = oMatterDetails.OpenDate
                 oPinnedObject = getPinnedObject();
                 createListItemAndPin(oPinnedObject);
             }
@@ -1564,13 +1564,13 @@ function getPinnedObject() {
     var sMatterClientUrl = oMatterDetails.MatterClientUrl;
     sMatterClientUrl = sMatterClientUrl.substring(0, sMatterClientUrl.length - 1);
     var sPinnedObject = ""
-    
-    
-    if(!configs.global.isBackwardCompatible){
-    	var pcGroup = oMatterDetails.PracticeGroup.trim().replace(/;\s*$/, "");
-    	var areaOfLaw = oMatterDetails.AreaOfLaw.trim().replace(/;\s*$/, "");
-    	var subAreaOfLaw = oMatterDetails.SubAreaOfLaw.trim().replace(/;\s*$/, "");
-		sPinnedObject = "\"" + oMatterDetails.MatterUrl + "\": {\n\t \"MatterName\": \"" +
+
+
+    if (!configs.global.isBackwardCompatible) {
+        var pcGroup = oMatterDetails.PracticeGroup.trim().replace(/;\s*$/, "");
+        var areaOfLaw = oMatterDetails.AreaOfLaw.trim().replace(/;\s*$/, "");
+        var subAreaOfLaw = oMatterDetails.SubAreaOfLaw.trim().replace(/;\s*$/, "");
+        sPinnedObject = "\"" + oMatterDetails.MatterUrl + "\": {\n\t \"MatterName\": \"" +
             oMatterDetails.MatterName + "\", \n\t \"MatterDescription\": \"" +
             oMatterDetails.Description + "\", \n\t \"MatterCreatedDate\": \"" +
             oMatterDetails.OpenDate + "\", \n\t \"MatterUrl\": \"" +
@@ -1582,24 +1582,24 @@ function getPinnedObject() {
             oMatterDetails.ClientName + "\", \n\t \"MatterClientId\": \"" +
             oMatterDetails.ClientID + "\", \n\t \"MatterID\": \"" +
             oMatterDetails.MatterID + "\", \n\t \"MatterModifiedDate\": \"" +
-            oMatterDetails.LastItemModifiedDate+ "\", \n\t \"MatterResponsibleAttorney\": \"" +
+            oMatterDetails.LastItemModifiedDate + "\", \n\t \"MatterResponsibleAttorney\": \"" +
             oMatterDetails.ResponsibleAttorney + "\", \n\t \"MatterGUID\": \"" +
             getMatterName() + "\", \n\t \"HideUpload\": \"";
     }
-    else if(configs.global.isBackwardCompatible){
-    	var pcGroup = "";
-    	
-    	if(oMatterDetails.LPCPracticeGroup){
-    		pcGroup = oMatterDetails.LPCPracticeGroup.trim().replace(/;\s*$/, "");
-    	}
-    	
-    	var subAreaOfLaw = "";
-    	if(oMatterDetails.ProjectType){
-    		subAreaOfLaw = oMatterDetails.ProjectType.trim().replace(/;\s*$/, "");
-    	}
-    	
-    	var areaOfLaw = oMatterDetails.TeamName.trim().replace(/;\s*$/, "");    	
-    	sPinnedObject = "\"" + oMatterDetails.MatterUrl + "\": {\n\t \"MatterName\": \"" +
+    else if (configs.global.isBackwardCompatible) {
+        var pcGroup = "";
+
+        if (oMatterDetails.LPCPracticeGroup) {
+            pcGroup = oMatterDetails.LPCPracticeGroup.trim().replace(/;\s*$/, "");
+        }
+
+        var subAreaOfLaw = "";
+        if (oMatterDetails.ProjectType) {
+            subAreaOfLaw = oMatterDetails.ProjectType.trim().replace(/;\s*$/, "");
+        }
+
+        var areaOfLaw = oMatterDetails.TeamName.trim().replace(/;\s*$/, "");
+        sPinnedObject = "\"" + oMatterDetails.MatterUrl + "\": {\n\t \"MatterName\": \"" +
             oMatterDetails.ProjectName + "\", \n\t \"MatterDescription\": \"" +
             oMatterDetails.Description + "\", \n\t \"MatterCreatedDate\": \"" +
             oMatterDetails.OpenDate + "\", \n\t \"MatterUrl\": \"" +
@@ -1611,7 +1611,7 @@ function getPinnedObject() {
             oMatterDetails.TeamName + "\", \n\t \"MatterClientId\": \"" +
             oMatterDetails.TeamID + "\", \n\t \"MatterID\": \"" +
             oMatterDetails.ProjectID + "\", \n\t \"MatterModifiedDate\": \"" +
-            oMatterDetails.LastItemModifiedDate+ "\", \n\t \"MatterResponsibleAttorney\": \"" +
+            oMatterDetails.LastItemModifiedDate + "\", \n\t \"MatterResponsibleAttorney\": \"" +
             oMatterDetails.ResponsibleAttorney + "\", \n\t \"MatterGUID\": \"" +
             getMatterName() + "\", \n\t \"HideUpload\": \"";
 
@@ -1789,9 +1789,9 @@ function pinUnpinMatter(event) {
     "use strict";
     $(".pinIcon .loadingIcon").removeClass("hide");
     $("#PinMatter").addClass("hide");
-   // if( $(".pinImg").cl)
-      //  $(".pinImg").addClass("hide");
-  // $(".unPinImg").removeClass("hide");
+    // if( $(".pinImg").cl)
+    //  $(".pinImg").addClass("hide");
+    // $(".unPinImg").removeClass("hide");
 
     if (oElement) {
         if (oGlobalConstants.sOperationPin === $(oElement).attr("title")) {
@@ -1856,11 +1856,11 @@ function urlExists() {
                     // Success - Show the link and update the href
                     oGlobalConstants.sEventName = oGlobalConstants.Go_To_OneNote;
                     $(oOneNoteLink).empty();
-                    var oneNoteText =  oMatterLandingHtmlConstants.oneNoteHtml;
+                    var oneNoteText = oMatterLandingHtmlConstants.oneNoteHtml;
                     oneNoteText = oneNoteText.replace("@@OneNoteLink", sOneNoteURL).replace("@@OneNoteIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.oneNoteIcon)
                     oneNoteText = oneNoteText.replace("@@oneNoteTitle", uiconfigs.MatterLanding.Label13GotoOnnoteTitleText);
                     oneNoteText = oneNoteText.replace("@@oneNoteAlt", uiconfigs.MatterLanding.Label13GotoOnnoteTitleText);
-					oneNoteText = oneNoteText.replace("@@oneNoteText", uiconfigs.MatterLanding.Label13GotoOnnoteTitleText);
+                    oneNoteText = oneNoteText.replace("@@oneNoteText", uiconfigs.MatterLanding.Label13GotoOnnoteTitleText);
                     $(oOneNoteLink).html(oneNoteText);
                     adjustFooter();
                 },
