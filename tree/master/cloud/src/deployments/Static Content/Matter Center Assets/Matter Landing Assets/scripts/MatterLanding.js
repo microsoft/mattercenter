@@ -1,21 +1,4 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @premchandpl
- Sign out
- Unwatch 71
-  Star 130
- Fork 112 Microsoft/mattercenter
- Code  Issues 20  Pull requests 1  Projects 0  Wiki  Pulse  Graphs
-Branch: master Find file Copy pathmattercenter/tree/master/cloud/src/deployments/Static Content/Matter Center Assets/Matter Landing Assets/scripts/MatterLanding.js
-b1d49c0  14 days ago
-@keyurtechy keyurtechy Changes for Task and extraproperties (#681)
-5 contributors @WilsonReddy @premchandpl @keyurtechy @sunnymistry @AkashVirani
-RawBlameHistory     
-1884 lines (1699 sloc)  90.7 KB
+
 /// <disable>JS1003,JS2005,JS2024,JS2027,JS2031,JS2032,JS2052,JS2053,JS2064,JS2073,JS2074,JS2076,JS2085,JS3054,JS3057,JS3085,JS3116,JS3056,JS3058,JS3092</disable>
 /* Matter Center constants */
 
