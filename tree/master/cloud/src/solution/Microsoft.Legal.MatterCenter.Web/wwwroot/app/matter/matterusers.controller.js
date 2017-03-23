@@ -2204,6 +2204,7 @@
                         assignTeam.disable = false;
                         cm.canDeleteTheUser = false;
                         assignTeam.status = "add";
+                        cm.disableControls = false;
                     }
                 }
                 else {
