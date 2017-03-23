@@ -228,7 +228,7 @@
             var roles = tempMatterProp.matterObject.roles;
             cm.sConflictScenario = 0 < tempMatterProp.matterObject.blockUserNames.length ? "True" : "False";
 
-            if (userEmails && userNames && roles && permissions && userEmails.length === userNames.length && userNames.length === permissions.length && roles.length === permissions.length) {
+            if (userEmails && userNames && roles && permissions && userEmails.length === userNames.length && userNames.length === permissions.length ) {
                 setMatterUsersData(true);
             }
             else if (userNames && permissions && userNames.length === permissions.length) {
@@ -322,7 +322,13 @@
                 cm.assignPermissionTeams.push(assignedTeam);
                 var userDetails = {};
                 userDetails.userName = userNameValue + "(" + userEmailValue + ");";
-                userDetails.userRole = roles[i];
+                //userDetails.userRole = roles[i];
+                if (roles == undefined || roles.length === 0) {
+                    userDetails.userRole = assignedTeam.assignedRole.name;
+                }
+                else {
+                    userDetails.userRole = roles[i];
+                }
                 userDetails.userEmail = userEmailValue;
                 userDetails.userPermission = permissions[i];
                 if(cm.stampedMatterUsers.length==0){

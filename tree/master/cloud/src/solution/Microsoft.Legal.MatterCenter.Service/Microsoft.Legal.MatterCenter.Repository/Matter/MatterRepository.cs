@@ -203,7 +203,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 // Get matter library current permissions
                 userPermissionOnLibrary = FetchUserPermissionForLibrary(clientContext, matter.Name);
                 string originalMatterName = GetMatterName(clientContext, matter.Name);
-                string matterAssosicatedListName ="";
+                string matterAssosicatedListName = "";
                 List<string> usersToRemove = new List<string>();
                 foreach (IList<string> removedUsers in matterInformation.UsersNamesToRemove)
                 {
@@ -883,7 +883,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             return await Task.FromResult(spList.GetFolderHierarchy(matterData));
         }
-		
+
         public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
         {
             return spList.AddOneNote(clientContext, clientAddressPath, oneNoteLocation, listName, oneNoteTitle);
@@ -1073,6 +1073,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                     if (null != roleCollection && 0 < roleCollection.Count && 0 < usersToRemove.Count)
                     {
+                        usersToRemove = usersToRemove.Where(user => user != string.Empty).ToList();
                         foreach (string user in usersToRemove)
                         {
                             foreach (RoleAssignment role in roleCollection)
@@ -1082,21 +1083,29 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     // Removing permission for all the user except current user with full control
                                     // Add those users in list, then traverse the list and removing all users from that list
-                                    
+
                                     //Get email from the user instead of name for comparison
                                     Principal principal = role.Member;
-                                    User currentListUser = (User)principal;
-                                    if (currentListUser.Email.ToLower() == user.ToLower() && !((role.Member.Title.ToLower() == loggedInUserTitle.ToLower()) && (roleDef.Name ==
-                                        matterSettings.EditMatterAllowedPermissionLevel)))
+                                    if (principal.GetType().Name != "Group")
                                     {
-                                        roleDefinationList.Add(roleDef);
+                                        User currentListUser = (User)principal;
+                                        if (currentListUser.Email.ToLower() == user.ToLower() && !((role.Member.Title.ToLower() == loggedInUserTitle.ToLower()) && (roleDef.Name ==
+                                            matterSettings.EditMatterAllowedPermissionLevel)))
+                                        {
+                                            roleDefinationList.Add(roleDef);
+                                        }
                                     }
+
                                 }
-                                foreach (RoleDefinition roleDef in roleDefinationList)
+                                if (roleDefinationList.Count > 0)
                                 {
-                                    role.RoleDefinitionBindings.Remove(roleDef);
+                                    foreach (RoleDefinition roleDef in roleDefinationList)
+                                    {
+                                        role.RoleDefinitionBindings.Remove(roleDef);
+                                    }
+                                    role.Update();
                                 }
-                                role.Update();
+
                             }
                         }
                     }
@@ -1131,6 +1140,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var stampedPermissionsList = stampedPermissions.Replace("$|$", "$").Split('$').ToList();
                     string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterRoles);
                     var stampedRolesList = stampedRoles.Replace("$|$", "$").Split('$').ToList();
+                    stampedRolesList = stampedRolesList.Where(rolesList => rolesList != string.Empty).ToList();
 
                     string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyTeamMembers);
                     var stampedTeamMembersList = stampedTeamMembers.Replace(";", "$").Split('$').ToList();
@@ -1177,7 +1187,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             stampedUserList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                             stampedUserEmailsList[itemsToRemoveStampedUserProp[i]] = string.Empty;
-                            stampedRolesList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+
+                            if (stampedRolesList != null && stampedRolesList.Count > 0 && stampedRolesList.IndexOf(itemsToRemoveStampedUserProp[i].ToString()) > 0)
+                            {
+                                stampedRolesList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                            }
                             stampedPermissionsList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                             stampedTeamMembersList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                         }
@@ -1271,7 +1285,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     var finalMatterPermissionsList = finalMatterPermissions.Replace("$|$", "$").Split('$').ToList();
+                    finalMatterPermissionsList = finalMatterPermissionsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     var finalMatterRolesList = finalMatterRoles.Replace("$|$", "$").Split('$').ToList();
+                    finalMatterRolesList = finalMatterRolesList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     var finalMatterCenterUserEmailsString = finalMatterCenterUserEmails.Replace("$|$", ";");
                     var finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsString.Replace(";", "$").Split('$').ToList();
@@ -1289,10 +1305,21 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     #region Remove all the external users from the request object so that only internal users are added to the matter
                     //Once the external users accepted the invitation, those external users will be added to the matter by azure web app job
                     List<int> itemsToRemove = new List<int>();
-
-                    for (int i = 0; i < finalMatterUsersList.Count; i++)
+                    ///Below changes are required for the matters where no roles are available in the stamped properties. By default we are adding Responsible Attorney
+                    if (generalSettings.IsBackwardCompatible == true)
                     {
-                        if (userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterUsersList[i]) == false)
+                        if (finalMatterRolesList != null && finalMatterRolesList.Count == 0)
+                        {
+                            for (int i = 0; i < finalMatterPermissionsList.Count; i++)
+                            {
+                                finalMatterRolesList.Add("Responsible Attorney");
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < finalMatterCenterUserEmailsList.Count; i++)
+                    {
+                        if (userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterCenterUserEmailsList[i]) == false)
                         {
                             itemsToRemove.Add(i);
                         }
@@ -1424,7 +1451,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
 
 
-                    
+
                     //  finalTeamMembersList = matterDetails.TeamMembers.Replace(";", "$").Split('$').ToList();
                     finalTeamMembersList = matterDetails.TeamMembers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     if (itemsToRemove.Count > 0)
@@ -1773,7 +1800,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                 }
                 return currentUsers;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
@@ -1829,96 +1857,96 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                 }
 
-                    //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
-                    StringBuilder sb = new StringBuilder();
-                    JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
-                    jw.Formatting = Formatting.Indented;
-                    jw.WriteStartObject();
+                //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+                StringBuilder sb = new StringBuilder();
+                JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+                jw.Formatting = Formatting.Indented;
+                jw.WriteStartObject();
 
-                    jw.WritePropertyName("Fields");
-                    jw.WriteStartArray();
-                    foreach (var field in fieldCollection)
+                jw.WritePropertyName("Fields");
+                jw.WriteStartArray();
+                foreach (var field in fieldCollection)
+                {
+                    if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
                     {
-                        if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
+                        jw.WriteStartObject();
+                        jw.WritePropertyName("name");
+                        jw.WriteValue(field.Title);
+
+                        jw.WritePropertyName("fieldInternalName");
+                        jw.WriteValue(field.InternalName);
+
+                        jw.WritePropertyName("required");
+                        string isRequired = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
+                        string required = string.IsNullOrWhiteSpace(isRequired) ? false.ToString() : isRequired.ToLower();
+                        jw.WriteValue(required);
+
+                        jw.WritePropertyName("displayInUI");
+                        string isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
+                        isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
+                        jw.WriteValue(isDisplayInUI);
+
+                        jw.WritePropertyName("originalType");
+                        jw.WriteValue(field.TypeAsString);
+                        jw.WritePropertyName("defaultValue");
+                        jw.WriteValue(field.DefaultValue);
+                        jw.WritePropertyName("description");
+                        jw.WriteValue(field.Description);
+
+                        if (field.TypeAsString == "Choice")
                         {
-                            jw.WriteStartObject();
-                            jw.WritePropertyName("name");
-                            jw.WriteValue(field.Title);
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
+                            List<string> options = GetChoiceFieldValues(clientContext, field);
+                            jw.WritePropertyName("values");
+                            jw.WriteStartArray();
+                            int optionCounter = 1;
 
-                            jw.WritePropertyName("fieldInternalName");
-                            jw.WriteValue(field.InternalName);
-
-                            jw.WritePropertyName("required");
-                            string isRequired = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
-                            string required = string.IsNullOrWhiteSpace(isRequired) ? false.ToString() :isRequired.ToLower();
-                            jw.WriteValue(required);
-
-                            jw.WritePropertyName("displayInUI");
-                            string isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
-                            isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
-                            jw.WriteValue(isDisplayInUI);
-
-                            jw.WritePropertyName("originalType");
-                            jw.WriteValue(field.TypeAsString);
-                            jw.WritePropertyName("defaultValue");
-                            jw.WriteValue(field.DefaultValue);
-                            jw.WritePropertyName("description");
-                            jw.WriteValue(field.Description);
-
-                            if (field.TypeAsString == "Choice")
+                            foreach (string option in options)
                             {
-                                jw.WritePropertyName("type");
-                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
-                                List<string> options = GetChoiceFieldValues(clientContext, field);
-                                jw.WritePropertyName("values");
-                                jw.WriteStartArray();
-                                int optionCounter = 1;
-
-                                foreach (string option in options)
-                                {
-                                    jw.WriteStartObject();
-                                    jw.WritePropertyName("choiceId");
-                                    jw.WriteValue(optionCounter);
-                                    jw.WritePropertyName("choiceValue");
-                                    jw.WriteValue(option);
-                                    optionCounter++;
-                                    jw.WriteEndObject();
-                                }
-                                jw.WriteEndArray();
+                                jw.WriteStartObject();
+                                jw.WritePropertyName("choiceId");
+                                jw.WriteValue(optionCounter);
+                                jw.WritePropertyName("choiceValue");
+                                jw.WriteValue(option);
+                                optionCounter++;
+                                jw.WriteEndObject();
                             }
-                            else if (field.TypeAsString == "MultiChoice")
-                            {
-                                jw.WritePropertyName("type");
-                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
-                                List<string> options = GetChoiceFieldValues(clientContext, field);
-                                jw.WritePropertyName("values");
-                                jw.WriteStartArray();
-                                int optionCounter = 1;
-
-                                foreach (string option in options)
-                                {
-                                    jw.WriteStartObject();
-                                    jw.WritePropertyName("choiceId");
-                                    jw.WriteValue(optionCounter);
-                                    jw.WritePropertyName("choiceValue");
-                                    jw.WriteValue(option);
-                                    optionCounter++;
-                                    jw.WriteEndObject();
-                                }
-
-                                jw.WriteEndArray();
-                            }
-                            else
-                            {
-                                jw.WritePropertyName("type");
-                                jw.WriteValue(Convert.ToString(field.TypeAsString));
-                            }
-                            jw.WriteEndObject();
+                            jw.WriteEndArray();
                         }
+                        else if (field.TypeAsString == "MultiChoice")
+                        {
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                            List<string> options = GetChoiceFieldValues(clientContext, field);
+                            jw.WritePropertyName("values");
+                            jw.WriteStartArray();
+                            int optionCounter = 1;
+
+                            foreach (string option in options)
+                            {
+                                jw.WriteStartObject();
+                                jw.WritePropertyName("choiceId");
+                                jw.WriteValue(optionCounter);
+                                jw.WritePropertyName("choiceValue");
+                                jw.WriteValue(option);
+                                optionCounter++;
+                                jw.WriteEndObject();
+                            }
+
+                            jw.WriteEndArray();
+                        }
+                        else
+                        {
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(field.TypeAsString));
+                        }
+                        jw.WriteEndObject();
                     }
-                    jw.WriteEndArray();
-                    jw.WriteEndObject();
-                    return sb.ToString();             
+                }
+                jw.WriteEndArray();
+                jw.WriteEndObject();
+                return sb.ToString();
             }
             catch (Exception ex)
             {
