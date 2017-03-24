@@ -136,6 +136,7 @@ namespace Microsoft.Legal.MatterCenter.CreateTerm
                     if (action)
                     {
                         CreateTermStructure(listval, termList);
+                        System.Threading.Thread.Sleep(10000);
                         CreateClientStructure(listval, clientList, action);
                     }
                     else
