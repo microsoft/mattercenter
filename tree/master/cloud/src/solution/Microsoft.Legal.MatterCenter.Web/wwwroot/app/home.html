@@ -21,9 +21,9 @@
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
                 <span tabindex="-1" class="AppLogoContainer">
-                    <img tabindex="0" ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
-                    <span ng-if="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
-                    <span ng-if="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
+                    <img tabindex="0" ng-show="!vm.globalSettings.isBackwardCompatible" class="AppLogo" aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                    <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoFirstPart">CELA </span>
+                    <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoSecondPart">Project Center</span>
                 </span>
             </div>
         </div>

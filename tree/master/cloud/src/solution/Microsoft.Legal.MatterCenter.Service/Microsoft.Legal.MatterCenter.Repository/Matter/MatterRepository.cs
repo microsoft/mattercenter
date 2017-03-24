@@ -1072,8 +1072,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
 
                     if (null != roleCollection && 0 < roleCollection.Count && 0 < usersToRemove.Count)
-                    {
-                        usersToRemove = usersToRemove.Where(user => user != string.Empty).ToList();
+                    {                       
                         foreach (string user in usersToRemove)
                         {
                             foreach (RoleAssignment role in roleCollection)
@@ -1086,6 +1085,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                                     //Get email from the user instead of name for comparison
                                     Principal principal = role.Member;
+                                    //Check has been made to see whether the principal is of type group
                                     if (principal.GetType().Name != "Group")
                                     {
                                         User currentListUser = (User)principal;
@@ -1145,10 +1145,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyTeamMembers);
                     var stampedTeamMembersList = stampedTeamMembers.Replace(";", "$").Split('$').ToList();
                     stampedTeamMembersList = stampedTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-                    string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyBlockedUploadUsers);
-
-
-
+                    
                     List<int> itemsToRemoveStampedUserProp = new List<int>();
                     foreach (IList<string> userNames in matter.AssignUserEmails)
                     {
@@ -1188,7 +1185,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             stampedUserList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                             stampedUserEmailsList[itemsToRemoveStampedUserProp[i]] = string.Empty;
 
-                            if (stampedRolesList != null && stampedRolesList.Count > 0 && stampedRolesList.IndexOf(itemsToRemoveStampedUserProp[i].ToString()) > 0)
+                            if (stampedRolesList != null && stampedRolesList.Count > 0)
                             {
                                 stampedRolesList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                             }
@@ -1267,13 +1264,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
 
-
+                    string finalBlockedUploadUsers = string.Empty;
                     string finalMatterPermissions = string.IsNullOrWhiteSpace(stampedPermissions) || isEditMode ? currentPermissions : string.Concat(stampedPermissions, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentPermissions);
                     string finalMatterRoles = string.IsNullOrWhiteSpace(stampedRoles) || isEditMode ? currentRoles : string.Concat(stampedRoles, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentRoles);
                     string finalResponsibleAttorneys = string.IsNullOrWhiteSpace(stampedResponsibleAttorneys) || isEditMode ? matterDetails.ResponsibleAttorney : string.Concat(stampedResponsibleAttorneys, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorney);
                     string finalTeamMembers = string.IsNullOrWhiteSpace(stampedTeamMembers) || isEditMode ? matterDetails.TeamMembers : string.Concat(stampedTeamMembers, ServiceConstants.SEMICOLON, matterDetails.TeamMembers);
                     string finalMatterCenterUsers = string.IsNullOrWhiteSpace(stampedUsers) || isEditMode ? currentUsers : string.Concat(stampedUsers, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUsers);
-                    string finalBlockedUploadUsers = string.IsNullOrWhiteSpace(stampedBlockedUploadUsers) || isEditMode ? currentBlockedUploadUsers : string.Concat(stampedBlockedUploadUsers, ServiceConstants.SEMICOLON, currentBlockedUploadUsers);
+                    
                     string finalMatterCenterUserEmails = string.IsNullOrWhiteSpace(stampedUserEmails) || isEditMode ? currentUserEmails : string.Concat(stampedUserEmails, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUserEmails);
                     string finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorneyEmail);
                     var finalMatterUsers = finalMatterCenterUsers.Replace("$|$", ";").ToString();
@@ -1315,7 +1312,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 finalMatterRolesList.Add("Responsible Attorney");
                             }
                         }
+                    } 
+
+                    //If the user permissions has been changed to read, need to add that user to blocked users list, so that, read only users can't upload 
+                    //documents to matters
+                    var finalBlockedUploadUsersList = new List<string>();
+                    for (int i = 0; i < finalMatterPermissionsList.Count; i++)
+                    {
+                        if (finalMatterPermissionsList[i].ToLower() == "read")
+                        {
+                            finalBlockedUploadUsersList.Add(finalMatterCenterUserEmailsList[i]);
+                        }
                     }
+                    finalBlockedUploadUsers = string.Join(";", finalBlockedUploadUsersList);
+
 
                     for (int i = 0; i < finalMatterCenterUserEmailsList.Count; i++)
                     {
@@ -1339,7 +1349,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 finalResponsibleAttorneysEmailList[itemsToRemove[i]] = string.Empty;
                                 finalResponsibleAttorneysUsersList[itemsToRemove[i]] = string.Empty;
                             }
-
                         }
                         finalMatterUsersList = finalMatterUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
