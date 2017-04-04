@@ -2305,6 +2305,47 @@
         }
         //#endregion
 
+
+        //#region accessibility bug fixses
+        //to handle enter key press event on the ECB menu for accessibility issue fix
+        vm.openContextMenu = function (event, currentRow) {
+            if (event.keyCode === 13) {
+                $('.popcontent').css('display', 'none');
+                angular.element($(event.currentTarget.children[0])).addClass('open');
+              
+            }
+            else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                angular.element($(event.currentTarget.children[0])).removeClass('open');
+            }
+        }
+
+        //to handle enter key press event to display matter flyout menu for accessibility issue fix
+        vm.openDocumentFlyout = function (event) {
+            if (event.keyCode === 13) {
+                angular.element($(event.currentTarget.children[0])).click();
+            }
+            else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                $('.popcontent').css('display', 'none');
+            }
+        }
+
+
+        vm.closeContextMenu = function ($event) {
+            //To handle key board event for accessability fix
+            if (event.keyCode === 9) {
+                angular.element($(event.currentTarget.parentElement.parentElement)).removeClass('open');
+            }
+        }
+        //To handle check all functionality when the user presses checkbox at the 
+        //in the header column
+        vm.toggleCheckerForKeyDown = function (temp, currentRow, event) {
+            temp = temp ? false : true;
+            currentRow.checker = temp;
+        }
+
+
+        //#endregion
+
     }]);
 
     //#region For adding custom filter 
