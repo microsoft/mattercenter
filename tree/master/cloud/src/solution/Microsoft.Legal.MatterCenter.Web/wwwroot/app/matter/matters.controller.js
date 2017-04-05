@@ -1286,7 +1286,12 @@
             //#endregion
 
             //#region for setting the mattername in dropdown
-            vm.SetMatters = function (id, name) {
+            vm.SetMatters = function (event, id, name) {
+                if (event) {
+                    if (event.keyCode == 13) {
+                        angular.element('#comboMattersOpt').removeClass('open');                       
+                    }
+                }
                 vm.pinnedorunpinned = false;
                 vm.clearAllFilter();
                 vm.clearAllFiltersofSort();
@@ -2013,7 +2018,7 @@
             //#endregion
 
             //#region To run GetMatters function on page load
-            vm.SetMatters(vm.matterid, vm.mattername);
+            vm.SetMatters(undefined,vm.matterid, vm.mattername);
             //End 
 
             //#region Written for unpinning the matter 
@@ -3129,6 +3134,21 @@
                 }
             }
             //Generic function to handle Accessability Fixes for KeyBoard Navigation
+		vm.mattersCombobox = function (event,id) {
+	                if (event.keyCode == 13) {
+	                    angular.element('#comboMattersOpt').addClass("open");
+	                }
+	                else if (id == 3 && event.keyCode == 9) {
+	                     angular.element('#comboMattersOpt').removeClass('open');
+	                }
+	                else if (event.keyCode == 27) {
+	                    angular.element('#comboMattersOpt').removeClass('open');
+	                }
+	                event.stopPropagation();
+              
+            	}
+
+          
             vm.keydownFunction = function (event, funcName, currentRow) {
                 if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
                     angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');

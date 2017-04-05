@@ -278,10 +278,7 @@
             //#endregion
 
             //#region Functionality to check all checkboxes inside grid
-            vm.toggleCheckerAll = function (checked, event) {
-                if (event && event.keyCode == 13) {
-                    checked = checked?false:true;
-                }
+            vm.toggleCheckerAll = function (checked, event) {                
                 vm.cartelements = [];
                 vm.documentsCheckedCount = 0;
                 for (var i = 0; i < vm.documentGridOptions.data.length; i++) {
