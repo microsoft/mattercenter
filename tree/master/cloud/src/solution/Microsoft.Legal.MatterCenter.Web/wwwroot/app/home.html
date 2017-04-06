@@ -46,10 +46,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="ContextualHelpSupport">
-                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">
-                                {{vm.header.ContextualHelpFooterLabel}}
-                                <span class="ContextualHelpSupportMailTo">
+                        <div class="ContextualHelpSupport" role="region">
+                            <span class="ContextualHelpBottomText" 
+                                  aria-label="{{vm.header.ContextualHelpFooterLabel}}"
+                                  aria-live="assertive" aria-atomic="true" title="{{vm.header.ContextualHelpFooterLink1Title}}">
+                                {{vm.header.ContextualHelpFooterLabel}} 
+                                <span class="ContextualHelpSupportMailTo" 
+                                      aria-label="{{vm.navigation.ContextualHelpFooterLink1Label}}"
+                                      aria-live="assertive" aria-atomic="true">
                                     <a class="MatterCenterSupportLink" aria-live="assertive" aria-atomic="true" 
                                        aria-label="{{vm.navigation.ContextualHelpFooterLink1Label}}"
                                        tabindex="0"  title="{{vm.navigation.ContextualHelpFooterLink1Label}}"
@@ -58,7 +62,9 @@
                             </span>
                         </div>
                         <div class="lazyLoading" style="left:45%;bottom:162px" ng-hide="vm.lazyloaderhelp">
-                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
+                            <img src="../Images/WindowsLoadingFast.GIF" 
+                                 alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" 
+                                 title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
                         </div>
                     </div>
                 </div>
