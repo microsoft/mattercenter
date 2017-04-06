@@ -10,13 +10,12 @@
                 <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelCloseMenu}}" class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
                 <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
             </div>
-            <div role="menu" class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}" >
+            <div role="menu" class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
                 <div tabindex="-1" class="AppMenuFlyoutPriLinks" role="menu">
                     <a tabindex="0" role="menuitem" ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
-                    <a tabindex="0" role="menuitem"  ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
-                    <a tabindex="0" role="menuitem"  ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
-                    <a  tabindex="0" role="menuitem" ng-keydown="$event.keyCode==9?vm.menuClick():null"  ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
-
+                    <a tabindex="0" role="menuitem" ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
+                    <a tabindex="0" role="menuitem" ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
+                    <a tabindex="0" role="menuitem" ng-keydown="$event.keyCode==9?vm.menuClick():null" ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
                 </div>
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
@@ -29,23 +28,34 @@
         </div>
         <div class="col-xs-2 col-sm-2 pad0 width25">
             <div id="ContextualHelp">
-                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}" ng-click="$root.dispContextualHelp($event)" />
+                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}"
+                     ng-click="$root.dispContextualHelp($event)" />
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
-                    <div class="ContextualHelpFlyout">
-                        <img class="homeCloseContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
+                    <div class="ContextualHelpFlyout" role="menu">
+                        <img class="homeCloseContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}"
+                             ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" aria-live="assertive" aria-atomic="true" tabindex="0"/>
                         <div class="ContextualHelpHeader" title="{{vm.header.ContextualHelpHeader}}">{{vm.header.ContextualHelpHeader}}</div>
                         <div class="contextualHelpSections">
-                            <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData">
-                                <div class="ContextualHelpSectionHeader"
+                            <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData" >
+                                <div role="menuitem" class="ContextualHelpSectionHeader" aria-live="assertive" aria-atomic="true" tabindex="0"
+                                     aria-label="{{helpData.contextSection.sectionTitle}}"
                                      title="{{helpData.contextSection.sectionTitle}}" id="{{helpData.contextSection.sectionTitle}}">{{helpData.contextSection.sectionTitle}}</div>
-                                <div class="ContextualHelpSectionData displaySingleColumn" title="{{helpData.linkTitle}}">
-                                    <a href="{{helpData.linkURL}}"
-                                       target="_blank">{{helpData.linkTitle}}</a>
+                                <div class="ContextualHelpSectionData displaySingleColumn" title="{{helpData.linkTitle}}" tabindex="0">
+                                    <a href="{{helpData.linkURL}}" aria-label="{{helpData.linkTitle}}"
+                                       target="_blank" aria-live="assertive" aria-atomic="true" tabindex="0" role="menuitem">{{helpData.linkTitle}}</a>
                                 </div>
                             </div>
                         </div>
                         <div class="ContextualHelpSupport">
-                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="{{vm.navigation.MatterCenterSupportLink}}">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
+                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">
+                                {{vm.header.ContextualHelpFooterLabel}}
+                                <span class="ContextualHelpSupportMailTo">
+                                    <a class="MatterCenterSupportLink" aria-live="assertive" aria-atomic="true" 
+                                       aria-label="{{vm.navigation.ContextualHelpFooterLink1Label}}"
+                                       tabindex="0"  title="{{vm.navigation.ContextualHelpFooterLink1Label}}"
+                                       href="{{vm.navigation.MatterCenterSupportLink}}">{{vm.navigation.ContextualHelpFooterLink1Label}}</a>
+                                </span>
+                            </span>
                         </div>
                         <div class="lazyLoading" style="left:45%;bottom:162px" ng-hide="vm.lazyloaderhelp">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
