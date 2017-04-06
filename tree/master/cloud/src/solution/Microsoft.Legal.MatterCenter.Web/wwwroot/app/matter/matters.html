@@ -23,10 +23,29 @@
                             <span role="listitem" class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.mattername}}</span>
                             <span class="caret"></span>
                         </div>
-                        <ul tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
-                            <li role="listitem" aria-label="{{vm.matterConfigContent.AriaLabelDropdown1Item1}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}"  ng-click="vm.SetMatters($event,1,vm.matterConfigContent.Dropdown1Item1)">{{vm.matterConfigContent.Dropdown1Item1}}</li>
-                            <li role="listitem" aria-label="{{vm.matterConfigContent.AriaLabelDropdown1Item2}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item2}"  ng-click="vm.SetMatters($event,2,vm.matterConfigContent.Dropdown1Item2)">{{vm.matterConfigContent.Dropdown1Item2}}</li>
-                            <li role="listitem" aria-label="{{vm.matterConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item3}" ng-keydown="vm.mattersCombobox($event,3)"  ng-click="vm.SetMatters($event,3,vm.matterConfigContent.Dropdown1Item3)">{{vm.matterConfigContent.Dropdown1Item3}}</li>
+                        <ul role="menu" tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                            <li >
+                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item1}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}"
+                                   href="" tabindex="0" aria-live="assertive" aria-atomic="true" role="menuitem"
+                                    ng-click="vm.SetMatters(1,vm.matterConfigContent.Dropdown1Item1)">
+                                    {{vm.matterConfigContent.Dropdown1Item1}}
+                                </a>
+                            </li>
+                            <li >
+                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item2}}"
+                                   class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item2}" ng-click="vm.SetMatters(2,vm.matterConfigContent.Dropdown1Item2)"
+                                    href="" tabindex="0" aria-live="assertive" aria-atomic="true" role="menuitem">
+                                    {{vm.matterConfigContent.Dropdown1Item2}}
+                                </a>
+                            </li>
+                            <li >
+                                <a 
+                                   class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item3}" ng-keydown="vm.mattersCombobox($event,3)" ng-click="vm.SetMatters(3,vm.matterConfigContent.Dropdown1Item3)"
+                                   aria-label="{{vm.matterConfigContent.Dropdown1Item3}}"
+                                   href="" tabindex="0" aria-live="assertive" aria-atomic="true" role="menuitem">
+                                    {{vm.matterConfigContent.Dropdown1Item3}}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

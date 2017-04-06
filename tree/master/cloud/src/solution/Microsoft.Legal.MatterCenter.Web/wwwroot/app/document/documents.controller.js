@@ -1319,7 +1319,7 @@
 
         //#region Functionality to get results bases of "All,My,Pinned" document selection in dropdown
         //#region for setting the document name in dropdown
-        vm.SetDocuments = function (id, name) {
+        vm.SetDocuments = function (id, name) {           
             vm.pinnedorunpinned = false;
             vm.clearAllFilter();
             vm.clearAllFiltersofSort();
@@ -2117,7 +2117,9 @@
                 }
             }
             isOpenedInOutlook();
-            $scope.$apply();
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
 
         };
         //#endregion
@@ -2307,6 +2309,10 @@
 
 
         //#region accessibility bug fixses
+        //keycode 13 for enterkey
+        //keycode 9 for tab
+        //keycode 38 up arrow and 40 for down arrow
+        //keycode 27 for esc key
         //to handle enter key press event on the ECB menu for accessibility issue fix
         vm.openContextMenu = function (event, currentRow) {
             if (event.keyCode === 13) {
@@ -2342,7 +2348,20 @@
             temp = temp ? false : true;
             currentRow.checker = temp;
         }
+        //To handle keyboard navigation to open document menu option
+        vm.documentsCombobox = function (event, id) {
+            if (event.keyCode == 13) {
+                angular.element('#comboDocumentsOpt').addClass("open");
+            }
+            else if (id == 3 && event.keyCode == 9) {
+                angular.element('#comboDocumentsOpt').removeClass('open');
+            }
+            else if (event.keyCode == 27) {
+                angular.element('#comboDocumentsOpt').removeClass('open');
+            }
 
+
+        }
 
         //#endregion
 

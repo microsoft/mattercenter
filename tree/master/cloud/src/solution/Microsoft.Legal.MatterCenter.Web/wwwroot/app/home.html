@@ -7,7 +7,7 @@
         <div tabindex="-1" class="col-xs-10 AppHeader">
             <div tabindex="-1" class="AppSwitcherContainer" ng-click="vm.menuClick()">
                 <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelOpenMenu}}" class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
-                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelCloseMenu}}" class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
+                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelCloseMenu}}" ng-keydown="$event.keyCode==27?vm.menuClick():null" class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
                 <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
             </div>
             <div role="menu" class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">

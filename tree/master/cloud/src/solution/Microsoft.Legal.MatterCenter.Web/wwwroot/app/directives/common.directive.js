@@ -120,7 +120,7 @@
                     }
                     var actualcontent = "";
                     var matterUrl = obj.matterClientUrl + "/" + obj.matterGuid;
-                    actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
+                    actualcontent = '<div class="" role="region" aria-live="assertive" aria-atomic="true" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
                                       <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
@@ -155,8 +155,8 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading" style="width:250px">Save the document to this locations</div><br/>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
                                           <input type="text" value="' + matterUrl + '"><br/>\
-                                       </div>\<a aria-live="assertive" aria-atomic="true" role="button" id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-keydown="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
-                                          <a ng-if="!wordTextDisplay" aria-live="assertive" aria-atomic="true" role="button" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-keydown="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                       </div>\<a aria-describedby="description" aria-live="assertive" aria-atomic="true" aria-label="' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '" role="button" id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-keydown="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
+                                          <a aria-describedby="description" ng-if="!wordTextDisplay" aria-live="assertive" aria-label="' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '" aria-atomic="true" role="button" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-keydown="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                 </div>';
 

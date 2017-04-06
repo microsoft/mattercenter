@@ -355,7 +355,7 @@
             }
 
             //#region Functionality to check does URL exist in system.
-            vm.checkUrlExists = function (data) {               
+            vm.checkUrlExists = function (data) {
                 var loginUser = adalService.userInfo.userName.toLowerCase();
                 vm.hideUpload = true;
                 vm.urlExists = false;
@@ -1286,12 +1286,8 @@
             //#endregion
 
             //#region for setting the mattername in dropdown
-            vm.SetMatters = function (event, id, name) {
-                if (event) {
-                    if (event.keyCode == 13) {
-                        angular.element('#comboMattersOpt').removeClass('open');                       
-                    }
-                }
+            vm.SetMatters = function (id, name) {
+               
                 vm.pinnedorunpinned = false;
                 vm.clearAllFilter();
                 vm.clearAllFiltersofSort();
@@ -2018,7 +2014,7 @@
             //#endregion
 
             //#region To run GetMatters function on page load
-            vm.SetMatters(undefined,vm.matterid, vm.mattername);
+            vm.SetMatters( vm.matterid, vm.mattername);
             //End 
 
             //#region Written for unpinning the matter 
@@ -3112,6 +3108,10 @@
             });
 
             //#region accessibility bug fixses
+            //keycode 13 for enterkey
+            //keycode 9 for tab
+            //keycode 38 up arrow and 40 for down arrow
+            //keycode 27 for esc key
             //to handle enter key press event on the ECB menu for accessibility issue fix
             vm.openContextMenu = function (event, currentRow) {
                 if (event.keyCode === 13) {
@@ -3134,21 +3134,18 @@
                 }
             }
             //Generic function to handle Accessability Fixes for KeyBoard Navigation
-		vm.mattersCombobox = function (event,id) {
-	                if (event.keyCode == 13) {
-	                    angular.element('#comboMattersOpt').addClass("open");
-	                }
-	                else if (id == 3 && event.keyCode == 9) {
-	                     angular.element('#comboMattersOpt').removeClass('open');
-	                }
-	                else if (event.keyCode == 27) {
-	                    angular.element('#comboMattersOpt').removeClass('open');
-	                }
-	                event.stopPropagation();
-              
-            	}
+            vm.mattersCombobox = function (event, id) {
+                if (event.keyCode == 13) {
+                    angular.element('#comboMattersOpt').addClass("open");
+                }
+                else if (id == 3 && event.keyCode == 9) {
+                    angular.element('#comboMattersOpt').removeClass('open');
+                }
+                else if (event.keyCode == 27) {
+                    angular.element('#comboMattersOpt').removeClass('open');
+                }
+            }
 
-          
             vm.keydownFunction = function (event, funcName, currentRow) {
                 if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
                     angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
@@ -3161,7 +3158,7 @@
                             if (event.keyCode === 13) {
                                 vm.Openuploadmodal(currentRow.matterName, currentRow.matterClientUrl, currentRow.matterGuid);
                             }
-                        } 
+                        }
                         break;
                     }
                         //If the user clicks on matteronenoteurl link with in the ECB menu and presses Enter key
@@ -3191,8 +3188,8 @@
                     }
 
                 }
-                
-           
+
+
             }
             //#endregion
 
