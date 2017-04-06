@@ -66,17 +66,17 @@
             <div id="ProfileSwitcher" ng-click="$root.dispPersonal($event)">
                 <img class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
             </div>
-            <div class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();">
+            <div class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();" role="region">
                 <div class="PersonaContainer">
                     <div class="PersonaPictureContainer">
                         <img id="PersonaPicture" ng-src="{{vm.largePictureUrl}}" alt="{{vm.header.ProfilePictureLabelText}}" title="{{vm.header.ProfilePictureLabelText}}" />
                     </div>
-                    <div class="PersonaPictureDetails">
-                        <div class="PersonaTitle" id="PersonaTitle" title={{vm.fullName}}>{{vm.fullName}}</div>
-                        <div class="PersonaEmail" id="PersonaEmail" title={{vm.loginUserEmail}}>{{vm.loginUserEmail}}</div>
+                    <div class="PersonaPictureDetails" aria-live="assertive" aria-atomic="true" tabindex="0">
+                        <div class="PersonaTitle" id="PersonaTitle" title={{vm.fullName}} aria-label="{{vm.fullName}}">{{vm.fullName}}</div>
+                        <div class="PersonaEmail" id="PersonaEmail" title={{vm.loginUserEmail}} aria-label="{{vm.fullName}}">{{vm.loginUserEmail}}</div>
                     </div>
                 </div>
-                <div class="SignOutLink">
+                <div class="SignOutLink" aria-live="assertive" aria-atomic="true">
 
                     <button class="btn btn-link" ng-show="vm.isAuthenticated" ng-click="vm.signOut()">{{vm.header.LabelSingOutText}}</button>
                 </div>
