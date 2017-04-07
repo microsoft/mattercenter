@@ -2,6 +2,7 @@
     .commonContent {
         display: block !important;
     }
+   
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
@@ -275,9 +276,13 @@
             <div class="col-xs-12  padtop20 navtabs">
                 <ul class="nav nav-tabs" toggletab>
                     <li id="showMatters" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
-                    <li id="myMatters"  ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
-                    <li id="allMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText}" class="cursor hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.search()">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
-                    <li id="pinMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
+                    <li id="myMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText}" class="hideDocTabs">
+                        <a href="" class="noCursor" ng-show="!vm.lazyloaderdashboard">
+                            {{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})
+                        </a><a ng-show="vm.lazyloaderdashboard" href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a>
+                    </li>
+                    <li id="allMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText}" class="cursor hideDocTabs"><a href="" class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.search()">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
+                    <li id="pinMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a href="" class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
                 </ul>
             </div>
             <span class="showDocDashboard displayMatterTabs" ng-click="vm.showDocTabs($event)">...</span>

@@ -1287,6 +1287,7 @@
 
             //#region for setting the mattername in dropdown
             vm.SetMatters = function (id, name) {
+               
                 vm.pinnedorunpinned = false;
                 vm.clearAllFilter();
                 vm.clearAllFiltersofSort();
@@ -2013,7 +2014,7 @@
             //#endregion
 
             //#region To run GetMatters function on page load
-            vm.SetMatters(vm.matterid, vm.mattername);
+            vm.SetMatters( vm.matterid, vm.mattername);
             //End 
 
             //#region Written for unpinning the matter 
@@ -3105,6 +3106,92 @@
             $rootScope.$on('disableOverlay', function (event, data) {
                 vm.lazyloader = true;
             });
+
+            //#region accessibility bug fixses
+            //keycode 13 for enterkey
+            //keycode 9 for tab
+            //keycode 38 up arrow and 40 for down arrow
+            //keycode 27 for esc key
+            //to handle enter key press event on the ECB menu for accessibility issue fix
+            vm.openContextMenu = function (event, currentRow) {
+                if (event.keyCode === 13) {
+                    $('.popcontent').css('display', 'none');
+                    angular.element($(event.currentTarget.children[0])).addClass('open');
+                    vm.checkUrlExists(currentRow)
+                }
+                else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                    angular.element($(event.currentTarget.children[0])).removeClass('open');
+                }
+            }
+
+            //to handle enter key press event to display matter flyout menu for accessibility issue fix
+            vm.openMatterFlyout = function (event) {
+                if (event.keyCode === 13) {
+                    angular.element($(event.currentTarget.children[0])).click();
+                }
+                else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                    $('.popcontent').css('display', 'none');
+                }
+            }
+            //Generic function to handle Accessability Fixes for KeyBoard Navigation
+            vm.mattersCombobox = function (event, id) {
+                if (event.keyCode == 13) {
+                    angular.element('#comboMattersOpt').addClass("open");
+                }
+                else if (id == 3 && event.keyCode == 9) {
+                    angular.element('#comboMattersOpt').removeClass('open');
+                }
+                else if (event.keyCode == 27) {
+                    angular.element('#comboMattersOpt').removeClass('open');
+                }
+            }
+
+            vm.keydownFunction = function (event, funcName, currentRow) {
+                if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                    angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
+
+                }
+                switch (funcName.toLowerCase()) {
+                    //If the user clicks on upload link with in the ECB menu  and presses Enter key
+                    case 'upload': {
+                        if (vm.hideUpload) {
+                            if (event.keyCode === 13) {
+                                vm.Openuploadmodal(currentRow.matterName, currentRow.matterClientUrl, currentRow.matterGuid);
+                            }
+                        }
+                        break;
+                    }
+                        //If the user clicks on matteronenoteurl link with in the ECB menu and presses Enter key
+                    case 'matteronenoteurl': {
+                        if (event.keyCode === 13) {
+                            $window.open(event.currentTarget.children[0].href, "_blank");
+                        }
+                        break;
+                    }
+                        //If the user clicks on viewmatterdetails link with in the ECB menu and presses Enter key
+                    case 'viewmatterdetails': {
+                        if (event.keyCode === 13) {
+                            vm.viewMatterDetails(currentRow.matterClientUrl, currentRow.matterGuid)
+                        }
+                        break;
+                    }
+                        //If the user clicks on pinorunpin link with in the ECB menu  and presses Enter key
+                        //If the user presses tab for the last menu, we need to close the ECB menu
+                    case 'pinorunpin': {
+                        if (event.keyCode === 13) {
+                            currentRow.entity.MatterInfo === undefined ? vm.PinMatter(currentRow) : vm.UnpinMatter(currentRow);
+
+                        } else if (event.keyCode === 9) {
+                            angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
+                        }
+                        break;
+                    }
+
+                }
+
+
+            }
+            //#endregion
 
             //#region For clearing search on filter.
             vm.clearFiltersForSearch = function () {

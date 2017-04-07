@@ -120,7 +120,7 @@
                     }
                     var actualcontent = "";
                     var matterUrl = obj.matterClientUrl + "/" + obj.matterGuid;
-                    actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
+                    actualcontent = '<div class="" role="region" aria-live="assertive" aria-atomic="true" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
                                       <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
@@ -155,8 +155,8 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading" style="width:250px">Save the document to this locations</div><br/>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
                                           <input type="text" value="' + matterUrl + '"><br/>\
-                                       </div>\<a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
-                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                       </div>\<a aria-describedby="description" aria-live="assertive" aria-atomic="true" aria-label="' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '" role="button" id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-keydown="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
+                                          <a aria-describedby="description" ng-if="!wordTextDisplay" aria-live="assertive" aria-label="' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '" aria-atomic="true" role="button" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-keydown="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\',$event)" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                 </div>';
 
@@ -187,16 +187,31 @@
                             $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '220px');
                         }
                     }
-                    scope.$apply();
+                   // if (scope.$$phase && !scope.$$phase) {
+                        scope.$apply();
+                    //}
                 });
             },
             controller: function ($scope) {
-                $scope.openUpload = function (matterName, matterUrl, matterGUID) {
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);
+                $scope.openUpload = function (matterName, matterUrl, matterGUID, event) {
                     $('.popcontent').css('display', 'none');
+                    //To handle Accessability Fixes for KeyBoard Navigation
+                    if (event == undefined) {
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);                       
+                    }                    
+                    if (event && event.keyCode == 13) {                       
+                         $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);                       
+                     }
+                    
                 };
-                $scope.redirectViewMatters = function (url, guid) {
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.viewMatterDetails(url, guid);
+                $scope.redirectViewMatters = function (url, guid, event) {
+                    //To handle Accessability Fixes for KeyBoard Navigation
+                    if (event == undefined) {
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.viewMatterDetails(url, guid);
+                    }
+                    if (event && event.keyCode == 13) {
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.viewMatterDetails(url, guid);
+                    }
                 }
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
@@ -291,7 +306,7 @@
                                           <div class="ms-font-m FlyoutContent" datefilter title="' + obj.documentCreatedDate + '" date=' + obj.documentCreatedDate + '>' + obj.documentCreatedDate + '</div>\
                                        </div>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" href="" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" href="" style="width:190px" ng-keydown="gotoUrl(\'' + obj.documentClientUrl + '\',$event)" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
@@ -319,8 +334,17 @@
                 });
             },
             controller: function ($scope) {
-                $scope.gotoUrl = function (url) {
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl(url);
+                $scope.gotoUrl = function (url, event) {
+                    //To handle Accessability Fixes for KeyBoard Navigation
+                    $('.popcontent').css('display', 'none');
+                    if (event==undefined) {
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl(url);
+                    }
+                    if (event && event.keyCode == 9) {
+
+                    } else if (event && event.keyCode == 13) {
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl(url);
+                    }
                 }
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();

@@ -278,7 +278,7 @@
             //#endregion
 
             //#region Functionality to check all checkboxes inside grid
-            vm.toggleCheckerAll = function (checked) {
+            vm.toggleCheckerAll = function (checked, event) {                
                 vm.cartelements = [];
                 vm.documentsCheckedCount = 0;
                 for (var i = 0; i < vm.documentGridOptions.data.length; i++) {
@@ -1754,6 +1754,12 @@
                 }
             }
             //#endregion
+
+
+            vm.toggleCheckerForKeyDown = function (temp, currentRow, event) {
+                temp = temp ? false : true;
+                currentRow.checker = temp;
+            }
         }
     ]);
 })();

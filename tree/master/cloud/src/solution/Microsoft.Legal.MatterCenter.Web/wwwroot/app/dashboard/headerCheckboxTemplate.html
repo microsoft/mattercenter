@@ -1,5 +1,7 @@
 ﻿<div class="ngHeaderSortColumn {{col.headerClass}}" style="text-align: right;padding-right: 6px;padding-top: 8px;">
     <div  ng-class="'colt' + col.index" class="ngHeaderText">
-        <input  type="checkbox" role="checkbox" aria-label="To select all documents" id="chkAllDocCheckBox"  ng-model="checker.checked" ng-change="grid.appScope.vm.toggleCheckerAll(checker.checked);">
+        <input  type="checkbox" role="checkbox" aria-label="To select all documents" id="chkAllDocCheckBox"  ng-model="checker.checked" 
+                ng-keydown="$event.keyCode==13?grid.appScope.vm.toggleCheckerAll(checker.checked):null"
+               ng-change="$event.keyCode==13?null:grid.appScope.vm.toggleCheckerAll(checker.checked);">
     </div>
 </div>

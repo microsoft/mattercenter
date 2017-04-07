@@ -1319,7 +1319,7 @@
 
         //#region Functionality to get results bases of "All,My,Pinned" document selection in dropdown
         //#region for setting the document name in dropdown
-        vm.SetDocuments = function (id, name) {
+        vm.SetDocuments = function (id, name) {           
             vm.pinnedorunpinned = false;
             vm.clearAllFilter();
             vm.clearAllFiltersofSort();
@@ -2117,7 +2117,9 @@
                 }
             }
             isOpenedInOutlook();
-            $scope.$apply();
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
 
         };
         //#endregion
@@ -2303,6 +2305,64 @@
             vm.endDate = "";
             vm.createddatefilter = false;
         }
+        //#endregion
+
+
+        //#region accessibility bug fixses
+        //keycode 13 for enterkey
+        //keycode 9 for tab
+        //keycode 38 up arrow and 40 for down arrow
+        //keycode 27 for esc key
+        //to handle enter key press event on the ECB menu for accessibility issue fix
+        vm.openContextMenu = function (event, currentRow) {
+            if (event.keyCode === 13) {
+                $('.popcontent').css('display', 'none');
+                angular.element($(event.currentTarget.children[0])).addClass('open');
+              
+            }
+            else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                angular.element($(event.currentTarget.children[0])).removeClass('open');
+            }
+        }
+
+        //to handle enter key press event to display matter flyout menu for accessibility issue fix
+        vm.openDocumentFlyout = function (event) {
+            if (event.keyCode === 13) {
+                angular.element($(event.currentTarget.children[0])).click();
+            }
+            else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                $('.popcontent').css('display', 'none');
+            }
+        }
+
+
+        vm.closeContextMenu = function ($event) {
+            //To handle key board event for accessability fix
+            if (event.keyCode === 9) {
+                angular.element($(event.currentTarget.parentElement.parentElement)).removeClass('open');
+            }
+        }
+        //To handle check all functionality when the user presses checkbox at the 
+        //in the header column
+        vm.toggleCheckerForKeyDown = function (temp, currentRow, event) {
+            temp = temp ? false : true;
+            currentRow.checker = temp;
+        }
+        //To handle keyboard navigation to open document menu option
+        vm.documentsCombobox = function (event, id) {
+            if (event.keyCode == 13) {
+                angular.element('#comboDocumentsOpt').addClass("open");
+            }
+            else if (id == 3 && event.keyCode == 9) {
+                angular.element('#comboDocumentsOpt').removeClass('open');
+            }
+            else if (event.keyCode == 27) {
+                angular.element('#comboDocumentsOpt').removeClass('open');
+            }
+
+
+        }
+
         //#endregion
 
     }]);
