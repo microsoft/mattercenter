@@ -23,8 +23,9 @@
     <!--Start Pop up conatins for documents to send documents to one drive, send the email etc-->
 
     <div class="modal fade padright0" id="UploadMatterModal" tabindex="-1"
+         aria-live="assertive" aria-atomic="true"
          role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="width:100%" id="myModalLabel" role="region">
+        <div class="modal-dialog modal-lg" style="width:100%" id="myModalLabel" >
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="row margin0">
@@ -39,6 +40,7 @@
                                  src="../../images/close-666.png" />
                         </div>
                         <div style="text-align:center; margin-bottom:10px;"
+                             role="alert"
                              aria-label="{{vm.displayMessage}}"
                              aria-live="assertive"
                              aria-atomic="true"
@@ -54,10 +56,15 @@
                                          aria-label="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
                                          aria-live="assertive"
                                          aria-atomic="true"
+                                         tabindex="0"
                                          alt="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
-                                         ng-disabled="vm.enable"
+                                         
                                          title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" />
-                                    <div title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
+                                    <div title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
+                                         aria-label="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" 
+                                         aria-live="assertive"
+                                         aria-atomic="true"
+                                         class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
                                 </div>
                                 <div class="sendEmailOptions emailLinkOption" 
                                      ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)" tabindex="0">
@@ -65,10 +72,14 @@
                                          role="button"
                                          aria-label="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
                                          aria-live="assertive"
+                                         tabindex="0"
                                          aria-atomic="true"
                                          alt="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
                                          title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" />
                                     <div title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" 
+                                         aria-label="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" 
+                                         aria-live="assertive"
+                                         aria-atomic="true"
                                          class="inlineValues">{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}</div>
                                 </div>
                             </div>
@@ -81,15 +92,22 @@
                                             </div>
                                             <div class="col-xs-12 col-sm-8">
                                                 <span class="paddingRight20 floatLeft">
-                                                    <input type="checkbox" ng-model="element.mailCartSelected" 
+                                                    <input type="checkbox" ng-model="element.mailCartSelected"
                                                            role="checkbox"
                                                            aria-live="assertive"
                                                            aria-atomic="true"
                                                            aria-label="checking or unchecking {{element.documentName}}.{{element.documentExtension}}"
-                                                           tabindex="0"/>
+                                                           tabindex="0" />
                                                 </span><div title="{{element.documentName}}.{{element.documentExtension}}" class="cartFileTxtLabel">{{element.documentName}}.{{element.documentExtension}}</div>
                                             </div>
-                                            <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" ng-click="vm.removeAttachment(element)"></div>
+                                            <div class="col-xs-12 col-sm-1">
+                                                <img src="../Images/icon-delete.png" class="" 
+                                                     tabindex="0" role="button" aria-live="assertive"
+                                                     aria-atomic="true"
+                                                     aria-label="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}"
+                                                     title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" 
+                                                     ng-click="vm.removeAttachment(element)">
+                                            </div>
                                         </div>
                                     </li>
                                 </ul>
@@ -412,9 +430,11 @@
                     <span id="" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
                         <span id="EmailImg">
                             <img src="../Images/cart_icon_30px_X_30px.png"
+                                 tabindex="0"                                 
                                  class="mailCartIcon"
                                  title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
-                                 alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
+                                 alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" 
+                                 ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
                         </span>
                     </span>
                 </div>
