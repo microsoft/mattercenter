@@ -11,6 +11,7 @@
     #divCreateMatter #divContent:focus, .sectionContent:focus {
         outline: none !important;
     }
+    .visitedlink:visited {color:#333;}  
 </style>
 <div class="row" id="divHeader">
     <div class="col-xs-10 col-sm-8 col-md-6 col-lg-10" style="margin-left: 45px;margin-top: 1px;height: 58px;">
@@ -176,11 +177,13 @@
 
                     <div class="gutter"></div>
                     <div class="conflictRadioBtn">
-                        <label class="smaller">
+                        <label class="smaller" role="region">
                             <input type="radio" class="conflictradioCheck " 
+                                   aria-label="{{cm.createContent.ConflictYesRadioButtonTitle}}"
                                    aria-live="assertive" 
                                    aria-atomic="true" 
                                    role="radio"
+                                   tabindex="0"                                   
                                    title="{{cm.createContent.ConflictYesRadioButtonTitle}}"    
                                    ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' 
                                    ng-value="true" ng-model="cm.conflictRadioCheck" value=true>{{cm.createContent.Tab2RadioButton1Option1}}
@@ -188,9 +191,11 @@
                         <label class="smaller">
                             <input type="radio" class="conflictradioCheck " 
                                    title="{{cm.createContent.ConflictNoRadioButtonTitle}}" 
+                                   aria-label="{{cm.createContent.ConflictNoRadioButtonTitle}}"
                                    aria-live="assertive" 
                                    aria-atomic="true" 
                                    role="radio" 
+                                   tabindex="0"
                                    ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' 
                                    ng-model="cm.conflictRadioCheck" 
                                    ng-value="false" 
@@ -231,22 +236,31 @@
                     </section>
                 </div>
                 <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">{{cm.createContent.Tab2RadioButton2Label}}</label>
-                <div class="secureMatterRadioBtn assignTeamRadioPosition">
+                <div class="secureMatterRadioBtn assignTeamRadioPosition" role="region">
                     <label class="rdbOptions">
                         <input name="rdbSecureMatterCheck" 
                                title="{{cm.createContent.SecuredYesRadioButtonTitle}}" 
+                               aria-label="{{cm.createContent.SecuredYesRadioButtonTitle}}"
                                aria-live="assertive" 
                                aria-atomic="true" 
                                ng-disabled="cm.secureMatterRadioEnabled" 
                                ng-model="cm.secureMatterCheck" 
+                               tabindex="0"
+                               role="radio"
                                class="matterCheckYes" type="radio" ng-value=true value="true">{{cm.createContent.Tab2RadioButton2Option1}}
                     </label>
                     <label class="rdbOptions">
                         <input name="rdbSecureMatterCheck" 
                                aria-live="assertive" 
                                aria-atomic="true"  
+                               aria-label="{{cm.createContent.SecuredNoRadioButtonTitle}}"
                                title="{{cm.createContent.SecuredNoRadioButtonTitle}}" 
-                               ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false value="false">{{cm.createContent.Tab2RadioButton2Option2}}
+                               ng-disabled="cm.secureMatterRadioEnabled" 
+                               ng-model="cm.secureMatterCheck" 
+                               class="matterCheckNo" type="radio" 
+                               tabindex="0"
+                               role="radio"
+                               ng-value=false value="false">{{cm.createContent.Tab2RadioButton2Option2}}
                     </label>
                 </div>
                 <label class="contentLabel medium clear blue" id="assignTeam" ng-show="cm.defaultConfilctCheck">{{cm.createContent.Tab2TeamHeader}}</label>
@@ -260,7 +274,7 @@
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                         <input aria-autocomplete="list" aria-haspopup="true" 
-                               role="combobox" 
+                               role="textbox" 
                                aria-live="assertive" 
                                aria-atomic="true"
                                typeahead-focus-first=true
@@ -288,6 +302,7 @@
                                         aria-required="true" 
                                         aria-live="assertive"
                                         aria-atomic="true"
+                                        role="combobox"
                                         aria-label="{{cm.createContent.AriaLabelTeamRoleCombo}}" 
                                         ng-model="assignTeam.assignedRole"
                                         ng-options='assignRole.name for assignRole in cm.assignRoles'></select>
@@ -299,22 +314,50 @@
                                 <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
                                     <select id='permUser{{assignTeam.assigneTeamRowNumber}}' ng-disabled="assignTeam.disable"
                                             ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}"
-                                            class="medium clear dropdownCustom roleWidth" aria-required="true" aria-label="{{cm.createContent.AriaLabelTeamPermissionCombo}}" ng-model="assignTeam.assignedPermission"
+                                            class="medium clear dropdownCustom roleWidth" 
+                                            aria-required="true" 
+                                            role="combobox"
+                                            aria-live="assertive" 
+                                            aria-atomic="true"
+                                            aria-label="{{cm.createContent.AriaLabelTeamPermissionCombo}}" 
+                                            ng-model="assignTeam.assignedPermission"
                                             ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                                 </div>
                             </div>
                         </div>
                         <div class="gutter"></div>
                         <div class="customClose" ng-if="assignTeam.disable==true">
-                            <img ng-model="assignTeam.assigneTeamRowNumber" aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" style="cursor:default; opacity:0.6 !important" src="/../../Images/icon-delete.png">
+                            <img ng-model="assignTeam.assigneTeamRowNumber" 
+                                 role="button"
+                                 aria-live="assertive" 
+                                 aria-atomic="true"
+                                 aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" 
+                                 title="{{cm.createContent.ButtonDeleteText}}" 
+                                 alt="{{cm.createContent.ButtonDeleteText}}" 
+                                 style="cursor:default; opacity:0.6 !important" 
+                                 src="/../../Images/icon-delete.png">
                         </div>
                         <div class="close customClose" ng-if="assignTeam.disable==undefined">
-                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="/../../Images/icon-delete.png">
+                            <img ng-model="assignTeam.assigneTeamRowNumber" 
+                                 ng-click="cm.removeAssignPermissionsRow($index)" 
+                                 aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" 
+                                 aria-live="assertive" 
+                                 aria-atomic="true"
+                                 title="{{cm.createContent.ButtonDeleteText}}" 
+                                 role="button"
+                                 alt="{{cm.createContent.ButtonDeleteText}}" src="/../../Images/icon-delete.png">
                         </div>
                     </div>
                 </div>
                 <div class="clear" id="addNewAssignPerm">
-                    <a id="addMoreLink" tabindex="0" title="{{cm.createContent.LinkAddMoreUserTitle}}" aria-label="{{cm.createContent.AriaLabelAddMoreUser}}" ng-click="cm.addNewAssignPermissions()">
+                    <a href="" id="addMoreLink" 
+                       tabindex="0" 
+                       aria-live="assertive"
+                       aria-atomic="true"
+                       title="{{cm.createContent.LinkAddMoreUserTitle}}" 
+                       aria-label="{{cm.createContent.AriaLabelAddMoreUser}}" 
+                       ng-keypress="$event.keyCode==13?cm.addNewAssignPermissions():null"
+                       ng-click="cm.addNewAssignPermissions()">
                         <span class="glyphicon glyphicon-plus"></span> {{cm.createContent.Tab2AddMoreHeaderLabel}}
                     </a>
                 </div>
@@ -342,25 +385,49 @@
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <input id="demo-checkbox-unselected2" 
+                           ng-model="cm.includeEmail" 
+                           ng-init="cm.includeEmail" 
+                           ng-click="cm.createAndNotify(cm.includeEmail)" 
+                           class="ms-ChoiceField-input  ms-checkBox" 
+                           role="checkbox"
+                           aria-label="{{cm.createContent.Tab3CheckBox3Text}}"
+                           type="checkbox">
                     <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
+                    <input role="checkbox" 
+                           id="demo-checkbox-unselected0" 
+                           ng-model="cm.includeCalendar" 
+                           ng-init="cm.includeCalendar" 
+                           class="ms-ChoiceField-input ms-checkBox" 
+                           aria-label="{{cm.createContent.Tab3CheckBox1Text}}"
+                           type="checkbox">
                     <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <input role="checkbox" aria-label="{{cm.createContent.Tab3CheckBox4Text}}" id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <input role="checkbox" 
+                           aria-label="{{cm.createContent.Tab3CheckBox2Text}}"
+                           id="demo-checkbox-unselected1" 
+                           ng-model="cm.includeRssFeeds" 
+                           ng-init="cm.includeRssFeeds" 
+                           class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
                 </div>
-                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
+                <button class="button clear" 
+                        role="button"
+                        aria-label="{{cm.createButton}}"
+                        type="button" id="btnCreateMatter" 
+                        ng-click='cm.createMatterButton($event)' 
+                        ng-disabled="cm.createBtnDisabled" 
+                        value="Create">{{cm.createButton}}</button>
                 <div class="creatematerLoadingBtn">
                     <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
                 </div>
@@ -430,7 +497,7 @@
                                        href=""
                                        aria-atomic="true" aria-live="assertive"
                                        aria-label="{{levelTwoItem.termName}}"
-                                       class="pull-left contentTypeWidth">{{levelTwoItem.termName}}</a>
+                                       class="pull-left contentTypeWidth visitedlink">{{levelTwoItem.termName}}</a>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
                                 </div>
                             </div>
@@ -454,10 +521,10 @@
                                     <div role="menu" tabindex="0"
                                          aria-atomic="true" aria-live="assertive"
                                          ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
-                                        <a title="{{levelThreeItem.termName}}"
+                                        <a title="{{levelThreeItem.termName}}" href=""
                                            role="menuitem" tabindex="0" aria-live="assertive" aria-atomic="true"
                                            aria-label="{{levelThreeItem.termName}}"
-                                           class="pull-left contentTypeWidth">{{levelThreeItem.termName}}</a>
+                                           class="pull-left contentTypeWidth visitedlink">{{levelThreeItem.termName}}</a>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
 
                                     </div>
@@ -485,7 +552,7 @@
                                         <a title="{{levelFourItem.termName}}"
                                            role="menuitem" tabindex="0" aria-live="assertive" aria-atomic="true"
                                            aria-label="{{levelFourItem.termName}}"
-                                           class="pull-left contentTypeWidth">{{levelFourItem.termName}}</a>
+                                           class="pull-left contentTypeWidth visitedlink">{{levelFourItem.termName}}</a>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
 
                                     </div>
@@ -511,7 +578,7 @@
                                 <div class="popUpSALContent "
                                      ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        <a role="button" tabindex="0"
+                                        <a role="button" tabindex="0" href=""
                                            aria-live="assertive"
                                            aria-atomic="true"
                                            aria-label="{{levelFiveItem.termName}}"
