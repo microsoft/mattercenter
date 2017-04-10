@@ -2,6 +2,10 @@
     .commonContent {
         display: block !important;
     }
+
+    .bodymain {
+        overflow: scroll;
+    }
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
@@ -18,26 +22,54 @@
     <div class="clear"></div>
     <!--Start Pop up conatins for documents to send documents to one drive, send the email etc-->
 
-    <div class="modal fade padright0" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="width:100%">
+    <div class="modal fade padright0" id="UploadMatterModal" tabindex="-1"
+         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width:100%" id="myModalLabel" role="region">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="row margin0">
                         <div class="col-md-12">
-                            <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
+                            <img data-dismiss="modal"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-label="close dialog box"
+                                 aria-live="assertive"
+                                 aria-atomic="true"
+                                 class="pull-right"
+                                 src="../../images/close-666.png" />
                         </div>
-                        <div style="text-align:center; margin-bottom:10px;" ng-show="vm.isDisplayMessage">
+                        <div style="text-align:center; margin-bottom:10px;"
+                             aria-label="{{vm.displayMessage}}"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             ng-show="vm.isDisplayMessage">
                             {{vm.displayMessage}}
                         </div>
                         <div id="PopupBody">
                             <div class="selectMailFormat">
-                                <div class="sendEmailOptions emailAttachmentOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
-                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" ng-disabled="vm.enable"
-                                         title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" /><div title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
+                                <div class="sendEmailOptions emailAttachmentOption" tabindex="0"
+                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
+                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png"                                         
+                                         role="button"
+                                         aria-label="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
+                                         aria-live="assertive"
+                                         aria-atomic="true"
+                                         alt="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
+                                         ng-disabled="vm.enable"
+                                         title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" />
+                                    <div title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
                                 </div>
-                                <div class="sendEmailOptions emailLinkOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)">
-                                    <img class="mailCartLogo" src="../Images/link-666.png" alt="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
-                                         title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" /><div title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}</div>
+                                <div class="sendEmailOptions emailLinkOption" 
+                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)" tabindex="0">
+                                    <img class="mailCartLogo" src="../Images/link-666.png"
+                                         role="button"
+                                         aria-label="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
+                                         aria-live="assertive"
+                                         aria-atomic="true"
+                                         alt="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
+                                         title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" />
+                                    <div title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" 
+                                         class="inlineValues">{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}</div>
                                 </div>
                             </div>
                             <div class="popUpBody popUpFloatLeft popUpScrollXHidden mailContentPopUpBody">
@@ -48,14 +80,26 @@
                                                 <span><img id="document-{{$index}}" style="display:none" src="../Images/loadingcirclests16.gif"></span>
                                             </div>
                                             <div class="col-xs-12 col-sm-8">
-                                                <span class="paddingRight20 floatLeft"><input type="checkbox" ng-model="element.mailCartSelected" /></span><div title="{{element.documentName}}.{{element.documentExtension}}" class="cartFileTxtLabel">{{element.documentName}}.{{element.documentExtension}}</div> 
+                                                <span class="paddingRight20 floatLeft">
+                                                    <input type="checkbox" ng-model="element.mailCartSelected" 
+                                                           role="checkbox"
+                                                           aria-live="assertive"
+                                                           aria-atomic="true"
+                                                           aria-label="checking or unchecking {{element.documentName}}.{{element.documentExtension}}"
+                                                           tabindex="0"/>
+                                                </span><div title="{{element.documentName}}.{{element.documentExtension}}" class="cartFileTxtLabel">{{element.documentName}}.{{element.documentExtension}}</div>
                                             </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" ng-click="vm.removeAttachment(element)"></div>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class='pinLoadingImage' id='mailCartLoadingImage'>
-                                    <img src='/Images/WindowsLoadingFast.GIF' title='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' class='LoadingImage' alt='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' />
+                                    <img src='/Images/WindowsLoadingFast.GIF' 
+                                         aria-label="attaching documents or links"
+                                         aria-live="assertive"
+                                         aria-atomic="true"
+                                         title='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' 
+                                         class='LoadingImage' alt='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' />
                                 </div>
                             </div>
                         </div>
@@ -78,74 +122,151 @@
                                uib-typeahead="documentDataList.documentName+'.'+ documentDataList.documentExtension + ' ('+ documentDataList.docId + ')' for documentDataList in vm.searchDocumentFile($viewValue)"
                                typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)'
                                typeahead-no-results="noResults" class="form-control">
-                        <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                        <span class="input-group-addon cursor"
+                              id="basic-addon1" ng-click="vm.search()" role="button"
+                              title="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}"
+                              aria-label="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="col-xs-3 pad0">
-                <img title="{{vm.documentDashboardConfigs.ImageAdvanceSearchTitle}}" style="display: inline;" type='button'
+                <img title="{{vm.documentDashboardConfigs.ImageAdvanceSearchTitle}}"
+                     style="display: inline;" type='button'
+                     aria-atomic="true"
+                     aria-live="assertive"
+                     role="button"
                      ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown'
-                     alt="{{vm.documentDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/downward-advanced-search-29x29-666.png">
+                     alt="{{vm.documentDashboardConfigs.ImageAdvanceSearchAltText}}"
+                     src="../Images/downward-advanced-search-29x29-666.png">
                 <img title="{{vm.documentDashboardConfigs.ImageAdvanceSearchTitle}}" id="filterSearchDown"
+                     aria-atomic="true"
+                     aria-live="assertive"
+                     role="button"
                      ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="{{vm.documentDashboardConfigs.ImageAdvanceSearchAltText}}"
                      src="../Images/upward-advanced-search-29x29-666.png">
             </div>
             <div class="col-xs-12">
-              
+
             </div>
-            <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdashboarddrop($event)' ng-if="vm.searchdrop">
+            <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdashboarddrop($event)'
+                 aria-atomic="true"
+                 aria-live="assertive"
+                 ng-if="vm.searchdrop" role="region">
                 <div class="col-xs-12 dashboarddropinner">
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel1Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients"
-                                       ng-keyup="vm.showclientdrop($event)" placeholder="Enter or select a client" class="form-control">
-                                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop($event)"><img src='../images/icon-combobox.png' /></span>
+                                <input type="text"
+                                       role="textbox"
+                                       aria-live="assertive"
+                                       aria-atomic="true"
+                                       aria-label="Enter or select a client"
+                                       value="{{vm.selectedClients}}"
+                                       ng-click="$event.stopPropagation();"
+                                       ng-model="vm.selectedClients"
+                                       ng-keyup="vm.showclientdrop($event)"
+                                       placeholder="Enter or select a client"
+                                       class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop($event)">
+                                    <img src='../images/icon-combobox.png'
+                                         aria-live="assertive"
+                                         aria-label="select clients"
+                                         aria-atomic="true" />
+                                </span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderdocumentclient" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}"
+                                 aria-label="{{vm.documentDashboardConfigs.AttachmentLoadingText}}"
+                                 aria-live="assertive"
+                                 aria-atomic="true"
                                  title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
-                    <div class="col-xs-12 " ng-show="vm.clientdrop">
+                    <div class="col-xs-12 " ng-show="vm.clientdrop" role="region">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
                                 <div class="col-xs-12 col-sm-5 col-md-2">
                                     <a class="btn btn-link"
-                                       ng-click="vm.checkAll(true, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">{{vm.documentDashboardConfigs.AdvSearchSelectAllLinkText}}</a>
+                                       href=""
+                                       tabindex="0"
+                                       aria-live="assertive"
+                                       aria-atomic="true"
+                                       aria-label="{{vm.documentDashboardConfigs.AdvSearchSelectAllLinkText}}"
+                                       ng-click="vm.checkAll(true, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">
+                                        {{vm.documentDashboardConfigs.AdvSearchSelectAllLinkText}}
+                                    </a>
                                 </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2">
                                     <a class="btn btn-link"
+                                       href=""
+                                       tabindex="0"
+                                       aria-live="assertive"
+                                       aria-atomic="true"
+                                       aria-label="{{vm.documentDashboardConfigs.AdvSearchSelectNoneLinkText}}"
                                        ng-click="vm.checkAll(false, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">{{vm.documentDashboardConfigs.AdvSearchSelectNoneLinkText}}</a>
                                 </div>
                                 <div class="col-xs-12 refinerWrapper">
-                                    <div class="col-xs-12 refinerRow" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
-                                        <input type="checkbox" name="clients" ng-model="client.Selected" /> <span>{{client.name}}</span>
+                                    <div class="col-xs-12 refinerRow" ng-repeat="client in vm.clients"
+                                         ng-click="$event.stopPropagation();">
+                                        <input type="checkbox"
+                                               tabindex="0"
+                                               role="checkbox"
+                                               aria-live="assertive"
+                                               aria-atomic="true"
+                                               aria-label="{{client.name}}"
+                                               name="clients" ng-model="client.Selected" /> <span>{{client.name}}</span>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <br />
-                                        <div class="filterOkButton"><button class="dashboardSearch" role="button" tabindex="0" ng-click="vm.filterSearchOK(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText)">{{vm.documentDashboardConfigs.AdvSearchbuttonOkText}}</button></div>
+                                        <div class="filterOkButton">
+                                            <button class="dashboardSearch"
+                                                    role="button" tabindex="0"
+                                                    aria-atomic="true"
+                                                    aria-live="assertive"
+                                                    aria-label="Ok button to filter client"
+                                                    ng-click="vm.filterSearchOK(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText)">
+                                                {{vm.documentDashboardConfigs.AdvSearchbuttonOkText}}
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="col-xs-3">
                                         <br />
-                                        <div class="filterOkButton" ><button role="button" tabindex="0" ng-click="vm.filterSearchCancel()" class="dashboardSearch">{{vm.documentDashboardConfigs.AdvSearchbuttonCancelText}}</button></div>
+                                        <div class="filterOkButton">
+                                            <button role="button"
+                                                    tabindex="0"
+                                                    aria-atomic="true"
+                                                    aria-live="assertive"
+                                                    aria-label="Cancel button to not filter client"
+                                                    ng-click="vm.filterSearchCancel()" class="dashboardSearch">
+                                                {{vm.documentDashboardConfigs.AdvSearchbuttonCancelText}}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" role="region">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel2Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10" id="documentAuthorDiv">
-                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" 
-                                   uib-typeahead="documentDataList.name + ' ' + documentDataList.entityDataTitle for documentDataList in vm.searchDocument($viewValue)" 
-                                   typeahead-loading="loadingLocations" typeahead-on-select='vm.authortypeheadselect($item, $model)'
-                                   typeahead-no-results="noResults" ng-model="vm.selectedAuthor" class="form-control">
+                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}"
+                                   uib-typeahead="documentDataList.name + ' ' + documentDataList.entityDataTitle for documentDataList in vm.searchDocument($viewValue)"
+                                   typeahead-loading="loadingLocations"
+                                   typeahead-on-select='vm.authortypeheadselect($item, $model)'
+                                   typeahead-no-results="noResults"
+                                   ng-model="vm.selectedAuthor"
+                                   typeahead-focus-first=true
+                                   class="form-control"
+                                   aria-label="documentDataList.name"
+                                   aria-atomic="true"
+                                   aria-live="assertive">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
@@ -154,7 +275,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" role="region">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel3Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="row">
@@ -163,14 +284,28 @@
                                         <input type='text' placeholder='{{vm.documentDashboardConfigs.AdvSearchTextbox3PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.startDate'
+                                               tabindex="0"
                                                is-open='vm.openedStartDate'
                                                datepicker-options='vm.dateOptions'
                                                ng-keydown="vm.changeOnCreateDate($event)"
                                                ng-blur="vm.changeOnCreateDate($event)"
-                                               ng-required='true' close-text='Close'
+                                               ng-required='true'
+                                               aria-live="assertive"
+                                               aria-atomic="true"
+                                               aria-label="select a from date"
+                                               close-text='Close'
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button'
+                                                    class='btn btn-default'
+                                                    tabindex="0"
+                                                    role="button"
+                                                    aria-live="assertive"
+                                                    aria-atomic="true"
+                                                    aria-label="open a date calendar to select a from date"
+                                                    ng-click='vm.openStartDate($event)'>
+                                                <i class='glyphicon glyphicon-calendar'></i>
+                                            </button>
                                         </span>
                                     </div>
                                 </div>
@@ -179,21 +314,38 @@
                                         <input type='text' placeholder='{{vm.documentDashboardConfigs.AdvSearchTextbox4PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.endDate'
+                                               tabindex="0"
                                                is-open='vm.openedEndDate'
                                                datepicker-options='vm.endDateOptions'
                                                ng-keydown="vm.changeOnCreateDate($event)"
                                                ng-blur="vm.changeOnCreateDate($event)"
                                                ng-required='true' close-text='Close'
+                                               aria-live="assertive"
+                                               aria-atomic="true"
+                                               aria-label="select a to date"
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default'
+                                                    tabindex="0"
+                                                    role="button"
+                                                    aria-live="assertive"
+                                                    aria-atomic="true"
+                                                    aria-label="open a date calendar to select a to date"
+                                                    ng-click='vm.openEndDate($event)'>
+                                                <i class='glyphicon glyphicon-calendar'></i>
+                                            </button>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-5 col-sm-3 pad15">
-                            <button id="filterAdvancedSearch" class="dashboardSearch" role="button" tabindex="0" ng-click="vm.getSearchResults()">
+                            <button id="filterAdvancedSearch"
+                                    aria-live="assertive"
+                                    aria-atomic="true"
+                                    aria-label="search documents based on the search criteria"
+                                    class="dashboardSearch" role="button" tabindex="0"
+                                    ng-click="vm.getSearchResults()">
                                 {{vm.documentDashboardConfigs.AdvSearchButtonSearchText}}
                             </button>
                         </div>
@@ -203,9 +355,15 @@
             <div class="col-xs-12 padtop20 navtabs">
                 <ul class="nav nav-tabs" toggletab>
                     <li id="showDocuments" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
-                    <li ng-click="vm.hideTabs($event)" id="myDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
-                    <li ng-click="vm.hideTabs($event)" id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
-                    <li ng-click="vm.hideTabs($event)" id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
+                    <li ng-click="vm.hideTabs($event)" id="myDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText}" class="hideDocTabs">
+                        <a class="noCursor" href=""
+                           ng-show="!vm.lazyloaderdashboard">
+                            {{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})
+                        </a>
+                        <a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a>
+                    </li>
+                    <li ng-click="vm.hideTabs($event)" id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs"><a class="noCursor" href="" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
+                    <li ng-click="vm.hideTabs($event)" id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a class="noCursor" href="" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
                 </ul>
                 <span class="showDocDashboard displayDocTabs" ng-click="vm.showDocTabs($event)">...</span>
                 <div class="switchHideTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
@@ -226,12 +384,27 @@
                     </div>
                 </div>
 
-                <div class="jsonGridFooter jsonGridFooterNew" ng-show="vm.displaypagination && vm.totalrecords>0">
-                    <div ng-show="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
-                    <div ng-show="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
-                    <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle docFromToPageWidth"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
-                    <div ng-show="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
-                    <div ng-show="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
+                <div class="jsonGridFooter jsonGridFooterNew" ng-show="vm.displaypagination && vm.totalrecords>0" role="region">
+                    <div ng-show="vm.totalrecords>6 && vm.first>2">
+                        <img id="" tabindex="0" aria-live="assertive" aria-atomic="true" aria-label="go to previous page"
+                             ng-click="vm.prev()"
+                             class="first cur-pointer" src="../Images/pagination-back-Enabled.png">
+                    </div>
+                    <div ng-show="vm.totalrecords<6 || vm.first<2">
+                        <img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png">
+                    </div>
+                    <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle docFromToPageWidth">
+                        <span class="PaginateSpan">{{vm.fromtopage}}</span>
+                    </div>
+                    <div ng-show="vm.totalrecords<=6 || vm.last>=vm.totalrecords">
+                        <img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png">
+                    </div>
+                    <div ng-show="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}">
+                        <img title="Next" id="grid_Grid_Next"
+                             ng-click="vm.next()"
+                             tabindex="0" aria-live="assertive" aria-atomic="true" aria-label="go to next page"
+                             class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png">
+                    </div>
 
                 </div>
 
@@ -319,6 +492,11 @@
                     <!--<th>{{vm.documentDashboardConfigs.GridColumn6Header}}</th>-->
                 </tr>
             </thead>
+            <tb od
+                </tr>
+                od
+            </thead>
+            od
             <tbody>
                 <tr ng-repeat="item in vm.exportDate">
                     <td>{{item.documentName}}</td>
@@ -327,9 +505,23 @@
                     <td>{{item.documentOwner}}</td>
                     <td>{{item.documentCreatedDate}}</td>
                     <!--<td>{{item.matterID}}</td>-->
+                    <
+                    /tr>
                 </tr>
+
+
+                <
+                >
+
+
+                </tr>
+
+
             </tbody>
         </table>
+
+        /t
+        </
 
     </div>
 
