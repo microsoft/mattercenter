@@ -146,11 +146,12 @@
                     <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                     <input aria-autocomplete="list" 
-                           aria-haspopup="true" 
-                           aria-live="assertive"
+                          
+                               aria-expanded="true" 
+                               aria-live="assertive"
                                aria-atomic="true"
                                typeahead-focus-first=true
-                           role="textbox" 
+                           role="combobox" 
                            class="medium clear ui-autocomplete-input" 
                            id="txtConflictCheckBy" 
                            ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-min-length='3' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
