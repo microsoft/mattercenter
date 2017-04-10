@@ -19,20 +19,29 @@
 </style>
 <div id="mainDivContainer" ng-click="vm.closealldrops()">
 
-    <div id="accessDeniedDiv" ng-show="!vm.canAccessSettingsPage">
+    <div id="accessDeniedDiv" ng-show="!vm.canAccessSettingsPage"
+         aria-live="assertive"
+         aria-atomic="true" role="alert"
+         aria-label="You do not have permission to access this page. If you feel you need to access this page, kindly contact your support">
         You do not have permission to access this page. If you feel you need to access this page, kindly contact your support <a href="{{vm.showDenyMessage}}">team</a> to grant you access.
-        
+
     </div>
 
     <div id="contentDiv" class="pad0" ng-if="vm.canAccessSettingsPage">
-        <div ng-if="vm.clientlist">
+        <div ng-if="vm.clientlist"  role="region">
             <div class="defaultFontStyle clientName" id="settingName">{{vm.settingsConfigs.Label1HeaderText}}</div>
             <div class="defaultFontStyle contentDescription clientDescription">{{vm.settingsConfigs.Label2Text}}</div>
             <div class="tableContainer defaultFontStyle semiBold ClientNameTitle">{{vm.settingsConfigs.Label3Text}}</div>
             <div class="horizontalLine"></div>
             <div class="row margin0">
-                <div class="defaultFontStyle">
-                    <a class="col-xs-12 clientLinks clientNames" ng-repeat="client in vm.taxonomydata" ng-click="vm.showSelectedClient(client.name,client.url)">
+                <div class="defaultFontStyle" ng-repeat="client in vm.taxonomydata">
+                    <a class="col-xs-12 clientLinks clientNames"
+                       tabindex="0"
+                       href=""
+                       aria-live="assertive"
+                       aria-atomic="true"
+                       aria-label="{{client.name}}"
+                       ng-click="vm.showSelectedClient(client.name,client.url)">
                         {{client.name}}
                     </a>
                 </div>
@@ -51,7 +60,7 @@
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.Label5Section1HeaderText}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.Label6Section1HeaderText}}</div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="row margin0">
                         <div class="col-xs-12 col-sm-5 pad0">
                             <div class="row margin0">
@@ -64,11 +73,17 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                            <input type="text" class="form-control" ng-model="vm.mattername" />
+                            <input type="text"
+                                   class="form-control"
+                                   role="textbox"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.mattername}}"
+                                   ng-model="vm.mattername" />
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="row margin0">
                         <div class="col-xs-12 col-sm-5 pad0">
                             <div class="row margin0">
@@ -81,7 +96,11 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                            <input type="text" class="form-control" ng-model="vm.matterid" />
+                            <input role="textbox"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.matterid}}"
+                                   type="text" class="form-control" ng-model="vm.matterid" />
                         </div>
                     </div>
                 </div>
@@ -89,7 +108,7 @@
                     {{vm.settingsConfigs.Label11DefaultValue3HeaderText}}
 
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="settingsMatterTypeBox">
                         <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' class="docuTemplates" ng-repeat='selectedDocumentTypeLawTerm in vm.selectedDocumentTypeLawTerms' style=""
                              data-value="{{$index}}"
@@ -111,10 +130,12 @@
                     </div>
 
                     <div class="addmatterType">
-                        <a id="" ng-click="vm.selectMatterType()"><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
+                        <a id="" ng-click="vm.selectMatterType()">
+                            <span class="glyphicon glyphicon-plus"></span> Add/Remove Types
+                        </a>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -125,14 +146,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.assignteam" name="assignteam" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7" role="region">
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.assignteam"
+                                   name="assignteam"
+                                   role="radio"
+                                   aria-label="Yes radio button to restricting access to an assigned team"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" />
+                            {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" ng-model="vm.assignteam" name="assignteam" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   ng-model="vm.assignteam"
+                                   name="assignteam"
+                                   role="radio"
+                                   aria-label="No radio button to restricting access to an assigned team"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" />
+                            {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="defaultFontStyle tableContainer semiBold" id="assignPermissionsTitle">{{vm.settingsConfigs.Label14DefaultValue4HeaderText}}</div>
                     <div class="col-xs-12 pad0">
                         <div class="row margin0 marginTop10">
@@ -140,26 +175,46 @@
                                 <div style="min-width:295px;max-width:295px;float:left;margin-right:32px">{{vm.settingsConfigs.Label15DefaultValue4Text}}</div>
                                 <div class="addNewMember pull-left">
                                     <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">{{vm.settingsConfigs.Label16DefaultValue4Text}}</div>
-                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionLbl" style="margin-left:5px" >{{vm.settingsConfigs.Label17DefaultValue4Text}}</div>
+                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionLbl" style="margin-left:5px">{{vm.settingsConfigs.Label17DefaultValue4Text}}</div>
                                     <div class="close customClose"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="row margin0 marginTop10" data-ng-repeat="assignTeam in vm.assignPermissionTeams">
-                            <div class="row1 assignNewPerm" id="SettingsPermissions">
+                            <div class="row1 assignNewPerm" id="SettingsPermissions" role="region">
                                 <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                                <input style="min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px;padding: 6px 15px 6px 12px;"  id='txtUser{{assignTeam.assigneTeamRowNumber}}' class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" ng-model="assignTeam.assignedUser" uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' spellcheck="true" type="text" placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" autocomplete="off" typeahead-min-length='3'>
+                                <input style="min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px;padding: 6px 15px 6px 12px;" 
+                                       id='txtUser{{assignTeam.assigneTeamRowNumber}}' 
+                                       class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input" 
+                                       typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" 
+                                       ng-model="assignTeam.assignedUser" 
+                                       uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" 
+                                       typeahead-loading='loadingLocations' 
+                                       typeahead-no-results='teamAssingnResults' 
+                                       typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' 
+                                       spellcheck="true" 
+                                       type="text" 
+                                       placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" 
+                                       autocomplete="off" 
+                                       typeahead-focus-first=true
+                                       aria-label="users.name"
+                                       aria-atomic="true"
+                                       aria-live="assertive"
+                                       role="combobox"
+                                       aria-autocomplete="list"
+                                       aria-expanded="true"
+                                       typeahead-min-length='3'>
                                 <div ng-show='teamAssingnResults'>
                                     <i class="glyphicon glyphicon-remove"></i> {{vm.settingsConfigs.Label18DefaultValue4NoResultsFoundText}}
                                 </div>
                                 <div class="pull-left gutter">
-                                    <img ng-show="loadingLocations"  class="glyphicon glyphicon-refresh  gly-spin pull-right loadGlyphIconSettings" src="../../images/loadingcirclests16.gif" />
-                                </div>                                
-                                <div class="addNewMember pull-left">
+                                    <img ng-show="loadingLocations" class="glyphicon glyphicon-refresh  gly-spin pull-right loadGlyphIconSettings" src="../../images/loadingcirclests16.gif" />
+                                </div>
+                                <div class="addNewMember pull-left"  role="region">
                                     <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ddlPermissionCtrl">
                                         <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control medium clear dropdownCustom roleWidth " ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in vm.assignRoles '></select>
                                     </div>
-                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionCtrl" >
+                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionCtrl">
                                         <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
                                             <select id='permUser{{assignTeam.assigneTeamRowNumber}}' class="form-control medium clear dropdownCustom roleWidth " ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in vm.assignPermissions '></select>
                                         </div>
@@ -173,12 +228,14 @@
                         </div>
                         <div class="col-xs-9 col-xs-offset-3 margin0 marginTop10">
                             <div id="addMoreLink" class="addMoreLinks">
-                                <a id="addMorePermissions" class="pad0" ng-click="vm.addNewAssignPermissions()">{{vm.settingsConfigs.Label19DefaultValue4AddMoreText}}</a>
+                                <a id="addMorePermissions" class="pad0" 
+                                   href="" tabindex="0" aria-label="add more permissions"
+                                   ng-click="vm.addNewAssignPermissions()">{{vm.settingsConfigs.Label19DefaultValue4AddMoreText}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -187,13 +244,29 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.email" name="email" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.email"
+                                   name="email"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Yes radio button to include email notification when provisioning matter"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" name="email" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.email" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   name="email"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="No radio button to include email notification when provisioning matter"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}"
+                                   ng-model="vm.email" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop15">
+                <div class="col-xs-12 pad0 marginTop15"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -202,13 +275,29 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.calendar" name="calender" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.calendar"
+                                   name="calender"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Yes radio button to create calendar list when provisioning matter"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" ng-model="vm.calendar" name="calender" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   ng-model="vm.calendar"
+                                   name="calender"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="No radio button to not create calendar list when provisioning matter"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -217,13 +306,29 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.tasks" name="tasks" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.tasks"
+                                   name="tasks"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Yes radio button to create tasks list when provisioning matter"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" name="tasks" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.tasks" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="No radio button to not create tasks list when provisioning matter"
+                                   name="tasks" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.tasks" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -232,9 +337,23 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Yes radio button to include RRS feeds when provisioning matter"
+                                   ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="No radio button to not to include RRS feeds when provisioning matter"
+                                   ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
@@ -242,7 +361,7 @@
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.Label24Section2HeaderText}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.Label25Section2HeaderText}}</div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -254,13 +373,30 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.matterdesc" name="matterdesc" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.matterdesc"
+                                   name="matterdesc"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="yes radio button to make matter description mandatory"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" name="matterdesc" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.matterdesc" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   name="matterdesc"
+                                   tabindex="0"
+                                   role="radio"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="no radio button to not to make matter description mandatory"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.matterdesc" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -272,13 +408,28 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0  marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.conflict" name="conflict" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   tabindex="0"
+                                   role="radio"                                   
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label28Section2Text}}"
+                                   ng-model="vm.conflict" name="conflict" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" name="conflict" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.conflict" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   name="conflict"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label28Section2Text}}"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.conflict" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -287,13 +438,30 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.showrole" name="showrole" value="{{vm.settingsConfigs.Radio1Option1Text}}" />{{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.showrole"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label30Section2Text}}"
+                                   name="showrole" value="{{vm.settingsConfigs.Radio1Option1Text}}" />{{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
                         <span>
-                            <input type="radio" name="showrole" ng-model="vm.showrole" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                            <input type="radio"
+                                   name="showrole"
+                                   ng-model="vm.showrole"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label30Section2Text}}"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -302,11 +470,31 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
-                        <span class="marginRight10" ng-click="vm.showMatterId()"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.showmatterid"
+                                   name="matterid"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label31Section2Text}}"
+                                   value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
+                        <span class="marginRight10" ng-click="vm.showMatterId()">
+                            <input type="radio"
+                                   ng-model="vm.showmatterid"
+                                   name="matterid"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="{{vm.settingsConfigs.Label31Section2Text}}"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10">
+                <div class="col-xs-12 pad0 marginTop10"   role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -315,20 +503,70 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option1Text}}" /> {{vm.settingsConfigs.Radio2Option1Text}}</span>
-                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}</span>
-                        <span class="marginRight10" ng-if="vm.showmatterid=='Yes'"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option3Text}}" /> {{vm.settingsConfigs.Radio2Option3Text}}</span>
+                        <span class="marginRight10">
+                            <input type="radio" 
+                                   ng-model="vm.showmatterconfiguration" 
+                                   name="showmatterconfiguration" 
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Matter id is of type GUID?"
+                                   value="{{vm.settingsConfigs.Radio2Option1Text}}" /> {{vm.settingsConfigs.Radio2Option1Text}}
+                        </span>
+                        <span class="marginRight10">
+                            <input type="radio" 
+                                   ng-model="vm.showmatterconfiguration" 
+                                   name="showmatterconfiguration" 
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Matter id is of type Datetime?"
+                                   value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}
+                        </span>
+                        <span class="marginRight10" ng-if="vm.showmatterid=='Yes'">
+                            <input type="radio" 
+                                   ng-model="vm.showmatterconfiguration" 
+                                   name="showmatterconfiguration" 
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Matter id is of type Custom?"
+                                   value="{{vm.settingsConfigs.Radio2Option3Text}}" /> {{vm.settingsConfigs.Radio2Option3Text}}
+                        </span>
                     </div>
                 </div>
                 <!--We are displaying this section if Addition matter properties mapped to default contenet type texonomy hirarchey.-->
-                <div id="divExtraMatterProps" ng-hide="true" class="defaultSection col-xs-12 marginTop20">
+                <div id="divExtraMatterProps" ng-hide="true" class="defaultSection col-xs-12 marginTop20" role="region">
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.divExtraPropTitle}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.divExtraPropTitleDescription}}</div>
                 </div>
-                <div extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
-                <div id="buttonSection col-xs-12 pad0">
-                    <button class="button clear" type="button" id="saveButton" title="{{vm.settingsConfigs.ButtonSaveText}}" ng-click="vm.saveSettings()">{{vm.settingsConfigs.ButtonSaveText}}</button>
-                    <button class="button" type="button" id="cancelButton" title="{{vm.settingsConfigs.ButtonCancelText}}" ng-click="vm.showSetting()">{{vm.settingsConfigs.ButtonCancelText}}</button>
+                <div  role="region" extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
+                <div id="buttonSection col-xs-12 pad0" role="region">
+                    <button 
+                            class="button clear" 
+                            type="button" 
+                            id="saveButton" 
+                            title="{{vm.settingsConfigs.ButtonSaveText}}" 
+                            role="button"
+                            tabindex="0"
+                            aria-live="assertive"
+                            aria-atomic="true"
+                            aria-label="Save matter configurations changes"
+                            ng-click="vm.saveSettings()">{{vm.settingsConfigs.ButtonSaveText}}</button>
+                    <button 
+                            class="button" 
+                            type="button" 
+                            id="cancelButton" 
+                            role="button"
+                            tabindex="0"
+                            aria-live="assertive"
+                            aria-atomic="true"
+                            aria-label="Cancel matter configurations changes"
+                            title="{{vm.settingsConfigs.ButtonCancelText}}" 
+                            ng-click="vm.showSetting()">{{vm.settingsConfigs.ButtonCancelText}}</button>
                 </div>
                 <div class="defaultFontStyle col-xs-12 pad0" id="successMessage" ng-if="vm.successmessage">{{vm.settingsConfigs.Label33Section2Text}} <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="{{vm.settingsConfigs.Label34Section2Text}}">{{vm.settingsConfigs.Label34Section2Text}}</span>.</div>
             </div>

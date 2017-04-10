@@ -8,7 +8,7 @@
                  src="{{row.entity.documentIconUrl}}"  alt="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> 
             {{row.entity.documentName}}
         </a>
-        <a documentflyout tabindex="0" type="button" role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
+        <a documentflyout tabindex="0" href="" type="button" role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
            details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess" aria-live="assertive" aria-atomic="true">
             <img class="docTypeIconHeader"  role="img" id="docTypeIcon" aria-live="assertive" aria-atomic="true"
                  src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> {{row.entity.documentName}}

@@ -170,7 +170,7 @@
             columnDefs1.push({
                 field: 'pin',
                 width: '6%',
-                displayName: '',
+                displayName: 'Pin/Unpin',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img title={{row.entity.pinType}} src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75

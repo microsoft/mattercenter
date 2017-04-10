@@ -11,7 +11,12 @@
 <div class="popupWait hide"></div>
 <div class="loadingImage hide" id="popupWaitLoadingImage">
     <a title="{{vm.matterDashboardConfigs.LinkImageLoadingTitle}}" id="mcIcon" href="" target="_parent">
-        <img title="{{vm.matterDashboardConfigs.ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
+        <img title="{{vm.matterDashboardConfigs.ImageLoadingAltText}}"
+             role="img"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-label="loading data"
+             src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
     </a>
 </div>
 <div class="popupContainerBackground hide"></div>
@@ -87,6 +92,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF"
+                                 role="img"
                                  aria-label="{{vm.matterDashboardConfigs.AttachmentLoadingText}}"
                                  aria-live="assertive"
                                  aria-atomic="true"
@@ -190,6 +196,7 @@
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading"
                              ng-hide="vm.lazyloaderpg" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF"
+                                 role="img"
                                  aria-live="assertive"
                                  aria-label="loading practice groups"
                                  aria-atomic="true"
@@ -292,6 +299,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF"
+                                 role="img"
                                  aria-live="assertive"
                                  aria-label="loading area of laws"
                                  aria-atomic="true"
@@ -407,9 +415,10 @@
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading"
                              ng-hide="vm.lazyloadersubaol" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF"
+                                 role="img"
                                  aria-live="assertive"
                                  aria-label="loading sub area of laws"
-                                 aria-atomic="true"
+                                 aria-atomic="true"  
                                  alt="{{vm.matterDashboardConfigs.AttachmentLoadingText}}"
                                  title="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
@@ -583,21 +592,32 @@
                     <div class="" style="min-width: 20px;max-width: 20px;float: right;margin-right: 10px;">
                         <span class="img-xls" ng-show="vm.lazyloaderdashboard" ng-click="vm.export()">
                             <img alt="export" ng-if="!vm.nodata" src="../../images/icxlsx.png" />
-                            
+
 
                         </span>
-                        
 
-                          <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
+
+                        <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
                     </div>
                     <div class="col-xs-offset-7 col-xs-5 col-sm-offset-8 col-sm-3 col-md-offset-9 col-sm-3" ng-if="vm.sortbydrop">
-                        <ul>
-                            <li ng-click="vm.sortby('Relevant','None')">{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
-                            sh
-                            <li ng-click="vm.sortby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↑</li>
-                            <li ng-click="vm.sortby('AlphabeticalDown','Alphabetical ↓')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↓</li>
-                            <li ng-click="vm.sortby('CreateddateUp','Created date ↑')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↑</li>
-                            <li ng-click="vm.sortby('CreateddateDown','Created date ↓')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↓</li>
+                        <ul role="menu">
+                            <li role="menuitem"
+                                ng-keydown="$event.keyCode==13?vm.sortby('Relevant','None'):null"
+                                aria-label="{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}"
+                                ng-click="vm.sortby('Relevant','None')">{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
+                            
+                            <li role="menuitem" aria-label="sort matter name in ascending order"
+                                ng-keydown="$event.keyCode==13?vm.sortby('AlphabeticalUp','Alphabetical ↑'):null"
+                                ng-click="vm.sortby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}}↑</li>
+                            <li role="menuitem" aria-label="sort matter name in descending order"
+                                ng-keydown="$event.keyCode==13?vm.sortby('AlphabeticalDown','Alphabetical ↓'):null"
+                                ng-click="vm.sortby('AlphabeticalDown','Alphabetical ↓')">{{vm.matterDashboardConfigs.DrpDownOption2Text}}↓</li>
+                            <li role="menuitem" aria-label="sort matter name by created date in ascending order"
+                                ng-keydown="$event.keyCode==13?vm.sortby('CreateddateUp','Created date ↑'):null"
+                                ng-click="vm.sortby('CreateddateUp','Created date ↑')">{{vm.matterDashboardConfigs.DrpDownOption3Text}}↑</li>
+                            <li role="menuitem" aria-label="sort matter name by created date in descending order"
+                                ng-keydown="$event.keyCode==13?vm.sortby('CreateddateDown','Created date ↓'):null"
+                                ng-click="vm.sortby('CreateddateDown','Created date ↓')">{{vm.matterDashboardConfigs.DrpDownOption3Text}}↓</li>
                         </ul>
                     </div>
                 </div>
@@ -612,7 +632,12 @@
                         <div class="col-xs-12 pad0 padtop5" ng-if="vm.divuigrid">
                             <div class="" id="grid1" ui-grid="vm.matterGridOptions" role="grid" tabindex="0" aria-sort="ascending" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
                         </div>
-                        <div class="col-xs-12 pad0 padtop5 text-center" ng-if="vm.nodata">
+                        <div class="col-xs-12 pad0 padtop5 text-center"
+                             role="alert"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}"
+                             ng-if="vm.nodata">
                             {{vm.matterDashboardConfigs.NoSearchResultMsgText}}
                         </div>
                     </div>
@@ -630,7 +655,7 @@
             <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle fromToPageWidth"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
             <div ng-show="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
             <div ng-show="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}">
-                <img title="Next" id="grid_Grid_Next" ng-click="vm.next()" 
+                <img title="Next" id="grid_Grid_Next" ng-click="vm.next()"
                      tabindex="0" aria-live="assertive" aria-atomic="true" aria-label="go to next page"
                      class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png">
             </div>
@@ -694,7 +719,14 @@
                         <div class="col-sm-9 maildata">
                             <!--Content start to show mail attachment information-->
                             <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
-                                <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='{{vm.matterDashboardConfigs.AttachmentLoadingText}}' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
+                                <div ng-if="vm.loadingAttachments" class='attachmentSection'>
+                                    <img alt='{{vm.matterDashboardConfigs.AttachmentLoadingText}}' 
+                                         role="img"
+                                         aria-live="assertive"
+                                         aria-atomic="true"
+                                         aria-label="{{vm.matterDashboardConfigs.AttachmentLoadingText}}"                                         
+                                         class='attachmentListLoading' src='../images/loading_metro.gif' />
+                                </div>
                                 <div ng-if="attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName mailName">
                                         <img title="{{vm.matterDashboardConfigs.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
@@ -806,7 +838,12 @@
     </div>
     <div id="loadingImageContainer" style="top:25%;left:47%">
         <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
-            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" />
+            <img src="../Images/WindowsLoadingFast.GIF"
+                 role="img"
+                 aria-live="assertive"
+                 aria-atomic="true"
+                 aria-label="{{vm.matterDashboardConfigs.AttachmentLoadingText}}"
+                 alt="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" />
         </div>
     </div>
     <div class="popupContainerBackground" ng-hide="vm.popupContainer"></div>
@@ -865,11 +902,16 @@
                     <td>{{item.matterSubAreaOfLaw}}</td>
                     <td datefilter date={{item.matterCreatedDate}}></td>
                     <!--<td>{{item.matterID}}</td>-->
+       </tr>
+                    
+
                 </tr>
 
 
-                
 
+
+                
+
                 >
 
 

@@ -97,14 +97,22 @@
                     <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
                         <div class="floatLeft" id="hamburgerConatiner" 
                              ng-click="vm.showCloseIcon()" 
+                               ng-keydown="$event.keyCode==27||$event.keyCode==13?vm.showCloseIcon():null"
+                             aria-label="{{vm.header.ImageOpenHamburgerTitle}}"
+                             role="button"
                              ng-show="vm.showHamburger">
-                            <img class="headerActions pull-left" title="{{vm.header.ImageOpenHamburgerTitle}}" 
+                            <img class="headerActions pull-left" tabindex="0"
+                                 title="{{vm.header.ImageOpenHamburgerTitle}}" 
                                  data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
                         </div>
                         <div class="closeIcon"                              
                              ng-if="vm.showClose" 
+                              role="button"
+                               aria-label="{{vm.header.ImageCloseHamburgerTitle}}"
+                             ng-keydown="$event.keyCode==27||$event.keyCode==13?vm.showHamburgerIcon():null"
                              ng-click="vm.showHamburgerIcon()">
                             <img class="headerActions pull-left" 
+                                 
                                  title="{{vm.header.ImageCloseHamburgerTitle}}" 
                                  data-hamburger="1" id="closeHamburger" 
                                  ng-keypress="$event.keyCode==27?vm.showHamburgerIcon():null"

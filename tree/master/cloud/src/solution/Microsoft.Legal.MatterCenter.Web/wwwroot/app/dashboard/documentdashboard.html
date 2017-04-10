@@ -12,21 +12,26 @@
 <div class="popupWait hide"></div>
 <div class="loadingImage hide" id="popupWaitLoadingImage">
     <a title="{{vm.documentDashboardConfigs.LinkImageLoadingTitle}}" id="mcIcon" href="" target="_parent">
-        <img title="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" />
+        <img title="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" 
+             role="img"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-label="{{vm.documentDashboardConfigs.ImageLoadingAltText}}"
+             src="../Images/WindowsLoadingFast.GIF" 
+             alt="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" />
     </a>
 </div>
 <div class="popupContainerBackground hide"></div>
-<div id="mainDivContainer" ng-click="vm.closealldrops($event)">
+<div id="mainDivContainer" ng-click="vm.closealldrops($event)" role="region">
     <div class="matterPopup"></div>
     <div class="documentPopup"></div>
     <div class="clear"></div>
     <!--Start Pop up conatins for documents to send documents to one drive, send the email etc-->
 
-    <div class="modal fade padright0" id="UploadMatterModal" tabindex="-1"
-         aria-live="assertive" aria-atomic="true"
+    <div class="modal fade padright0" id="UploadMatterModal" tabindex="-1"         
          role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="width:100%" id="myModalLabel" >
-            <div class="modal-content">
+        <div class="modal-dialog modal-lg" style="width:100%" id="myModalLabel" role="region" >
+            <div class="modal-content" role="region">
                 <div class="modal-body">
                     <div class="row margin0">
                         <div class="col-md-12">
@@ -50,7 +55,8 @@
                         <div id="PopupBody">
                             <div class="selectMailFormat">
                                 <div class="sendEmailOptions emailAttachmentOption" tabindex="0"
-                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
+                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);"
+                                     ng-keydown="$event.keyCode==13?vm.enable?vm.downloadEmailAsAttachment(true):null:null" >
                                     <img class="mailCartLogo" src="../Images/attach_666_27X27.png"                                         
                                          role="button"
                                          aria-label="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}"
@@ -67,7 +73,8 @@
                                          class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
                                 </div>
                                 <div class="sendEmailOptions emailLinkOption" 
-                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)" tabindex="0">
+                                     ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)" tabindex="0"
+                                      ng-keydown="$event.keyCode==13?vm.enable?vm.downloadEmailAsAttachment(false):null:null" >
                                     <img class="mailCartLogo" src="../Images/link-666.png"
                                          role="button"
                                          aria-label="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
@@ -113,7 +120,8 @@
                                 </ul>
                                 <div class='pinLoadingImage' id='mailCartLoadingImage'>
                                     <img src='/Images/WindowsLoadingFast.GIF' 
-                                         aria-label="attaching documents or links"
+                                         role="img"
+                                         aria-label="{{vm.documentDashboardConfigs.AttachmentLoadingText}}"
                                          aria-live="assertive"
                                          aria-atomic="true"
                                          title='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' 
@@ -201,6 +209,7 @@
                                  aria-label="{{vm.documentDashboardConfigs.AttachmentLoadingText}}"
                                  aria-live="assertive"
                                  aria-atomic="true"
+                                 role="img"
                                  title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
@@ -293,7 +302,7 @@
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
-                            <div ng-show="vm.AuthornoResults">
+                            <div ng-show="vm.AuthornoResults" aria-live="assertive" aria-atomic="true" aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}">
                                 <i class="glyphicon glyphicon-remove"></i> {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
                             </div>
                         </div>
@@ -394,13 +403,36 @@
                     <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">{{vm.documentDashboardConfigs.Tab2HeaderText}}</div>
                     <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">{{vm.documentDashboardConfigs.Tab3HeaderText}}</div>
                 </div>
+
+
+
+                <div class="col-xs-offset-6 col-xs-6 col-sm-offset-7 col-sm-5 sortby">
+                    <span id="" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
+                        <span id="EmailImg">
+                            <img src="../Images/cart_icon_30px_X_30px.png"
+                                 tabindex="0"
+                                 class="mailCartIcon"
+                                 title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
+                                 alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}"
+                                 ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
+                        </span>
+                    </span>
+                </div>
+
+
                 <div class="col-xs-12">
                     <div class="tab-content">
                         <div class="tab-pane active" id="Documents">
                             <div class="col-xs-12 pad0 padtop5" id="docgrid" ng-if="vm.divuigrid">
                                 <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
                             </div>
-                            <div class="col-xs-12 pad0 padtop5 text-center" id="docgrid" ng-if="vm.nodata">
+                            <div class="col-xs-12 pad0 padtop5 text-center" 
+                                 role="alert" 
+                                 
+                                 aria-live="assertive" 
+                                 aria-atomic="true" 
+                                 aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}"
+                                 id="docgrid" ng-if="vm.nodata">
                                 {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
                             </div>
                         </div>
@@ -431,18 +463,7 @@
 
                 </div>
 
-                <div class="col-xs-offset-6 col-xs-6 col-sm-offset-7 col-sm-5 sortby">
-                    <span id="" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
-                        <span id="EmailImg">
-                            <img src="../Images/cart_icon_30px_X_30px.png"
-                                 tabindex="0"                                 
-                                 class="mailCartIcon"
-                                 title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
-                                 alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" 
-                                 ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
-                        </span>
-                    </span>
-                </div>
+              
             </div>
             <div class="col-xs-12 mainsort docSortbyWidth">
                 <div class="col-xs-offset-8 col-xs-4 docsortby">
@@ -457,14 +478,28 @@
                         </span>
                     </div>
                     <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-8 col-md-4" ng-if="vm.sortbydrop">
-                        <ul>
-                            <li ng-click="vm.sortyby('Relevant',vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text)">{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
-                            <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
-                            <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
-                            <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>
-                            <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↓</li>
-                            <li ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↑</li>
-                            <li ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↓</li>
+                        <ul role="menu">
+                            <li role="menuitem" aria-label="{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('Relevant',vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text):null"
+                                ng-click="vm.sortyby('Relevant',vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text)">{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
+                            <li role="menuitem" aria-label="sort document name by descending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('AlphabeticalDown','Alphabetical ↓'):null"
+                                ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
+                            <li role="menuitem" aria-label="sort document name by ascending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('AlphabeticalUp','Alphabetical ↑'):null"
+                                ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
+                            <li role="menuitem" aria-label="sort documents by created date in ascending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('CreateddateUp','Created date ↑'):null"
+                                ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>
+                            <li role="menuitem" aria-label="sort documents by created date in descending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('CreateddateDown','Created date ↓'):null"
+                                ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↓</li>
+                            <li role="menuitem" aria-label="sort documents by modified date in ascending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('ModifieddateUp','Modified date ↑'):null"
+                                ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↑</li>
+                            <li role="menuitem" aria-label="sort documents by modified date in descending order" 
+                                ng-keydown="$event.keyCode==13?vm.sortyby('ModifieddateDown','Modified date ↓'):null"
+                                ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↓</li>
                         </ul>
                     </div>
                 </div>
@@ -473,7 +508,13 @@
     </div>
     <div id="loadingImageContainer" style="top: 25%;left: 47%;" class="docDashboardLoader">
         <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
-            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
+            <img src="../Images/WindowsLoadingFast.GIF" 
+                 role="img"
+                 aria-live="assertive"
+                 aria-atomic="true"
+                 aria-label="{{vm.documentDashboardConfigs.AttachmentLoadingText}}"
+                 alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" 
+                 title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
         </div>
     </div>
     <div class="popupContainerBackground" ng-hide="vm.popupContainer"></div>
@@ -517,11 +558,6 @@
                     <!--<th>{{vm.documentDashboardConfigs.GridColumn6Header}}</th>-->
                 </tr>
             </thead>
-            <tb od
-                </tr>
-                od
-            </thead>
-            od
             <tbody>
                 <tr ng-repeat="item in vm.exportDate">
                     <td>{{item.documentName}}</td>
@@ -530,23 +566,9 @@
                     <td>{{item.documentOwner}}</td>
                     <td>{{item.documentCreatedDate}}</td>
                     <!--<td>{{item.matterID}}</td>-->
-                    <
-                    /tr>
                 </tr>
-
-
-                <
-                >
-
-
-                </tr>
-
-
             </tbody>
         </table>
-
-        /t
-        </
 
     </div>
 
