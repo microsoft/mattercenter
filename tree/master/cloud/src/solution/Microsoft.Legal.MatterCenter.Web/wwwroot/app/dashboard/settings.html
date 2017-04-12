@@ -16,6 +16,10 @@
         min-height: 451px;
         max-height: 3000px !important;
     }
+
+    .visitedlink:visited {
+        color: #333;
+    }
 </style>
 <div id="mainDivContainer" ng-click="vm.closealldrops()">
 
@@ -28,7 +32,7 @@
     </div>
 
     <div id="contentDiv" class="pad0" ng-if="vm.canAccessSettingsPage">
-        <div ng-if="vm.clientlist"  role="region">
+        <div ng-if="vm.clientlist" role="region">
             <div class="defaultFontStyle clientName" id="settingName">{{vm.settingsConfigs.Label1HeaderText}}</div>
             <div class="defaultFontStyle contentDescription clientDescription">{{vm.settingsConfigs.Label2Text}}</div>
             <div class="tableContainer defaultFontStyle semiBold ClientNameTitle">{{vm.settingsConfigs.Label3Text}}</div>
@@ -50,7 +54,7 @@
         <div ng-if="vm.showClientDetails" class="settingsMarginBotton">
             <div class="row margin0">
                 <div class="defaultFontStyle clientName">
-                    <a class="clientLinks marginRight10" ng-click="vm.showSetting()">{{vm.settingsConfigs.Label1HeaderText}} &gt;</a>
+                    <a href="" class="clientLinks marginRight10" ng-click="vm.showSetting()">{{vm.settingsConfigs.Label1HeaderText}} &gt;</a>
                     {{vm.selected}}
                 </div>
                 <div class="defaultFontStyle pageDescription col-xs-12 pad0">
@@ -108,8 +112,8 @@
                     {{vm.settingsConfigs.Label11DefaultValue3HeaderText}}
 
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
-                    <div class="settingsMatterTypeBox">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
+                    <div class="settingsMatterTypeBox" tabindex="0" role="region">
                         <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' class="docuTemplates" ng-repeat='selectedDocumentTypeLawTerm in vm.selectedDocumentTypeLawTerms' style=""
                              data-value="{{$index}}"
                              data-foldernamespg='{{selectedDocumentTypeLawTerm.foldernamespg}}'
@@ -124,18 +128,27 @@
                              data-document-template='{{selectedDocumentTypeLawTerm.documentTemplates}}'
                              data-areaoflaw='{{selectedDocumentTypeLawTerm.areaoflaw}}'
                              data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'
+                             aria-label="{{selectedDocumentTypeLawTerm.termChainName}}"
+                             aria-live="assertive"
+                             aria-atomic="true"
                              title="{{selectedDocumentTypeLawTerm.termChainName}}">
                             {{selectedDocumentTypeLawTerm.termChainName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
                         </div>
                     </div>
 
                     <div class="addmatterType">
-                        <a id="" ng-click="vm.selectMatterType()">
+                        <a id="" href="" 
+                           ng-click="vm.selectMatterType()" 
+                           tabindex="0" 
+                            data-toggle="modal"
+                            data-target="#myModal"
+                           aria-label="Add or Remove Types">
                             <span class="glyphicon glyphicon-plus"></span> Add/Remove Types
                         </a>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -167,7 +180,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="defaultFontStyle tableContainer semiBold" id="assignPermissionsTitle">{{vm.settingsConfigs.Label14DefaultValue4HeaderText}}</div>
                     <div class="col-xs-12 pad0">
                         <div class="row margin0 marginTop10">
@@ -183,19 +196,19 @@
                         <div class="row margin0 marginTop10" data-ng-repeat="assignTeam in vm.assignPermissionTeams">
                             <div class="row1 assignNewPerm" id="SettingsPermissions" role="region">
                                 <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                                <input style="min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px;padding: 6px 15px 6px 12px;" 
-                                       id='txtUser{{assignTeam.assigneTeamRowNumber}}' 
-                                       class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input" 
-                                       typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" 
-                                       ng-model="assignTeam.assignedUser" 
-                                       uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" 
-                                       typeahead-loading='loadingLocations' 
-                                       typeahead-no-results='teamAssingnResults' 
-                                       typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' 
-                                       spellcheck="true" 
-                                       type="text" 
-                                       placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" 
-                                       autocomplete="off" 
+                                <input style="min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px;padding: 6px 15px 6px 12px;"
+                                       id='txtUser{{assignTeam.assigneTeamRowNumber}}'
+                                       class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input"
+                                       typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html"
+                                       ng-model="assignTeam.assignedUser"
+                                       uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)"
+                                       typeahead-loading='loadingLocations'
+                                       typeahead-no-results='teamAssingnResults'
+                                       typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)'
+                                       spellcheck="true"
+                                       type="text"
+                                       placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}"
+                                       autocomplete="off"
                                        typeahead-focus-first=true
                                        aria-label="users.name"
                                        aria-atomic="true"
@@ -210,7 +223,7 @@
                                 <div class="pull-left gutter">
                                     <img ng-show="loadingLocations" class="glyphicon glyphicon-refresh  gly-spin pull-right loadGlyphIconSettings" src="../../images/loadingcirclests16.gif" />
                                 </div>
-                                <div class="addNewMember pull-left"  role="region">
+                                <div class="addNewMember pull-left" role="region">
                                     <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ddlPermissionCtrl">
                                         <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control medium clear dropdownCustom roleWidth " ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in vm.assignRoles '></select>
                                     </div>
@@ -228,14 +241,14 @@
                         </div>
                         <div class="col-xs-9 col-xs-offset-3 margin0 marginTop10">
                             <div id="addMoreLink" class="addMoreLinks">
-                                <a id="addMorePermissions" class="pad0" 
+                                <a id="addMorePermissions" class="pad0"
                                    href="" tabindex="0" aria-label="add more permissions"
                                    ng-click="vm.addNewAssignPermissions()">{{vm.settingsConfigs.Label19DefaultValue4AddMoreText}}</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -266,7 +279,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop15"   role="region">
+                <div class="col-xs-12 pad0 marginTop15" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -297,7 +310,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -328,7 +341,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -361,7 +374,7 @@
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.Label24Section2HeaderText}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.Label25Section2HeaderText}}</div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -396,7 +409,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -411,7 +424,7 @@
                         <span class="marginRight10">
                             <input type="radio"
                                    tabindex="0"
-                                   role="radio"                                   
+                                   role="radio"
                                    aria-live="assertive"
                                    aria-atomic="true"
                                    aria-label="{{vm.settingsConfigs.Label28Section2Text}}"
@@ -429,7 +442,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -461,7 +474,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -494,7 +507,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0 marginTop10"   role="region">
+                <div class="col-xs-12 pad0 marginTop10" role="region">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -504,9 +517,9 @@
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
                         <span class="marginRight10">
-                            <input type="radio" 
-                                   ng-model="vm.showmatterconfiguration" 
-                                   name="showmatterconfiguration" 
+                            <input type="radio"
+                                   ng-model="vm.showmatterconfiguration"
+                                   name="showmatterconfiguration"
                                    role="radio"
                                    tabindex="0"
                                    aria-live="assertive"
@@ -515,9 +528,9 @@
                                    value="{{vm.settingsConfigs.Radio2Option1Text}}" /> {{vm.settingsConfigs.Radio2Option1Text}}
                         </span>
                         <span class="marginRight10">
-                            <input type="radio" 
-                                   ng-model="vm.showmatterconfiguration" 
-                                   name="showmatterconfiguration" 
+                            <input type="radio"
+                                   ng-model="vm.showmatterconfiguration"
+                                   name="showmatterconfiguration"
                                    role="radio"
                                    tabindex="0"
                                    aria-live="assertive"
@@ -526,9 +539,9 @@
                                    value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}
                         </span>
                         <span class="marginRight10" ng-if="vm.showmatterid=='Yes'">
-                            <input type="radio" 
-                                   ng-model="vm.showmatterconfiguration" 
-                                   name="showmatterconfiguration" 
+                            <input type="radio"
+                                   ng-model="vm.showmatterconfiguration"
+                                   name="showmatterconfiguration"
                                    role="radio"
                                    tabindex="0"
                                    aria-live="assertive"
@@ -543,46 +556,59 @@
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.divExtraPropTitle}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.divExtraPropTitleDescription}}</div>
                 </div>
-                <div  role="region" extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
+                <div role="region" extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
                 <div id="buttonSection col-xs-12 pad0" role="region">
-                    <button 
-                            class="button clear" 
-                            type="button" 
-                            id="saveButton" 
-                            title="{{vm.settingsConfigs.ButtonSaveText}}" 
+                    <button class="button clear"
+                            type="button"
+                            id="saveButton"
+                            title="{{vm.settingsConfigs.ButtonSaveText}}"
                             role="button"
                             tabindex="0"
                             aria-live="assertive"
                             aria-atomic="true"
                             aria-label="Save matter configurations changes"
-                            ng-click="vm.saveSettings()">{{vm.settingsConfigs.ButtonSaveText}}</button>
-                    <button 
-                            class="button" 
-                            type="button" 
-                            id="cancelButton" 
+                            ng-click="vm.saveSettings()">
+                        {{vm.settingsConfigs.ButtonSaveText}}
+                    </button>
+                    <button class="button"
+                            type="button"
+                            id="cancelButton"
                             role="button"
                             tabindex="0"
                             aria-live="assertive"
                             aria-atomic="true"
                             aria-label="Cancel matter configurations changes"
-                            title="{{vm.settingsConfigs.ButtonCancelText}}" 
-                            ng-click="vm.showSetting()">{{vm.settingsConfigs.ButtonCancelText}}</button>
+                            title="{{vm.settingsConfigs.ButtonCancelText}}"
+                            ng-click="vm.showSetting()">
+                        {{vm.settingsConfigs.ButtonCancelText}}
+                    </button>
                 </div>
-                <div class="defaultFontStyle col-xs-12 pad0" id="successMessage" ng-if="vm.successmessage">{{vm.settingsConfigs.Label33Section2Text}} <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="{{vm.settingsConfigs.Label34Section2Text}}">{{vm.settingsConfigs.Label34Section2Text}}</span>.</div>
+                <div class="defaultFontStyle col-xs-12 pad0"
+                     id="successMessage" ng-if="vm.successmessage">
+                    {{vm.settingsConfigs.Label33Section2Text}}
+                    <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="{{vm.settingsConfigs.Label34Section2Text}}">{{vm.settingsConfigs.Label34Section2Text}}</span>.
+                </div>
             </div>
         </div>
     </div>
     <!--<div id="taxonomyData" ng-include src="'../app/matter/MatterTemplates/taxonomyTemplate.html'"></div>-->
     <div class="popupContainerBackground " ng-click="vm.selectMatterTypePopUpClose()" ng-class="vm.popupContainerBackground"></div>
 
-    <div class="popUpContainer popUpContainerLevel3" ng-class="vm.popupContainer" ng-show="vm.taxonomyHierarchyLevels==3||vm.taxonomyHierarchyLevels==2" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='vm.selectMatterTypePopUpClose()'>
+    <div class="popUpContainer popUpContainerLevel3" role="dialog" aria-labelledby="matterTypeDialog" aria-hidden="true"
+         aria-label="selecting matter type popup open in overlay"
+         ng-class="vm.popupContainer" ng-show="vm.taxonomyHierarchyLevels==3||vm.taxonomyHierarchyLevels==2"
+         style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+        <img tabindex="0" role="button" aria-label="close add remove type dialog box" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='vm.selectMatterTypePopUpClose()'>
         <div class="alignCenter">
             <div class="popUpHeader">
                 <div title="Select a {{vm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{vm.createContent.ColumnName1}}</div>
-                <div class="popUpPracticeGroup clear">
+                <div class="popUpPracticeGroup clear" role="region">
                     <div class="popUpPGDiv">
-                        <select class="dropdownLevelOne clear custPracticeGroup " ng-model='vm.selectedLevelOneItem' ng-change='vm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in vm.levelOneList'>
+                        <select id="pgDropDownEle" role="combobox" aria-live="assertive"
+                                aria-atomic="true"
+                                class="dropdownLevelOne clear custPracticeGroup"
+                                ng-model='vm.selectedLevelOneItem' ng-change='vm.getSelectedLevelOne()'
+                                ng-options='levelOneItem.termName for levelOneItem in vm.levelOneList'>
                             <option value="" label="- {{vm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
@@ -594,12 +620,27 @@
                         {{vm.createContent.ColumnName2}}
                     </span>
                     <!--<label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">{{vm.createContent.ColumnName2}}</label>-->
-                    <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:207px;margin-top:5px;">
-                        <input class="popUpMDTextArea clear" ng-model="vm.searchLevelTwoText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="{{vm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
+
+                    <div class="popUpFloatLeft popUpBorder " role="region"
+                         id="popupAOLBorder" style="height:213px;width:207px;margin-top:5px;">
+                        <input class="popUpMDTextArea clear"
+                               aria-label="Filter from the below {{vm.createContent.ColumnName2}} by entering text in the textbox"
+                               ng-model="vm.searchLevelTwoText"
+                               style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="{{vm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
                             <div class='popUpMDContent ' style="padding:0px !important;" ng-repeat="levelTwoItem in vm.levelTwoList |  filter: {termName: vm.searchLevelTwoText}">
-                                <div ng-class="{popUpSelected : vm.activeLevelTwoItem === levelTwoItem}" ng-click='vm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
-                                    {{levelTwoItem.termName}}
+                                <div role="menu" tabindex="0"
+                                     aria-atomic="true" aria-live="assertive"
+                                     ng-class="{popUpSelected : vm.activeLevelTwoItem === levelTwoItem}" 
+                                     ng-keydown="$event.keyCode==13?vm.selectLevelTwoItem(levelTwoItem):null"
+                                     ng-click='vm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' 
+                                     documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
+
+                                    <a role="menuitem" tabindex="0" href=""
+                                       aria-live="assertive"
+                                       aria-atomic="true"
+                                       aria-label="{{levelTwoItem.termName}}"
+                                       title="{{levelTwoItem.termName}}" class="pull-left contentTypeWidth visitedlink">{{levelTwoItem.termName}}</a>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelTwoItem === levelTwoItem}" ng-show="vm.taxonomyHierarchyLevels>2"></i>
                                 </div>
                             </div>
@@ -611,13 +652,26 @@
                     <span style="margin-bottom:5px;">
                         {{vm.createContent.ColumnName3}}
                     </span>
-                    <div class="segoUIFont" ng-show="vm.taxonomyHierarchyLevels>=3">
+                    <div class="segoUIFont" ng-show="vm.taxonomyHierarchyLevels>=3" role="region">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
-                            <input class="popUpMDTextArea clear" ng-model="vm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
+                            <input class="popUpMDTextArea clear"
+                                   aria-label="Filter from the below {{vm.createContent.ColumnName3}} by entering text in the textbox"
+                                   ng-model="vm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
                                 <div class="popUpSALContent " ng-repeat='levelThreeItem in vm.levelThreeList  | filter: {termName: vm.searchLeveThreeText}' style="padding:0px !important;">
-                                    <div ng-class="{popUpSelected : ((vm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='vm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
-                                        {{levelThreeItem.termName}}
+                                    <div role="menu" tabindex="0"
+                                         aria-atomic="true" aria-live="assertive"
+                                         ng-class="{popUpSelected : ((vm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" 
+                                         ng-click='vm.selectLevelThreeItem(levelThreeItem)' 
+                                         ng-keydown="$event.keyCode==13?vm.selectLevelThreeItem(levelThreeItem):null"
+                                         data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
+
+                                        <a role="menuitem" tabindex="0" href=""
+                                           aria-live="assertive"
+                                           aria-atomic="true"
+                                           aria-label="{{levelThreeItem.termName}}"
+                                           title="{{levelThreeItem.termName}}" class="pull-left contentTypeWidth visitedlink">{{levelThreeItem.termName}}</a>
+
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelThreeItem === levelThreeItem}" ng-show="vm.taxonomyHierarchyLevels>3" class=""></i>
                                     </div>
                                 </div>
@@ -626,7 +680,7 @@
                     </div>
                 </div>
 
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=4">
+                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " role="region" id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=4">
                     <span style="margin-bottom:5px;">
                         {{vm.createContent.ColumnName4}}
                     </span>
@@ -636,7 +690,11 @@
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent1">
                                 <div class="popUpSALContent " ng-repeat='levelFourItem in vm.levelFourList  | filter: {termName: vm.searchLevelFourText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
-                                        {{levelFourItem.termName}}
+                                        <a role="button" tabindex="0" href=""
+                                           aria-live="assertive" aria-atomic="true"
+                                           aria-label="{{levelFourItem.termName}}"
+                                           title="{{levelFourItem.termName}}" class="pull-left contentTypeWidth visitedlink">{{levelFourItem.termName}}</a>
+
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFourItem === levelFourItem}" ng-show="vm.taxonomyHierarchyLevels>4" class=""></i>
                                     </div>
                                 </div>
@@ -644,7 +702,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=5">
+                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " role="region" id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=5">
                     <span style="margin-bottom:5px;">
                         {{vm.createContent.ColumnName5}}
                     </span>
@@ -654,7 +712,13 @@
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent2">
                                 <div class="popUpSALContent " ng-repeat='levelFiveItem in vm.levelFiveList  | filter: {termName: vm.searchLevelFiveText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        {{levelFiveItem.termName}}
+
+                                        <a role="button" tabindex="0" href=""
+                                           aria-live="assertive"
+                                           aria-atomic="true"
+                                           aria-label="{{levelFiveItem.termName}}"
+                                           title="{{levelFiveItem.termName}}" class="pull-left contentTypeWidth visitedlink">{{levelFiveItem.termName}}</a>
+
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFiveItem === levelFiveItem}" ng-show="vm.taxonomyHierarchyLevels>5" class=""></i>
                                     </div>
                                 </div>
@@ -663,17 +727,46 @@
                     </div>
                 </div>
 
-                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
+                <div role="region" class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="vm.addToDocumentTemplate()" class="iconForward iconForwardLevel3" style="margin:0px;" alt="Left" src="../Images/forward_666.png"><div ng-click="vm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop" style="float:right;">add</div>
+                        <img title="Add" ng-click="vm.addToDocumentTemplate()"
+                             ng-keydown="$event.keyCode==13?vm.addToDocumentTemplate():null"
+                            aria-label="{{vm.createContent.AriaLabelAddTypeButton}}"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             tabindex="0"
+                             role="button"
+                             class="iconForward iconForwardLevel3" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
+                        <div ng-click="vm.addToDocumentTemplate()" 
+                             ng-keydown="$event.keyCode==13?vm.addToDocumentTemplate():null"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             tabindex="0"
+                             aria-label="{{vm.createContent.AriaLabelAddTypeButton}}"
+                             class="addOrRemoveLabelMarginTop" 
+                             style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="vm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel3" alt="Right" src="../Images/back-666.png"> <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4" ng-click="vm.removeFromDocumentTemplate()" style="float:left;">
+                        <img ng-click="vm.removeFromDocumentTemplate()"
+                             ng-keydown="$event.keyCode==13?vm.removeFromDocumentTemplate():null"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             tabindex="0"
+                             role="button"
+                             title="Remove" class="iconBack iconBackLevel3" alt="Right" src="../Images/back-666.png">
+                        <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4" 
+                             ng-click="vm.removeFromDocumentTemplate()"
+                             ng-keydown="$event.keyCode==13?vm.removeFromDocumentTemplate():null"
+                             aria-live="assertive"
+                             aria-atomic="true"
+                             aria-label="{{vm.createContent.AriaLabelRemoveTypeButton}}"
+                             tabindex="0" role="none"
+                             style="float:left;">
                             remove
                         </div>
                     </div>
                 </div>
-                <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
+                <div role="region" class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
                     <div class="errorPopUpArea  " ng-show='vm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
@@ -684,22 +777,42 @@
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:207px;margin-top:5px;">
                         <div class="popUpCommonContent popDT">
                             <div class="popUpDTContent" style="padding:0px !important;" ng-repeat='documentTypeLawTerm in vm.documentTypeLawTerms'>
-                                <div ng-class='{popUpSelected : vm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
-                                     data-value='{{$index}}'>{{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                                <div ng-class='{popUpSelected : vm.activeDocumentTypeLawTerm === documentTypeLawTerm}'
+                                     ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
+                                     ng-click='vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                     tabindex="0" aria-live="assertive" aria-atomic="true"
+                                     data-value='{{$index}}'>
+                                    <a href="" class="visitedlink"
+                                       ng-click='vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                       ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
+                                       tabindex="0" aria-live="assertive" aria-atomic="true"
+                                       aria-label="{{documentTypeLawTerm.termName}}"
+                                       data-value='{{$index}}'>
+                                        {{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="defaultMessageDiv" class="">
-                    <img id="infoImg" alt="info" src="../Images/information-blue.png">
+                    <img id="infoImg" alt="info" src="../Images/information-blue.png" tabindex="0" aria-label="{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}}">
                     <span id="defaultMessage" class="defaultMessageLevel3">{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
-                <button ng-click="vm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButtonLevel3" type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
+                <button ng-click="vm.saveDocumentTemplates()" tabindex="0"
+                        aria-live="assertive"
+                        aria-atomic="true"
+                        role="button"
+                        class="SavePopUpEntries saveDocButtonLevel3"
+                        aria-label="{{vm.createContent.Tab1ButtonSaveSelectiponText}}   "
+                        type="button">
+                    {{vm.createContent.Tab1ButtonSaveSelectiponText}}
+                </button>
             </div>
         </div>
     </div>
-    <div class="popUpContainer popUpPadding popUpContainerLevel4 popUpContainerTaxLevel4" ng-show="vm.taxonomyHierarchyLevels==4" ng-class="vm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+    <div role="region" class="popUpContainer popUpPadding popUpContainerLevel4 popUpContainerTaxLevel4" ng-show="vm.taxonomyHierarchyLevels==4" ng-class="vm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='vm.selectMatterTypePopUpClose()'>
         <div class="AlignCenterLevel4">
             <div class="popUpHeader">
@@ -820,7 +933,7 @@
             <button ng-click="vm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButtonLevel4" type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
     </div>
-    <div class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" ng-show="vm.taxonomyHierarchyLevels==5" ng-class="vm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+    <div role="region" class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" ng-show="vm.taxonomyHierarchyLevels==5" ng-class="vm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='vm.selectMatterTypePopUpClose()'>
         <div class="matterAlignCenter">
             <div class="popUpHeader">
@@ -938,7 +1051,11 @@
                     <span id="defaultMessage" class="spanDefaultMessage spanDefaultMessageLevel5">{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
             </div>
-            <button ng-click="vm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButton saveDocButtonLevel5" type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
+            <button ng-click="vm.saveDocumentTemplates()" 
+                    role="button"
+                    aria-label="save selections"
+                    class="SavePopUpEntries saveDocButton saveDocButtonLevel5" 
+                    type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
     </div>
     <div class="modal fade " id="errorDiv">
@@ -953,7 +1070,12 @@
     </div>
     <div id="loadingImageContainer" style="top: 50%;left:50%;">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
-            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.settingsConfigs.Image.LoadingAltText}}" title="{{vm.settingsConfigs.Image.LoadingAltText}}" />
+            <img src="../Images/WindowsLoadingFast.GIF"
+                 aria-label="{{vm.settingsConfigs.Image.LoadingAltText}}"
+                aria-live="assertive"
+                aria-atomic="true"
+                 alt="{{vm.settingsConfigs.Image.LoadingAltText}}"
+                 title="{{vm.settingsConfigs.Image.LoadingAltText}}" />
         </div>
     </div>
 </div>

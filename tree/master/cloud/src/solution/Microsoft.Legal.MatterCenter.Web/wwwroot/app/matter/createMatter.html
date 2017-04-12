@@ -117,7 +117,13 @@
 
                 </div>
                 <div class="loadingLookUp hide">
-                    <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="/../../Images/WindowsLoadingFast.GIF">
+                    <img id="loadingLookupImage" 
+                         aria-label="data loading"
+                         aria-live="assertive"
+                         aria-atomic="true"
+                         title="data loading"
+                         alt="{{cm.createContent.Tab1ImageLoadingAltText}}" 
+                         src="/../../Images/WindowsLoadingFast.GIF">
                 </div>
             </div>
         </section>
@@ -145,8 +151,7 @@
 
                     <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input aria-autocomplete="list" 
-                          
+                    <input aria-autocomplete="list"
                                aria-expanded="true" 
                                aria-live="assertive"
                                aria-atomic="true"
@@ -430,7 +435,14 @@
                         ng-disabled="cm.createBtnDisabled" 
                         value="Create">{{cm.createButton}}</button>
                 <div class="creatematerLoadingBtn">
-                    <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
+                    <img id="loadingImageCreate" 
+                         
+                         ng-show="cm.createBtnDisabled" 
+                         aria-label="data loading"
+                         aria-live="assertive"
+                         aria-atomic="true"
+                         title="data loading"
+                         src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
                 </div>
             </div>
 
@@ -652,9 +664,11 @@
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:207px;margin-top:5px;">
                         <div class="popUpCommonContent popDT" role="combobox">
                             <div class="popUpDTContent" style="padding:0px !important;"
+                                 ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
                                  ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
                                 <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}'>
-                                    <a href=""
+                                    <a href="" class="visitedlink"
+                                       ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
                                        ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
                                        tabindex="0" aria-live="assertive" aria-atomic="true"
                                        aria-label="{{documentTypeLawTerm.termName}}"
@@ -937,6 +951,11 @@
 </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="cm.popupContainerBackground">
-        <img src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
+        <img src="/../../Images/WindowsLoadingFast.GIF" 
+             aria-label="{{cm.createContent.Tab1ImageLoadingAltText}}"
+                aria-live="assertive"
+                aria-atomic="true"
+                
+             alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
     </div>
 </div>

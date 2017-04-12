@@ -8,14 +8,15 @@
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
             {{vm.navigationContent.HeaderBarLabel}}
-            <a class="LearnMoreLink" aria-label="{{vm.navigationContent.HeaderBarLink1Title}}" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="{{vm.navigationContent.HeaderBarLink1Title}}">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
+            <a class="LearnMoreLink" aria-label="{{vm.navigationContent.HeaderBarLink1Title}}" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="{{vm.navigationContent.HeaderBarLink1Title}}">{{vm.navigationContent.HeaderBarLink1Text}}</a> or
+            <a tabindex="0" class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
         </span>
     </header>   
     <div class="LinkContainer">      
         <div class="LeftLinkContainer">          
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
                 <a ui-sref='mc.matters()' 
-                            aria-live="assertive" aria-atomic="true" tabindex="0">
+                            aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image1Title}}">
                     <figure>
                         <img aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
@@ -24,7 +25,7 @@
             </div>           
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
                 <a ui-sref='mc.documents()'
-                            aria-live="assertive" aria-atomic="true" tabindex="0">
+                            aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image2Title}}">
                     <figure>
                         <img aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>

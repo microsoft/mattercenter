@@ -16,7 +16,7 @@
 
     <div class="row" ng-init="initOfficeLibrary()">
         <div class="row" tabindex="0"  id="mainmenu">
-            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">              
+            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0"  role="region">              
                 <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
                     <div class="input-group-btn zindex6" id="comboMattersOpt" ng-keydown="vm.mattersCombobox($event,0)">
                         <div tabindex="0" role="combobox" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div  tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+            <div  tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
                     <input type="text" tabindex="0"  role="textbox" aria-label="{{vm.matterConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                     <span class="input-group-addon cursor" tabindex="0"  role="button" aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
@@ -58,7 +58,7 @@
                 <div class="col-xs-12">                
                 </div>
             </div>
-            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth" role="region">
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
@@ -84,10 +84,13 @@
             <span aria-label="{{vm.mattername}}" role="heading" class="add-margin-bottom">{{vm.mattername}}</span>
         </div>
     </div>
-    <div class="row" id="mattergrid">
+    <div class="row" id="mattergrid"  role="region">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
-                <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()" role="grid">
+                <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText" 
+                     aria-live="assertive" 
+                     aria-atomic="true" 
+                     aria-label="no search results found">
                 </div>
             </div>
            
@@ -322,29 +325,46 @@
             <div class='input-group'>
                 <input type='text' placeholder='{{vm.matterConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.startDate'
+                       ng-model='vm.startDate'  tabindex="0"
                        ng-keydown="vm.changeOnCreateDate($event)"
                         ng-blur="vm.changeOnCreateDate($event)"
                        is-open='vm.openedStartDate'
                        datepicker-options='vm.dateOptions'
                        ng-required='true' close-text='Close'
+                       aria-live="assertive"
+                        aria-atomic="true"    
+                       today-text="Today"
+                           clear-text="Clear"
+                       aria-label="select start date"
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' tabindex="0"
+                            aria-label="open calendar control"
+                            ng-click='vm.openStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
-            <div class='input-group' style='margin-top:5px'>
+            <div class='input-group' style='margin-top:5px' role="region">
                 <input type='text' placeholder='{{vm.matterConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.endDate'
+                       ng-model='vm.endDate' tabindex="0"
                        is-open='vm.openedEndDate'
                        ng-keydown="vm.changeOnCreateDate($event)"
                         ng-blur="vm.changeOnCreateDate($event)"
                        datepicker-options='vm.endDateOptions'
                        ng-required='true' close-text='Close'
-                       alt-input-formats='altInputFormats' />
+                       alt-input-formats='altInputFormats' 
+                       aria-live="assertive"
+                       today-text="Today"
+                           clear-text="Clear"
+                       
+                        aria-atomic="true"    
+                       aria-label="select end date"
+                       />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' 
+                            tabindex="0"
+                            aria-label="open calendar control"
+                            ng-click='vm.openEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>
@@ -358,9 +378,18 @@
                         ng-blur="vm.changeOnModifiedDate($event)"
                        datepicker-options='vm.modDateOptions'
                        ng-required='true' close-text='Close'
+                       aria-live="assertive"
+                       today-text="Today"
+                           clear-text="Clear"
+                       
+                        aria-atomic="true"    
+                       aria-label="select end date"
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openModStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default'
+                            tabindex="0"
+                            aria-label="open calendar control" 
+                            ng-click='vm.openModStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
@@ -372,13 +401,28 @@
                         ng-blur="vm.changeOnModifiedDate($event)"
                        datepicker-options='vm.modEndDateOptions'
                        ng-required='true' close-text='Close'
-                       alt-input-formats='altInputFormats' />
+                       alt-input-formats='altInputFormats' 
+                       aria-live="assertive"
+                       today-text="Today"
+                           clear-text="Clear"
+                       
+                        aria-atomic="true"    
+                       aria-label="select end date"/>
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openModEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' 
+                            tabindex="0"
+                            aria-label="open calendar control"
+                            class='btn btn-default' ng-click='vm.openModEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>
-        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>{{vm.matterConfigContent.Button5OkText}}</div>
+        <div class='okDateButton' 
+             tabindex="0"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-label="press ok button to filter matters by date criteria"
+             id='btnOK' 
+             ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>{{vm.matterConfigContent.Button5OkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
             <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
