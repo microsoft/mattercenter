@@ -236,7 +236,7 @@
         //#endregion
 
         //#region To get the column schema and populate in column collection for grid with sorting of column display
-        $templateCache.put('coldefheadertemplate.html', "<div><div role='columnheader' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+        $templateCache.put('coldefheadertemplate.html', "<div style='overflow: hidden; -ms-text-overflow: ellipsis; max-width: 160px;' role='columnheader' col-index='renderIndex'><span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div>");
 
         //Declaring column collection object.
         // Collection requires as columns defination will be read through appsettings files and - 
@@ -2211,43 +2211,52 @@
             if (name === vm.documentConfigContent.GridColumn2Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                 vm.filtername = vm.documentConfigContent.GridColumn2Header;
+                $timeout(function () { angular.element('#docClientName').focus() }, 1000);
             }
 
             //Project Name
             if (name === vm.documentConfigContent.GridColumn3Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                 vm.filtername = vm.documentConfigContent.GridColumn3Header;
+                $timeout(function () { angular.element('#docMatterName').focus() }, 1000);
             }
             //Author
             if (name === vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = vm.documentConfigContent.GridColumn4Header;
+                $timeout(function () { angular.element('#docAuthor1').focus() }, 1000);
             }
             if (name === vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = vm.documentConfigContent.GridColumn5Header;
+                $timeout(function () { angular.element('#docAuthor2').focus() }, 1000);
             }
             //for Practice Group
             if (name === vm.documentConfigContent.GridColumn6Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyPracticeGroup + "";
                 vm.filtername = vm.documentConfigContent.GridColumn6Header;
+                $timeout(function () { angular.element('#docPGFil').focus() }, 1000);
             }
             //Check out to
             if (name === vm.documentConfigContent.GridColumn7Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                 vm.filtername = vm.documentConfigContent.GridColumn7Header;
+                $timeout(function () { angular.element('#docDocCheckOutUser').focus() }, 1000);
             }
             //Modified Date
             if (name === vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                 vm.filtername = vm.documentConfigContent.GridColumn4Header;
+                $timeout(function () { angular.element('#docModifieddDate').focus() }, 1000);
             }
 
             if (name === vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                 vm.filtername = vm.documentConfigContent.GridColumn5Header;
+                $timeout(function () { angular.element('#docModifieddDate').focus() }, 1000);
             }
             //Created Date
             if (name == vm.documentConfigContent.GridColumn8Header) {
                 vm.filtername = vm.documentConfigContent.GridColumn8Header;
+                $timeout(function () { angular.element('#docCreatedDate').focus() }, 1000);
             }
             vm.dateOptions.maxDate = new Date();
             vm.modDateOptions.maxDate = new Date();

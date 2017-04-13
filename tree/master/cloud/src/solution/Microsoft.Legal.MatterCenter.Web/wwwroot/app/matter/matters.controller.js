@@ -3009,18 +3009,22 @@
                 if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn1Header;
+                    $timeout(function () { angular.element('#matMatterName').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn3Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn3Header;
+                    $timeout(function () { angular.element('#matMatterClientName').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyPracticeGroup + "";
                     vm.filtername = vm.matterConfigContent.GridColumn2Header;
+                    $timeout(function () { angular.element('#matPracticeGroup').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn3Header;
+                    $timeout(function () { angular.element('#matAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn5Header) {
                     if (!vm.globalSettings.isBackwardCompatible) {
@@ -3030,25 +3034,31 @@
                     else {
                         vm.filtername = vm.matterConfigContent.GridColumn5Header;
                     }
+                    $timeout(function () { angular.element('#matRespAttorney').focus() }, 1000);
                 }
                 //AOL
                 if (name === vm.matterConfigContent.GridColumn6Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn6Header;
+                    $timeout(function () { angular.element('#matSubAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterId + "";
                     vm.filtername = vm.matterConfigContent.GridColumn6Header;
+                    $timeout(function () { angular.element('#matMatterId').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn4Header;
+                    $timeout(function () { angular.element('#matSubAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn7Header) {
                     vm.filtername = vm.matterConfigContent.GridColumn7Header;
+                    $timeout(function () { angular.element('#matOpenCreatedDate').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.filtername = vm.matterConfigContent.GridColumn4Header;
+                    $timeout(function () { angular.element('#matModifiDate').focus() }, 1000);
                 }
                 vm.dateOptions.maxDate = new Date();
                 vm.modDateOptions.maxDate = new Date();
