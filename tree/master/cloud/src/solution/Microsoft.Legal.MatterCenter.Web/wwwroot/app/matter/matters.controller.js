@@ -568,14 +568,14 @@
                     fd.append('file', file);
                     fd.append("Overwrite" + nCount++, isOverwrite);
                 });
-                
+                jQuery.a11yfy.assertiveAnnounce('file upload in progress');
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined },
                     timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
-                    $.a11yfy.assertiveAnnounce('file upload completed');
+                    
                     if (response.status == 200) {
                         if (response.data.length !== 0) {
                             var tempFile = [];
@@ -585,7 +585,7 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
-                                    
+                                    jQuery.a11yfy.assertiveAnnounce('file upload completed');
                                     vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
                                         return item.fileName !== response.data[i].fileName;
                                     });
@@ -643,13 +643,14 @@
 
             //#region functionality to handle when mail gets uploaded
             vm.uploadEmail = function (attachmentRequestVM, droppedAttachedFile) {
+                jQuery.a11yfy.assertiveAnnounce('mail attachment upload in progress');
                 uploadEmail(attachmentRequestVM, function (response) {
                     vm.showLoading = false;
                     var target = vm.targetDrop;
                     var source = vm.sourceFile;
                     //If the mail upload is success
                     if (response.code === "OK" && response.value === "Attachment upload success") {
-
+                        jQuery.a11yfy.assertiveAnnounce('mail attachment successfully uploaded to ' + vm.targetDrop.name);
                         var subject = Office.context.mailbox.item.subject;
                         subject = subject.substring(0, subject.lastIndexOf("."));
                         vm.mailUpLoadSuccess = true;
@@ -671,6 +672,7 @@
                         bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
                         response.value = response.value.split("|")[0];
+                        jQuery.a11yfy.assertiveAnnounce(response.value);
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
                         response.append = bAppendEnabled;
@@ -687,6 +689,7 @@
                     else if (response.code === "IdenticalContent") {
                         var dupliFile = vm.ducplicateSourceFile[0];
                         dupliFile.value = dupliFile.value + "<br/><br/>" + response.value;
+                        jQuery.a11yfy.assertiveAnnounce(dupliFile.value);
                         dupliFile.saveLatestVersion = "True";
                         dupliFile.cancel = "True";
                         dupliFile.append = true;
@@ -728,6 +731,7 @@
 
             //#region Call back function when attachment gets uploaded
             vm.uploadAttachment = function (attachmentRequestVM, droppedAttachedFile) {
+                jQuery.a11yfy.assertiveAnnounce("attachment upload in progress");
                 vm.oUploadGlobal.successBanner = false;
                 uploadAttachment(attachmentRequestVM, function (response) {
                     vm.isLoadingFromDesktopStarted = false;
@@ -752,6 +756,8 @@
                             vm.targetDrop.name = vm.targetDrop.name == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : vm.targetDrop.name;
 
                         }
+
+                        jQuery.a11yfy.assertiveAnnounce("attachment successfully uploaded to " + vm.targetDrop.name);
                         droppedAttachedFile.uploadedFolder = vm.targetDrop.name;
                         vm.docUploadedFolder = vm.targetDrop.name;
                         droppedAttachedFile.uploadSuccess = true;
@@ -770,6 +776,7 @@
                         bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
                         response.value = response.value.split("|")[0];
+                        jQuery.a11yfy.assertiveAnnounce(response.value);
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
                         response.append = bAppendEnabled;
@@ -790,6 +797,7 @@
                         dupliFile.saveLatestVersion = "True";
                         dupliFile.cancel = "True";
                         dupliFile.contentCheck = "False";
+                        jQuery.a11yfy.assertiveAnnounce(dupliFile.value);
                     }
                 });
             }

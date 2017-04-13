@@ -1492,7 +1492,10 @@
             }
             UnpinDocuments(unpinRequest, function (response) {
                 if (response.isDocumentUnPinned) {
+                    
                     $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                    jQuery.a11yfy.assertiveAnnounce("Successfully unpinned document");
+                    
                 }
             });
         }
@@ -1534,7 +1537,9 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3);}, 500);
+                    
+                    $timeout(function () { vm.GetDocuments(vm.documentid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                    jQuery.a11yfy.assertiveAnnounce("Successfully pinned document")
                 }
             });
         }

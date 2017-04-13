@@ -162,7 +162,12 @@
                     <span class="closeNotification" ng-click="vm.closeSuccessBanner()">{{vm.matterConfigContent.CloseIconText}}</span>
                 </div>
                 <div class="row modalClose" role="region" >
-                    <img data-dismiss="modal" tabindex="0" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+                    <img data-dismiss="modal" tabindex="0" 
+                         title="Close file upload dialog box"
+                         aria-label="Close file upload dialog box"
+                         
+                         ng-click="vm.hideBreadCrumb()" 
+                         class="pull-right" src="../../images/close-666.png" />
                 </div>
                 <div class="modal-body modelbodyContainer"  role="region">
                     <div class='loadingprogressbar' ng-if="vm.isLoadingFromDesktopStarted">
@@ -189,21 +194,35 @@
 
                                 <div ng-if="attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName mailName">
-                                        <img ng-hide="vm.mailUpLoadSuccess" title="{{vm.matterConfigContent.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                             ng-click="vm.editAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentEditImageAltText}}" src="../Images/edit-666.png">
-                                        <img title="{{vm.matterConfigContent.AttachmentSaveImageTitle}}" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                        <img ng-hide="vm.mailUpLoadSuccess" title="{{vm.matterConfigContent.AttachmentEditImageTitle}}" 
+                                             class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" 
+                                             draggable="false"
+                                             tabindex="0" role="button"
+                                             ng-click="vm.editAttachment(this, $event)" 
+                                             alt="{{vm.matterConfigContent.AttachmentEditImageAltText}}" 
+                                             src="../Images/edit-666.png">
+                                        <img title="{{vm.matterConfigContent.AttachmentSaveImageTitle}}" 
+                                             tabindex="0" role="button"
+                                             class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" 
+                                             draggable="false"
                                              ng-click="vm.saveAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentSaveImageText}}" src="../Images/save-666.png">
                                         <!--If the mail upload is success, show this div-->
                                         <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
                                             <img class="uploadSuccessStatus" alt="{{vm.matterConfigContent.AttachmentUploadSuccessfullyImageAltText}}" src="/images/success-message.png">
                                         </div>
-                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="{{vm.matterConfigContent.AttachmentIconImageAltText}}" src="../Images/attach_icon-15x15_666.png">
-                                        <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
+                                        <img class="attachIcon attachIconMargin"
+                                              id="{{attachmentInfo.counter}}attachIcon" 
+                                             alt="{{vm.matterConfigContent.AttachmentIconImageAltText}}" src="../Images/attach_icon-15x15_666.png">
+                                        <input class="popupName editPopupContent hide ui-draggable" tabindex="0" 
+                                               role="textbox"
+                                               id="0attachmentText" type="text" maxlength="128">
                                         <div title="{{vm.matterConfigContent.AttachmentTestTitle}}"
                                              class="popupName ui-draggable"
                                              id="{{attachmentInfo.counter}}attachment"
                                              draggable
                                              aria-grabbed="true"
+                                             tabindex="0"
+                                             aria-label="{{attachmentInfo.attachmentFileName}}"
                                              data-isEmail="{{attachmentInfo.isEmail}}"
                                              data-attachmentid="{{attachmentInfo.attachmentId}}" attachedfile="attachmentInfo">{{attachmentInfo.attachmentFileName}}</div>
                                         <!--If the mail upload is success, show the folder name under which the email has been dropped-->
@@ -228,6 +247,8 @@
                                              class="popupName ui-draggable "
                                              draggable
                                              aria-grabbed="true"
+                                             tabindex="0"
+                                             aria-label="{{attachmentInfo.attachmentFileName}}"
                                              data-contentType="{{attachmentInfo.contentType}}"
                                              data-size="{{attachmentInfo.size}}"
                                              data-isEmail="{{attachmentInfo.isEmail}}"

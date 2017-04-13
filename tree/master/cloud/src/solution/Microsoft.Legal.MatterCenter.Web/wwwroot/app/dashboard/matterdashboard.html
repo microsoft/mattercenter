@@ -663,7 +663,7 @@
         </div>
     </div>
     <!--Upload Modal Screen Start-->
-    <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="region" >
         <div class="modal-dialog modal-lg" style="width:100%">
             <div ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
 
@@ -695,12 +695,16 @@
 
             </div>
 
-            <div class="modal-content">
+            <div class="modal-content" role="region">
                 <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">{{vm.matterDashboardConfigs.UploadCompleteLabel1Text}}<span class="closeNotification" ng-click="vm.closeSuccessBanner()">{{vm.matterDashboardConfigs.CloseIconText}}</span></div>
                 <div class="row modalClose">
-                    <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+                    <img data-dismiss="modal" 
+                         title="Close file upload dialog box"
+                         aria-label="Close file upload dialog box"
+                         ng-click="vm.hideBreadCrumb()" 
+                         class="pull-right" src="../../images/close-666.png" />
                 </div>
-                <div class="modal-body modelbodyContainer">
+                <div class="modal-body modelbodyContainer"  role="region">
                     <div class='loadingprogressbar'>
                         <img ng-if="vm.isLoadingFromDesktopStarted" alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' />
                     </div>
@@ -793,14 +797,17 @@
                                         </div>
                                     </div>
                                     <div ng-hide="vm.uploadedFiles.length || vm.allAttachmentDetails.length">
-                                        <div title="Test attachments" class="popupName" style="margin-left:1%;">
+                                        <div title="" class="popupName" style="margin-left:1%;" 
+                                             aria-atomic="true" 
+                                             aria-live="assertive" 
+                                             tabindex="0">
                                             No files uploaded
                                         </div>
                                     </div>
                                 </div>
                                 <!--Content end for showing the files which are uploaded from desktop-->
                             </div>
-                            <div class="col-sm-3 folderContent">
+                            <div class="col-sm-3 folderContent" role="region" aria-live="assertive" aria-atomic="true">
                                 <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
                                     <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
                                     <div id="parentFolder" class="breadcrumbItem"></div>
@@ -809,8 +816,19 @@
                                 </div>
                                 <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                                     <script type="text/ng-template" id="folderTree">
-                                        <div ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
-                                            <img class="folderIcon" src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="Documents">
+                                        <div ng-if="child.parentURL!==null" tabindex="0" role="region"
+                                             class="treeNodes" 
+                                             ng-show="child.active" title="" 
+                                             droppable 
+                                             drop="handleDrop()" 
+                                             aria-dropeffect="move"
+                                             folder="child" data-foldername="{{child.url}}" 
+                                             data-parentname="{{child.parentURL}}" 
+                                             ng-click="vm.showSelectedFolderTree(child)">
+                                            <img class="folderIcon" tabindex="0"
+                                                 aria-label="{{child.name}} folder to which the documents can be uploaded"
+                                                 src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" 
+                                                 align="middle" alt="Documents">
                                             {{child.name}}
                                         </div>
                                         <ul ng-if="child.children" style="margin-left:5px;">
