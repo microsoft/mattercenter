@@ -1593,4 +1593,8 @@ input[type=checkbox]:focus, input[type=radio]:focus,a.ms-Button:focus, button:fo
         display:none
     }
 
+.gridHeaderColumnsFloat {
+        float:left
+    }
+
 

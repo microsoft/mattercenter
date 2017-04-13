@@ -40,6 +40,7 @@
         vm.previousDocAuthorValue = '';
         vm.previousDocCheckOutUserValue = '';
         vm.assetsuccess = false;
+        
         //Onload show ui grid and hide error div
         //start
         vm.divuigrid = false;
@@ -235,7 +236,7 @@
         //#endregion
 
         //#region To get the column schema and populate in column collection for grid with sorting of column display
-        $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+        $templateCache.put('coldefheadertemplate.html', "<div><div role='columnheader' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
         //Declaring column collection object.
         // Collection requires as columns defination will be read through appsettings files and - 
@@ -2203,7 +2204,8 @@
             //Document
             if (name === vm.documentConfigContent.GridColumn1Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-                vm.filtername = vm.documentConfigContent.GridColumn1Header;
+                vm.filtername = vm.documentConfigContent.GridColumn1Header;                
+                $timeout( function(){angular.element('#docFileName').focus()}, 1000);
             }
             //ClientName
             if (name === vm.documentConfigContent.GridColumn2Header) {

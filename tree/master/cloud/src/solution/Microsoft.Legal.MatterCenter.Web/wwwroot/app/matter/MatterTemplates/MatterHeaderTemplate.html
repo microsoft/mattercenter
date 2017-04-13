@@ -1,4 +1,19 @@
-<div tabindex="0" ng-mouseenter='grid.appScope.vm.matterDropDowm = true' ng-mouseleave='grid.appScope.vm.matterDropDowm = false'>
+<div tabindex="0" 
+     ng-mouseenter='grid.appScope.vm.matterDropDowm = true' 
+     ng-mouseleave='grid.appScope.vm.matterDropDowm = false'>
+    <div aria-live="assertive" aria-atomic="true"
+         aria-label="{{grid.appScope.vm.matterConfigContent.GridColumn1HeaderTitle}}"
+         tabindex="0" role='gridcell' style='padding-left: 11px; float:left ' title="{{grid.appScope.vm.matterConfigContent.GridColumn1HeaderTitle}}"
+         sortby="{{col.colDef.field}}" class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
+        <span aria-live="assertive" aria-atomic="true"
+              aria-label="{{grid.appScope.vm.matterConfigContent.GridColumn1Header}}" tabindex="0" class='ui-grid-header-cell-label ng-binding' ng-focus='grid.appScope.vm.matterDropDowm = true'>
+            {{ col.colDef.displayName }}
+            <span tabindex="0"
+                  class="headerfilter" ng-if="grid.appScope.vm.matterfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
+            <span tabindex="0" id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span>
+            <span tabindex="0" id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
+        </span>
+    </div>
     <div tabindex="0" class='keep-open sorticon' ng-show='grid.appScope.vm.matterDropDowm' 
           aria-label="filter by matter name"
          aria-live="assertive"     aria-atomic="true"
@@ -14,21 +29,7 @@
             <img tabindex="0" src='../images/icon-combobox.png' />
         </a>
     </div>
-    <div
-          aria-live="assertive" aria-atomic="true" 
-          aria-label="{{grid.appScope.vm.matterConfigContent.GridColumn1HeaderTitle}}"
-          tabindex="0" role='gridcell' style='padding-left: 11px;' title="{{grid.appScope.vm.matterConfigContent.GridColumn1HeaderTitle}}" 
-         sortby="{{col.colDef.field}}" class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-        <span 
-               aria-live="assertive"     aria-atomic="true" 
-               aria-label="{{grid.appScope.vm.matterConfigContent.GridColumn1Header}}" tabindex="0" class='ui-grid-header-cell-label ng-binding' ng-focus='grid.appScope.vm.matterDropDowm = true' >
-            {{ col.colDef.displayName }}
-            <span tabindex="0"
-                  class="headerfilter" ng-if="grid.appScope.vm.matterfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
-            <span tabindex="0" id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span>
-            <span tabindex="0" id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
-        </span>
-    </div>
+    
     <div tabindex="0" class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' 
          ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
         <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>
