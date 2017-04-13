@@ -985,7 +985,7 @@
                 else {
                     if (vm.documentTypeLawTerms.length >= 0) {
                         vm.errorPopUp = true;
-                        $timeout(function () { angular.element('.errTextArea').focus(); }, 500);
+                        $timeout(function () { angular.element('#errMatterType').focus(); }, 500);
                     } else {
                         vm.popupContainerBackground = "hide";
                         vm.popupContainer = "hide";

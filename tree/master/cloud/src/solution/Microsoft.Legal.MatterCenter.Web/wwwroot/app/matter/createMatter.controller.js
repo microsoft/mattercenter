@@ -1483,15 +1483,18 @@
             cm.addNewAssignPermissions = function () {
                 var newItemNo = cm.assignPermissionTeams[cm.assignPermissionTeams.length - 1].assigneTeamRowNumber+1;
                 cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
+                jQuery.a11yfy.assertiveAnnounce('new row added to add user and add role and permissions');
             };
 
             cm.removeAssignPermissionsRow = function (index) {
                 var remainingRows = cm.assignPermissionTeams.length;
                 if (1 < remainingRows) {
                     cm.assignPermissionTeams.splice(index, 1);
+                    jQuery.a11yfy.assertiveAnnounce('permission row removed successfully');
                 }
                 cm.notificationPopUpBlock = false;
                 cm.notificationBorder = "";
+
             };
 
             if (localStorage.getItem("iLivePage")) {
@@ -1981,13 +1984,14 @@
                         console.log(matterMetdataVM);
 
                         cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText1;
+                        jQuery.a11yfy.assertiveAnnounce(cm.createContent.LabelEntityCreationSuccessMsgText1);
                         cm.successBanner = true; cm.createBtnDisabled = true;
                         createMatter(matterMetdataVM, function (response) {
 
                             console.log("createMatter API success");
                             console.log(response);
                             cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText2;
-
+                            jQuery.a11yfy.assertiveAnnounce(cm.createContent.LabelEntityCreationSuccessMsgText2);
                             associateContentTypes();
                             assignPermission();
                             createMatterLandingPage();
@@ -2160,6 +2164,7 @@
                 var matterGUID = cm.matterGUID;
                 cm.successBanner = true;
                 cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText3;
+                jQuery.a11yfy.assertiveAnnounce(cm.createContent.LabelEntityCreationSuccessMsgText3);
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
                 var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [];
@@ -3426,7 +3431,9 @@
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
                 }
                 else {
-                    cm.errorPopUp = true; $timeout(function(){angular.element('#errorPopUpMatterTypeBlock').focus();},500);
+                    cm.errorPopUp = true;
+                    jQuery.a11yfy.assertiveAnnounce(cm.createContent.ErrorMessagePrimaryMatterType);
+                    
                 }
             }
             //#endregion

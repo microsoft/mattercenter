@@ -568,13 +568,14 @@
                     fd.append('file', file);
                     fd.append("Overwrite" + nCount++, isOverwrite);
                 });
-
+                
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined },
                     timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
+                    $.a11yfy.assertiveAnnounce('file upload completed');
                     if (response.status == 200) {
                         if (response.data.length !== 0) {
                             var tempFile = [];
@@ -584,6 +585,7 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
+                                    
                                     vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
                                         return item.fileName !== response.data[i].fileName;
                                     });
@@ -2019,6 +2021,7 @@
 
             //#region Written for unpinning the matter 
             vm.UnpinMatter = function (data) {
+                jQuery("#jquery-a11yfy-assertiveannouncer").empty()
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
@@ -2033,6 +2036,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
+                        jQuery.a11yfy.assertiveAnnounce(data.entity.matterName + ' unpinned successfully');
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                     }
                 });
@@ -2041,6 +2045,7 @@
 
             //#region Functionality for pinning the matter.
             vm.PinMatter = function (data) {
+                jQuery("#jquery-a11yfy-assertiveannouncer").empty()
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
@@ -2069,6 +2074,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
+                        jQuery.a11yfy.assertiveAnnounce(data.entity.matterName + ' pinned successfully');
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                     }
                 });

@@ -11,15 +11,18 @@
     #divCreateMatter #divContent:focus, .sectionContent:focus {
         outline: none !important;
     }
-    .visitedlink:visited {color:#333;}  
+
+    .visitedlink:visited {
+        color: #333;
+    }
 </style>
 <div class="row" id="divHeader">
     <div class="col-xs-10 col-sm-8 col-md-6 col-lg-10" style="margin-left: 45px;margin-top: 1px;height: 58px;">
-        <div aria-label="{{cm.createContent.Tab1HeaderTitle}}" id="divTab1" tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 createMatterHeaderWidth focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
-        <div aria-label="{{cm.createContent.Tab2HeaderTitle}}" id="divTab2" tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
+        <div  id="divTab1" tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 createMatterHeaderWidth focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
+        <div  id="divTab2" tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
         <!-- add new div to show matter extra field properties -->
-        <div aria-label="{{cm.createContent.Tab4HeaderTitle}}" id="divTab4" tabindex="0" ng-show="cm.configurableSection" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConfigSection")' title="{{cm.createContent.Tab4HeaderTitle}}" data-section-num="4" ng-class='{menuTextSelected:cm.sectionName=="snConfigSection"}' data-section-name="snConfigSection">3 {{cm.createContent.Tab4Header}}</div>
-        <div aria-label="{{cm.createContent.Tab3HeaderTitle}}" id="divTab3" tabindex="0" class="col-xs-12 col-sm-4 col-md-4 col-lg-3 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">{{cm.createContent.TabNumber}} {{cm.createContent.Tab3Header}}</div>
+        <div  id="divTab4" tabindex="0" ng-show="cm.configurableSection" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConfigSection")' title="{{cm.createContent.Tab4HeaderTitle}}" data-section-num="4" ng-class='{menuTextSelected:cm.sectionName=="snConfigSection"}' data-section-name="snConfigSection">3 {{cm.createContent.Tab4Header}}</div>
+        <div  id="divTab3" tabindex="0" class="col-xs-12 col-sm-4 col-md-4 col-lg-3 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">{{cm.createContent.TabNumber}} {{cm.createContent.Tab3Header}}</div>
 
     </div>
 </div>
@@ -117,28 +120,28 @@
 
                 </div>
                 <div class="loadingLookUp hide">
-                    <img id="loadingLookupImage" 
+                    <img id="loadingLookupImage"
                          aria-label="data loading"
                          aria-live="assertive"
                          aria-atomic="true"
                          title="data loading"
-                         alt="{{cm.createContent.Tab1ImageLoadingAltText}}" 
+                         alt="{{cm.createContent.Tab1ImageLoadingAltText}}"
                          src="/../../Images/WindowsLoadingFast.GIF">
                 </div>
             </div>
         </section>
         <!-- Conflict check section -->
-        <section class="sectionStep"  role="region" id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"' 
+        <section class="sectionStep" role="region" id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"'
                  style="display: block;">
             <div class="sectionContent">
                 <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox" 
+                        <input id="chkConflictCheck" type="checkbox"
                                role="checkbox"
                                aria-live="assertive"
                                aria-atomic="true"
-                               aria-required="true"                                
-                               checked="checked" ng-model="cm.chkConfilctCheck" 
+                               aria-required="true"
+                               checked="checked" ng-model="cm.chkConfilctCheck"
                                value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
@@ -152,13 +155,13 @@
                     <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                     <input aria-autocomplete="list"
-                               aria-expanded="true" 
-                               aria-live="assertive"
-                               aria-atomic="true"
-                               typeahead-focus-first=true
-                           role="combobox" 
-                           class="medium clear ui-autocomplete-input" 
-                           id="txtConflictCheckBy" 
+                           aria-expanded="true"
+                           aria-live="assertive"
+                           aria-atomic="true"
+                           typeahead-focus-first=true
+                           role="combobox"
+                           class="medium clear ui-autocomplete-input"
+                           id="txtConflictCheckBy"
                            ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-min-length='3' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
@@ -167,12 +170,12 @@
                     <div class="gutter"></div>
                     <input type="text" class="calendar form-control dateWidth"
                            aria-live="assertive"
-                           aria-atomic="true"                           
+                           aria-atomic="true"
                            today-text="Today"
                            clear-text="Clear"
                            current-text="Today"
                            uib-datepicker-popup='MM/dd/yyyy'
-                           aria-required="true"                           
+                           aria-required="true"
                            aria-label={{cm.createContent.AriaLabelConflictedCheckDate}}
                            ng-class="{'errorBorder' :  (cm.errorBorder == 'cdate')}"
                            data-ng-model="cm.conflictDate"
@@ -184,27 +187,27 @@
                     <div class="gutter"></div>
                     <div class="conflictRadioBtn">
                         <label class="smaller" role="region">
-                            <input type="radio" class="conflictradioCheck " 
+                            <input type="radio" class="conflictradioCheck "
                                    aria-label="{{cm.createContent.ConflictYesRadioButtonTitle}}"
-                                   aria-live="assertive" 
-                                   aria-atomic="true" 
+                                   aria-live="assertive"
+                                   aria-atomic="true"
                                    role="radio"
-                                   tabindex="0"                                   
-                                   title="{{cm.createContent.ConflictYesRadioButtonTitle}}"    
-                                   ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' 
+                                   tabindex="0"
+                                   title="{{cm.createContent.ConflictYesRadioButtonTitle}}"
+                                   ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)'
                                    ng-value="true" ng-model="cm.conflictRadioCheck" value=true>{{cm.createContent.Tab2RadioButton1Option1}}
                         </label>
                         <label class="smaller">
-                            <input type="radio" class="conflictradioCheck " 
-                                   title="{{cm.createContent.ConflictNoRadioButtonTitle}}" 
+                            <input type="radio" class="conflictradioCheck "
+                                   title="{{cm.createContent.ConflictNoRadioButtonTitle}}"
                                    aria-label="{{cm.createContent.ConflictNoRadioButtonTitle}}"
-                                   aria-live="assertive" 
-                                   aria-atomic="true" 
-                                   role="radio" 
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   role="radio"
                                    tabindex="0"
-                                   ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' 
-                                   ng-model="cm.conflictRadioCheck" 
-                                   ng-value="false" 
+                                   ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)'
+                                   ng-model="cm.conflictRadioCheck"
+                                   ng-value="false"
                                    value=false>{{cm.createContent.Tab2RadioButton1Option2}}
                         </label>
                     </div>
@@ -212,21 +215,20 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input aria-autocomplete="list" aria-haspopup="true" 
+                        <input aria-autocomplete="list" aria-haspopup="true"
                                aria-live="assertive"
                                aria-atomic="true"
                                typeahead-focus-first=true
-                               role="textbox" class="medium clear ui-autocomplete-input" 
-                               id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" 
-                               ng-model="cm.conflictUsers.assignedUser" 
-                               ng-blur='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","on-blurr",$event,cm.conflictUsers.assignedUser)' 
-                               uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" 
-                               typeahead-loading="blockLoadingLocations" 
-                               
-                               typeahead-no-results="blockUserResults" 
+                               role="textbox" class="medium clear ui-autocomplete-input"
+                               id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}"
+                               ng-model="cm.conflictUsers.assignedUser"
+                               ng-blur='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","on-blurr",$event,cm.conflictUsers.assignedUser)'
+                               uib-typeahead="users.name    for users in cm.searchUsers($viewValue)"
+                               typeahead-loading="blockLoadingLocations"
+                               typeahead-no-results="blockUserResults"
                                typeahead-on-select='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","",$event,cm.conflictUsers.assignedUser)' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" typeahead-min-length='3' autocomplete="off">
                         <div class="gutter">
-                            <img ng-show="blockLoadingLocations" 
+                            <img ng-show="blockLoadingLocations"
                                  aria-live="assertive"
                                  aria-atomic="true"
                                  role="img"
@@ -244,26 +246,26 @@
                 <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">{{cm.createContent.Tab2RadioButton2Label}}</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition" role="region">
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" 
-                               title="{{cm.createContent.SecuredYesRadioButtonTitle}}" 
+                        <input name="rdbSecureMatterCheck"
+                               title="{{cm.createContent.SecuredYesRadioButtonTitle}}"
                                aria-label="{{cm.createContent.SecuredYesRadioButtonTitle}}"
-                               aria-live="assertive" 
-                               aria-atomic="true" 
-                               ng-disabled="cm.secureMatterRadioEnabled" 
-                               ng-model="cm.secureMatterCheck" 
+                               aria-live="assertive"
+                               aria-atomic="true"
+                               ng-disabled="cm.secureMatterRadioEnabled"
+                               ng-model="cm.secureMatterCheck"
                                tabindex="0"
                                role="radio"
                                class="matterCheckYes" type="radio" ng-value=true value="true">{{cm.createContent.Tab2RadioButton2Option1}}
                     </label>
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" 
-                               aria-live="assertive" 
-                               aria-atomic="true"  
+                        <input name="rdbSecureMatterCheck"
+                               aria-live="assertive"
+                               aria-atomic="true"
                                aria-label="{{cm.createContent.SecuredNoRadioButtonTitle}}"
-                               title="{{cm.createContent.SecuredNoRadioButtonTitle}}" 
-                               ng-disabled="cm.secureMatterRadioEnabled" 
-                               ng-model="cm.secureMatterCheck" 
-                               class="matterCheckNo" type="radio" 
+                               title="{{cm.createContent.SecuredNoRadioButtonTitle}}"
+                               ng-disabled="cm.secureMatterRadioEnabled"
+                               ng-model="cm.secureMatterCheck"
+                               class="matterCheckNo" type="radio"
                                tabindex="0"
                                role="radio"
                                ng-value=false value="false">{{cm.createContent.Tab2RadioButton2Option2}}
@@ -276,92 +278,94 @@
                 <label class="mediumSmallRole contentLabel labelRoles" ng-show="cm.showRoles"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown1Label}}</label>
                 <div class="gutter"></div>
                 <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown2Label}}</label>
-                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
-                    <div class="row{{$index}} assignNewPerm">
+                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam" role="region">
+                    <div class="row{{$index}} assignNewPerm"  role="region">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input aria-autocomplete="list" aria-haspopup="true" 
-                               role="textbox" 
-                               aria-live="assertive" 
+                        <input aria-autocomplete="list" aria-haspopup="true"
+                               role="textbox"
+                               aria-live="assertive"
                                aria-atomic="true"
                                typeahead-focus-first=true
-                               id='txtUser{{assignTeam.assigneTeamRowNumber}}' 
-                               aria-required="true" 
+                               id='txtUser{{assignTeam.assigneTeamRowNumber}}'
+                               aria-required="true"
                                aria-label="{{cm.createContent.AriaLabelTeamUserName}}" assignteamkeydown confirm="false" uservalue=""
                                ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))"
                                ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" typeahead-min-length='3' typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
 
                         <div class="gutter">
-                            <img ng-show="loadingLocationsTeam" 
+                            <img ng-show="loadingLocationsTeam"
                                  aria-live="assertive"
                                  aria-atomic="true"
                                  role="img"
                                  aria-label="Users loading"
-                                 class="glyphicon glyphicon-refresh loadingGlyphicon gly-spin pull-left" 
+                                 class="glyphicon glyphicon-refresh loadingGlyphicon gly-spin pull-left"
                                  src="/../../images/loadingcirclests16.gif" />
                         </div>
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
-                            <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ">
+                            <div 
+                                 class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth "   
+                                 role="region" 
+                                 aria-hidden="true">
                                 <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' ng-disabled="assignTeam.disable"
                                         ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}"
-                                        class="medium clear dropdownCustom roleWidth" 
-                                        aria-required="true" 
+                                        class="medium clear dropdownCustom roleWidth"
+                                        aria-required="true"
                                         aria-live="assertive"
                                         aria-atomic="true"
                                         role="combobox"
-                                        aria-label="{{cm.createContent.AriaLabelTeamRoleCombo}}" 
+                                        aria-label="{{cm.createContent.AriaLabelTeamRoleCombo}}"
                                         ng-model="assignTeam.assignedRole"
                                         ng-options='assignRole.name for assignRole in cm.assignRoles'></select>
                             </div>
                         </div>
                         <div class="gutter"></div>
                         <div>
-                            <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
-                                <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
+                            <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1" role="region">
+                                <div 
+                                     role="region" 
+                                     aria-hidden="true"
+                                     class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
                                     <select id='permUser{{assignTeam.assigneTeamRowNumber}}' ng-disabled="assignTeam.disable"
                                             ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}"
-                                            class="medium clear dropdownCustom roleWidth" 
-                                            aria-required="true" 
+                                            class="medium clear dropdownCustom roleWidth"
+                                            aria-required="true"
                                             role="combobox"
-                                            aria-live="assertive" 
+                                            aria-live="assertive"
                                             aria-atomic="true"
-                                            aria-label="{{cm.createContent.AriaLabelTeamPermissionCombo}}" 
+                                            aria-label="{{cm.createContent.AriaLabelTeamPermissionCombo}}"
                                             ng-model="assignTeam.assignedPermission"
                                             ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                                 </div>
                             </div>
                         </div>
                         <div class="gutter"></div>
-                        <div class="customClose" ng-if="assignTeam.disable==true">
+                        <div class="customClose" ng-if="assignTeam.disable==true" aria-hidden="true" role="region">
                             <img ng-model="assignTeam.assigneTeamRowNumber" 
-                                 role="button"
-                                 aria-live="assertive" 
-                                 aria-atomic="true"
-                                 aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" 
-                                 title="{{cm.createContent.ButtonDeleteText}}" 
-                                 alt="{{cm.createContent.ButtonDeleteText}}" 
-                                 style="cursor:default; opacity:0.6 !important" 
+                                 title="{{cm.createContent.ButtonDeleteText}}"
+                                 alt="{{cm.createContent.ButtonDeleteText}}"
+                                 style="cursor:default; opacity:0.6 !important"
                                  src="/../../Images/icon-delete.png">
                         </div>
-                        <div class="close customClose" ng-if="assignTeam.disable==undefined">
-                            <img ng-model="assignTeam.assigneTeamRowNumber" 
-                                 ng-click="cm.removeAssignPermissionsRow($index)" 
-                                 aria-label="{{cm.createContent.AriaLabelDeleteButton1}}" 
-                                 aria-live="assertive" 
+                        <div class="close customClose" ng-if="assignTeam.disable==undefined" role="region">
+                            <img ng-model="assignTeam.assigneTeamRowNumber"
+                                 ng-click="cm.removeAssignPermissionsRow($index)"
+                                 aria-label="{{cm.createContent.AriaLabelDeleteButton1}} testing abcd efgh ijkl"
+                                 aria-live="assertive"
                                  aria-atomic="true"
-                                 title="{{cm.createContent.ButtonDeleteText}}" 
+                                 title="{{cm.createContent.ButtonDeleteText}}"
                                  role="button"
                                  alt="{{cm.createContent.ButtonDeleteText}}" src="/../../Images/icon-delete.png">
                         </div>
                     </div>
                 </div>
                 <div class="clear" id="addNewAssignPerm">
-                    <a href="" id="addMoreLink" 
-                       tabindex="0" 
+                    <a href="" id="addMoreLink"
+                       tabindex="0"
                        aria-live="assertive"
                        aria-atomic="true"
-                       title="{{cm.createContent.LinkAddMoreUserTitle}}" 
-                       aria-label="{{cm.createContent.AriaLabelAddMoreUser}}" 
+                       title="{{cm.createContent.LinkAddMoreUserTitle}}"
+                       aria-label="{{cm.createContent.AriaLabelAddMoreUser}}"
                        ng-keypress="$event.keyCode==13?cm.addNewAssignPermissions():null"
                        ng-click="cm.addNewAssignPermissions()">
                         <span class="glyphicon glyphicon-plus"></span> {{cm.createContent.Tab2AddMoreHeaderLabel}}
@@ -391,11 +395,11 @@
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input id="demo-checkbox-unselected2" 
-                           ng-model="cm.includeEmail" 
-                           ng-init="cm.includeEmail" 
-                           ng-click="cm.createAndNotify(cm.includeEmail)" 
-                           class="ms-ChoiceField-input  ms-checkBox" 
+                    <input id="demo-checkbox-unselected2"
+                           ng-model="cm.includeEmail"
+                           ng-init="cm.includeEmail"
+                           ng-click="cm.createAndNotify(cm.includeEmail)"
+                           class="ms-ChoiceField-input  ms-checkBox"
                            role="checkbox"
                            aria-label="{{cm.createContent.Tab3CheckBox3Text}}"
                            type="checkbox">
@@ -403,11 +407,11 @@
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input role="checkbox" 
-                           id="demo-checkbox-unselected0" 
-                           ng-model="cm.includeCalendar" 
-                           ng-init="cm.includeCalendar" 
-                           class="ms-ChoiceField-input ms-checkBox" 
+                    <input role="checkbox"
+                           id="demo-checkbox-unselected0"
+                           ng-model="cm.includeCalendar"
+                           ng-init="cm.includeCalendar"
+                           class="ms-ChoiceField-input ms-checkBox"
                            aria-label="{{cm.createContent.Tab3CheckBox1Text}}"
                            type="checkbox">
                     <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
@@ -419,25 +423,26 @@
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
-                    <input role="checkbox" 
+                    <input role="checkbox"
                            aria-label="{{cm.createContent.Tab3CheckBox2Text}}"
-                           id="demo-checkbox-unselected1" 
-                           ng-model="cm.includeRssFeeds" 
-                           ng-init="cm.includeRssFeeds" 
+                           id="demo-checkbox-unselected1"
+                           ng-model="cm.includeRssFeeds"
+                           ng-init="cm.includeRssFeeds"
                            class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
                 </div>
-                <button class="button clear" 
+                <button class="button clear"
                         role="button"
                         aria-label="{{cm.createButton}}"
-                        type="button" id="btnCreateMatter" 
-                        ng-click='cm.createMatterButton($event)' 
-                        ng-disabled="cm.createBtnDisabled" 
-                        value="Create">{{cm.createButton}}</button>
+                        type="button" id="btnCreateMatter"
+                        ng-click='cm.createMatterButton($event)'
+                        ng-disabled="cm.createBtnDisabled"
+                        value="Create">
+                    {{cm.createButton}}
+                </button>
                 <div class="creatematerLoadingBtn">
-                    <img id="loadingImageCreate" 
-                         
-                         ng-show="cm.createBtnDisabled" 
+                    <img id="loadingImageCreate"
+                         ng-show="cm.createBtnDisabled"
                          aria-label="data loading"
                          aria-live="assertive"
                          aria-atomic="true"
@@ -460,45 +465,56 @@
 
     <div class="popupContainerBackground " ng-click="cm.selectMatterTypePopUpClose()" ng-class="cm.popupContainerBackground"></div>
 
-
-    <div role="dialog" aria-labelledby="matterTypeDialog" aria-hidden="true"
+    <!--Start region for taxonomy level 3-->
+    <div role="dialog" aria-labelledby="matterTypeDialog"
+         aria-describedby="instructions" aria-hidden="true"
          title="{{cm.createContent.TitleAddRemoveType}} popup open in overlay"
-         aria-label="{{cm.createContent.TitleAddRemoveType}} popup open in overlay"
          class="popUpContainer popUpContainerLevel3" ng-class="cm.popupContainer"
          ng-show="cm.taxonomyHierarchyLevels==3||cm.taxonomyHierarchyLevels==2"
          style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img aria-label="{{cm.createContent.AriaLabelCloseButton}}"
-             title="Close" class="popUpCloseIcon popUpFloatRight" alt="{{cm.createContent.AriaLabelCloseButton}}" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
-        <div class="alignCenter" role="region" id="matterTypeDialog">
+             title="Close" class="popUpCloseIcon popUpFloatRight"
+             alt="{{cm.createContent.AriaLabelCloseButton}}"
+             src="/../../Images/close-666.png"
+             tabindex="0"
+             ng-click='cm.selectMatterTypePopUpClose()'>
+        <div class="alignCenter" id="instructions">
+            <h2 tabindex="0" id="matterTypeDialog" class="popUpFloatLeft"
+                style="font-size:13px">
+                Select a {{cm.createContent.ColumnName1}}
+            </h2>
             <div class="popUpHeader">
-                <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{cm.createContent.ColumnName1}}</div>
+                <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft"></div>
                 <div class="popUpPracticeGroup clear" role="region">
-                    <div class="popUpPGDiv" aria-atomic="true" aria-live="assertive">
+                    <div class="popUpPGDiv">
                         <select role="combobox" class="dropdownLevelOne clear custPracticeGroup"
-                                id="selectPG" ng-model='cm.selectedLevelOneItem' ng-change='cm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
+                                id="selectPG"
+                                aria-selected="{{cm.selectedLevelOneItem}}"
+                                ng-model='cm.selectedLevelOneItem'
+                                ng-change='cm.getSelectedLevelOne()'
+                                ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
                             <option role="option" value="" label="- {{cm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
-                <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
+                <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL" role="region">
                     <span style="margin-bottom:5px;">
                         {{cm.createContent.ColumnName2}}
                     </span>
                     <div aria-atomic="true" aria-live="assertive" class="popUpFloatLeft popUpBorder " id="popupAOLBorder"
-                         style="height:213px;width:207px;margin-top:5px;">
-                        <input aria-atomic="true" aria-live="assertive" class="popUpMDTextArea clear"
-                               
-                                    aria-label="{{cm.searchLevelTwoText}}"
+                         style="height:213px;width:207px;margin-top:5px;"  role="region">
+                        <input class="popUpMDTextArea clear"
+                               aria-label="filter from the below area of laws"
                                ng-model="cm.searchLevelTwoText" style="border: 1px solid rgb(200, 200, 200);
                                 border-image: none; width:179px;" spellcheck="true" type="text"
                                placeholder="{{cm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
-                        <div aria-atomic="true" aria-live="assertive" class="popUpCommonContent popUpMD" id="popupAOLContent">
-                            <div aria-atomic="true" aria-live="assertive" class='popUpMDContent '
+                        <div class="popUpCommonContent popUpMD" id="popupAOLContent">
+                            <div class='popUpMDContent '
                                  style="padding:0px !important;"
                                  ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
-                                <div role="button" aria-atomic="true" aria-live="assertive"
+                                <div role="menu"
                                      ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}"
                                      ng-click='cm.selectLevelTwoItem(levelTwoItem)'
                                      ng-keydown="$event.keyCode==13?cm.selectLevelTwoItem(levelTwoItem):null"
@@ -508,7 +524,6 @@
                                      data-areaoflaw-id='{{levelTwoItem.id}}'>
                                     <a role="menuitem" title="{{levelTwoItem.termName}}"
                                        href=""
-                                       aria-atomic="true" aria-live="assertive"
                                        aria-label="{{levelTwoItem.termName}}"
                                        class="pull-left contentTypeWidth visitedlink">{{levelTwoItem.termName}}</a>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
@@ -517,25 +532,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft solDivWidth" id="divSAOL" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=3">
+
+                <div role="region" class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft solDivWidth"
+                     id="divSAOL" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=3">
 
                     <span style="margin-bottom:5px;">{{cm.createContent.ColumnName3}}</span>
-                    <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
+                    <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3"  role="region">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
-                            <input class="popUpMDTextArea clear" 
-                                   aria-live="assertive"
-                                    aria-atomic="true"
-                                    aria-label="{{cm.searchLeveThreeText}}"
-                                   ng-model="cm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
-                            <div class="popUpCommonContent popUpSAL" id="popupSAOLContent" role="menu">
+                            <input class="popUpMDTextArea clear"
+                                   type="text"
+                                   aria-label="filter from the below sub area of laws"
+                                   ng-model="cm.searchLeveThreeText"
+                                   role="textbox"
+                                   style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" placeholder="Search by typing">
+                            <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
                                 <div class="popUpSALContent "
                                      ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}'
                                      style="padding:0px !important;">
                                     <div role="menu" tabindex="0"
-                                         aria-atomic="true" aria-live="assertive"
                                          ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
                                         <a title="{{levelThreeItem.termName}}" href=""
-                                           role="menuitem" tabindex="0" aria-live="assertive" aria-atomic="true"
+                                           role="menuitem" tabindex="0"
                                            aria-label="{{levelThreeItem.termName}}"
                                            class="pull-left contentTypeWidth visitedlink">{{levelThreeItem.termName}}</a>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
@@ -547,65 +564,6 @@
                     </div>
                 </div>
 
-
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=4">
-
-                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName4}}</span>
-                    <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
-                        <div class="popUpFloatLeft popUpBorder" role="region"
-                             id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
-                            <input class="popUpMDTextArea clear" 
-                                    aria-live="assertive"
-                                    aria-atomic="true"
-                                    aria-label="{{cm.searchLevelFourText}}"
-                                   ng-model="cm.searchLevelFourText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
-                            <div class="popUpCommonContent popUpSAL" id="popupSAOLContent1" role="menu">
-                                <div class="popUpSALContent " ng-repeat='levelFourItem in cm.levelFourList  | filter: {termName: cm.searchLevelFourText}' style="padding:0px !important;">
-                                    <div ng-class="{popUpSelected : ((cm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
-                                        <a title="{{levelFourItem.termName}}"
-                                           role="menuitem" tabindex="0" aria-live="assertive" aria-atomic="true"
-                                           aria-label="{{levelFourItem.termName}}"
-                                           class="pull-left contentTypeWidth visitedlink">{{levelFourItem.termName}}</a>
-                                        <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=5">
-
-                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName5}}</span>
-                    <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
-                        <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
-                            <input class="popUpMDTextArea clear" 
-                                    aria-live="assertive"
-                                    aria-atomic="true"
-                                    aria-label="{{cm.searchLevelFiveText}}"
-                                   ng-model="cm.searchLevelFiveText" 
-                                   style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" 
-                                   spellcheck="true" type="text" placeholder="Search by typing">
-                            <div class="popUpCommonContent popUpSAL" id="popupSAOLContent2">
-                                <div class="popUpSALContent "
-                                     ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
-                                    <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        <a role="button" tabindex="0" href=""
-                                           aria-live="assertive"
-                                           aria-atomic="true"
-                                           aria-label="{{levelFiveItem.termName}}"
-                                           title="{{levelFiveItem.termName}}" class="pull-left contentTypeWidth">{{levelFiveItem.termName}}</a>
-                                        <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFiveItem === levelFiveItem}" ng-show="cm.taxonomyHierarchyLevels>5" class=""></i>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
                         <img title="Add"
@@ -613,15 +571,11 @@
                              ng-keydown="$event.keyCode==13?cm.addToDocumentTemplate():null"
                              class="iconForward iconForwardLevel3" style="margin:0px;"
                              aria-label="{{cm.createContent.AriaLabelAddTypeButton}}"
-                             aria-live="assertive"
-                             aria-atomic="true"
                              tabindex="0"
                              role="button"
                              alt="{{cm.createContent.AriaLabelAddTypeButton}}" src="/../../Images/forward_666.png" />
                         <div ng-click="cm.addToDocumentTemplate()"
                              ng-keydown="$event.keyCode==13?cm.addToDocumentTemplate():null"
-                             aria-live="assertive"
-                             aria-atomic="true"
                              tabindex="0"
                              aria-label="{{cm.createContent.AriaLabelAddTypeButton}}"
                              role="button" class="addOrRemoveLabelMarginTop" style="float:right;">add</div>
@@ -630,8 +584,6 @@
                          style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
                         <img ng-click="cm.removeFromDocumentTemplate()"
                              ng-keydown="$event.keyCode==13?cm.removeFromDocumentTemplate():null"
-                             aria-live="assertive"
-                             aria-atomic="true"
                              tabindex="0"
                              role="button"
                              title="Remove" class="iconBack iconBackLevel3"
@@ -640,8 +592,6 @@
                         <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4"
                              ng-click="cm.removeFromDocumentTemplate()"
                              ng-keydown="$event.keyCode==13?cm.removeFromDocumentTemplate():null"
-                             aria-live="assertive"
-                             aria-atomic="true"
                              aria-label="{{cm.createContent.AriaLabelRemoveTypeButton}}"
                              tabindex="0" role="none" style="float:left;">
                             remove
@@ -649,8 +599,10 @@
                     </div>
 
                 </div>
+
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
-                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert"
+                         ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div tabindex="0" class="errTextArea popUpFloatRight errTextAreaLevel4"
@@ -670,7 +622,7 @@
                                     <a href="" class="visitedlink"
                                        ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
                                        ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
-                                       tabindex="0" aria-live="assertive" aria-atomic="true"
+                                       tabindex="0"
                                        aria-label="{{documentTypeLawTerm.termName}}"
                                        data-value='{{$index}}'>
                                         {{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
@@ -680,17 +632,32 @@
                         </div>
                     </div>
                 </div>
-
-
+                
                 <div id="defaultMessageDiv" class="">
-                    <img id="infoImg" tabindex="0" role="button" aria-label="{{cm.createContent.AriaLabelInfoTypeButton}}" alt="{{cm.createContent.AriaLabelInfoTypeButton}}" src="/../../Images/information-blue.png" />
-                    <span id="defaultMessage"  class="defaultMessageLevel3">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
+                    <img id="infoImg" 
+                         alt="{{cm.createContent.AriaLabelInfoTypeButton}}" src="/../../Images/information-blue.png" />
+                    <span id="defaultMessage" 
+                          class="defaultMessageLevel3">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
-                <button ng-click="cm.saveDocumentTemplates()" title="{{cm.createContent.Tab1ButtonSaveSelectiponText}}" class="SavePopUpEntries saveDocButtonLevel3" type="button">{{cm.createContent.Tab1ButtonSaveSelectiponText}}</button>
+
+                <button ng-click="cm.saveDocumentTemplates()"
+                        tabindex="0"
+                        role="button"
+                        title="{{cm.createContent.Tab1ButtonSaveSelectiponText}}"
+                        class="SavePopUpEntries saveDocButtonLevel3"
+                        type="button">
+                    {{cm.createContent.Tab1ButtonSaveSelectiponText}}
+                </button>
+
             </div>
         </div>
     </div>
-    <div class="popUpContainer popUpPadding popUpContainerLevel4 popUpContainerTaxLevel4" ng-show="cm.taxonomyHierarchyLevels==4" ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+    <!--Start region for taxonomy level 3-->
+    
+    <!--Start region for taxonomy level 4-->
+    <div class="popUpContainer popUpPadding popUpContainerLevel4 popUpContainerTaxLevel4" 
+         ng-show="cm.taxonomyHierarchyLevels==4" ng-class="cm.popupContainer" 
+         style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img title="Close" class="popUpCloseIcon popUpFloatRight" aria-label="{{cm.createContent.AriaLabelCloseButton}" alt="{{cm.createContent.AriaLabelCloseButton}}" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()' />
         <div class="AlignCenterLevel4">
             <div class="popUpHeader">
@@ -792,10 +759,15 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterTypeLevel4" id="divDocTemplate" style="width:225px;">
-                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert"
+                         aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
+                        <div class="errTextArea popUpFloatRight errTextAreaLevel4"
+                             style="margin:12px 22px 0px 0px;color:red;">
+                            <span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4"
+                                  style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span>
+                        </div>
                     </div>
                     <span style="margin-bottom:5px;">{{cm.createContent.Tab1LabelFinalTypeText}}</span>
                     <div class="popUpFloatLeft popUpBorder popUpBorderLevel4" style="height:213px; width:207px;margin-top:5px;">
@@ -818,7 +790,11 @@
             <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButtonLevel4" type="button">{{cm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
     </div>
-    <div class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" ng-show="cm.taxonomyHierarchyLevels==5" ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+    <!--End region for taxonomy level 4-->
+    <!--Start region for taxonomy level 5-->
+    <div class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" 
+         ng-show="cm.taxonomyHierarchyLevels==5" 
+         ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img title="Close" class="popUpCloseIcon popUpFloatRight" aria-label="{{cm.createContent.AriaLabelCloseButton}" alt="{{cm.createContent.AriaLabelCloseButton}}" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="matterAlignCenter">
             <div class="popUpHeader">
@@ -946,16 +922,17 @@
             <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButton saveDocButtonLevel5" type="button">{{cm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
     </div>
+    <!--Start region for taxonomy level 5-->
+
 
 
 </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="cm.popupContainerBackground">
-        <img src="/../../Images/WindowsLoadingFast.GIF" 
-             aria-label="{{cm.createContent.Tab1ImageLoadingAltText}}"
-                aria-live="assertive"
-                aria-atomic="true"
-                
+        <img src="/../../Images/WindowsLoadingFast.GIF"
+             aria-label="data loading"
+             aria-live="assertive"
+             aria-atomic="true"
              alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
     </div>
 </div>
