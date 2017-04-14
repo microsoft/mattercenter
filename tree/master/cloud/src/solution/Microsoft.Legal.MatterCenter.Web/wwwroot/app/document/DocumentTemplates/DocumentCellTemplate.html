@@ -1,5 +1,5 @@
 ﻿<!--//adding template-->
-<div class='row' style="margin-right:0">
+<div class='row' style="margin-right:0" role="gridcell">
     <div role="region" aria-readonly="true" ng-keydown="grid.appScope.vm.openDocumentFlyout($event)" tabindex="0" class='col-xs-8 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
         <a documentflyout tabindex="0" type="button"  role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' 
            style='text-align: left;padding-left:0' details={{row.entity}}
@@ -8,7 +8,7 @@
                  src="{{row.entity.documentIconUrl}}"  alt="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> 
             {{row.entity.documentName}}
         </a>
-        <a documentflyout tabindex="0" type="button" role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
+        <a documentflyout tabindex="0" href="" type="button" role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
            details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess" aria-live="assertive" aria-atomic="true">
             <img class="docTypeIconHeader"  role="img" id="docTypeIcon" aria-live="assertive" aria-atomic="true"
                  src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> {{row.entity.documentName}}
@@ -40,8 +40,11 @@
                         {{grid.appScope.vm.documentConfigContent.EllipsisLink2Text}}
                     </a>
                 </li>
-                <li tabindex="0" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.closeContextMenu($event)" role="menuitem">                   
+                <li tabindex="0" class='ms-ContextualMenu-item' 
+                    ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinDocument(row)'
+                    ng-keydown="grid.appScope.vm.closeContextMenu($event)" role="menuitem">                   
                     <a href=""
+                       ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinDocument(row)'
                        aria-live="assertive" aria-atomic="true"
                        class='ECBItem ms-ContextualMenu-link upload'
                        aria-label={{row.entity.MatterInfo===undefined?grid.appScope.vm.documentConfigContent.ECBMenu3Title:grid.appScope.vm.documentConfigContent.ECBMenu4Title}}

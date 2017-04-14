@@ -568,13 +568,14 @@
                     fd.append('file', file);
                     fd.append("Overwrite" + nCount++, isOverwrite);
                 });
-
+                jQuery.a11yfy.assertiveAnnounce('file upload in progress');
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined },
                     timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
+                    
                     if (response.status == 200) {
                         if (response.data.length !== 0) {
                             var tempFile = [];
@@ -584,6 +585,7 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
+                                    jQuery.a11yfy.assertiveAnnounce('file upload completed');
                                     vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
                                         return item.fileName !== response.data[i].fileName;
                                     });
@@ -641,13 +643,14 @@
 
             //#region functionality to handle when mail gets uploaded
             vm.uploadEmail = function (attachmentRequestVM, droppedAttachedFile) {
+                jQuery.a11yfy.assertiveAnnounce('mail attachment upload in progress');
                 uploadEmail(attachmentRequestVM, function (response) {
                     vm.showLoading = false;
                     var target = vm.targetDrop;
                     var source = vm.sourceFile;
                     //If the mail upload is success
                     if (response.code === "OK" && response.value === "Attachment upload success") {
-
+                        jQuery.a11yfy.assertiveAnnounce('mail attachment successfully uploaded to ' + vm.targetDrop.name);
                         var subject = Office.context.mailbox.item.subject;
                         subject = subject.substring(0, subject.lastIndexOf("."));
                         vm.mailUpLoadSuccess = true;
@@ -669,6 +672,7 @@
                         bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
                         response.value = response.value.split("|")[0];
+                        jQuery.a11yfy.assertiveAnnounce(response.value);
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
                         response.append = bAppendEnabled;
@@ -685,6 +689,7 @@
                     else if (response.code === "IdenticalContent") {
                         var dupliFile = vm.ducplicateSourceFile[0];
                         dupliFile.value = dupliFile.value + "<br/><br/>" + response.value;
+                        jQuery.a11yfy.assertiveAnnounce(dupliFile.value);
                         dupliFile.saveLatestVersion = "True";
                         dupliFile.cancel = "True";
                         dupliFile.append = true;
@@ -726,6 +731,7 @@
 
             //#region Call back function when attachment gets uploaded
             vm.uploadAttachment = function (attachmentRequestVM, droppedAttachedFile) {
+                jQuery.a11yfy.assertiveAnnounce("attachment upload in progress");
                 vm.oUploadGlobal.successBanner = false;
                 uploadAttachment(attachmentRequestVM, function (response) {
                     vm.isLoadingFromDesktopStarted = false;
@@ -750,6 +756,8 @@
                             vm.targetDrop.name = vm.targetDrop.name == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : vm.targetDrop.name;
 
                         }
+
+                        jQuery.a11yfy.assertiveAnnounce("attachment successfully uploaded to " + vm.targetDrop.name);
                         droppedAttachedFile.uploadedFolder = vm.targetDrop.name;
                         vm.docUploadedFolder = vm.targetDrop.name;
                         droppedAttachedFile.uploadSuccess = true;
@@ -768,6 +776,7 @@
                         bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
                         response.value = response.value.split("|")[0];
+                        jQuery.a11yfy.assertiveAnnounce(response.value);
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
                         response.append = bAppendEnabled;
@@ -788,6 +797,7 @@
                         dupliFile.saveLatestVersion = "True";
                         dupliFile.cancel = "True";
                         dupliFile.contentCheck = "False";
+                        jQuery.a11yfy.assertiveAnnounce(dupliFile.value);
                     }
                 });
             }
@@ -2019,6 +2029,7 @@
 
             //#region Written for unpinning the matter 
             vm.UnpinMatter = function (data) {
+                jQuery("#jquery-a11yfy-assertiveannouncer").empty()
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
@@ -2033,6 +2044,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
+                        jQuery.a11yfy.assertiveAnnounce(data.entity.matterName + ' unpinned successfully');
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                     }
                 });
@@ -2041,6 +2053,7 @@
 
             //#region Functionality for pinning the matter.
             vm.PinMatter = function (data) {
+                jQuery("#jquery-a11yfy-assertiveannouncer").empty()
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
@@ -2069,6 +2082,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
+                        jQuery.a11yfy.assertiveAnnounce(data.entity.matterName + ' pinned successfully');
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                     }
                 });
@@ -2995,18 +3009,22 @@
                 if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn1Header;
+                    $timeout(function () { angular.element('#matMatterName').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn3Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn3Header;
+                    $timeout(function () { angular.element('#matMatterClientName').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyPracticeGroup + "";
                     vm.filtername = vm.matterConfigContent.GridColumn2Header;
+                    $timeout(function () { angular.element('#matPracticeGroup').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn3Header;
+                    $timeout(function () { angular.element('#matAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn5Header) {
                     if (!vm.globalSettings.isBackwardCompatible) {
@@ -3016,25 +3034,31 @@
                     else {
                         vm.filtername = vm.matterConfigContent.GridColumn5Header;
                     }
+                    $timeout(function () { angular.element('#matRespAttorney').focus() }, 1000);
                 }
                 //AOL
                 if (name === vm.matterConfigContent.GridColumn6Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn6Header;
+                    $timeout(function () { angular.element('#matSubAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterId + "";
                     vm.filtername = vm.matterConfigContent.GridColumn6Header;
+                    $timeout(function () { angular.element('#matMatterId').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                     vm.filtername = vm.matterConfigContent.GridColumn4Header;
+                    $timeout(function () { angular.element('#matSubAreaLaw').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn7Header) {
                     vm.filtername = vm.matterConfigContent.GridColumn7Header;
+                    $timeout(function () { angular.element('#matOpenCreatedDate').focus() }, 1000);
                 }
                 if (name === vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.filtername = vm.matterConfigContent.GridColumn4Header;
+                    $timeout(function () { angular.element('#matModifiDate').focus() }, 1000);
                 }
                 vm.dateOptions.maxDate = new Date();
                 vm.modDateOptions.maxDate = new Date();

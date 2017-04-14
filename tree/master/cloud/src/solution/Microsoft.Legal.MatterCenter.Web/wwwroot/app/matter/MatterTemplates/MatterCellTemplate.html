@@ -1,7 +1,10 @@
-<div class='row'>
+<div class='row' role="region">
 
     <div  tabindex="0"  ng-keydown="grid.appScope.vm.openMatterFlyout($event)" class='col-xs-7 col-sm-9 col-md-9 col-lg-9' id='matterPopup' 
-         role="region" aria-readonly="true" 
+          role="gridcell"
+         aria-label="{{row.entity.matterName}}"
+         aria-live="assertive" aria-atomic="true"
+           details={{row.entity}} 
          title='{{row.entity.matterName}}'>
         <!--<a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>-->
         <a  matterflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis'
@@ -13,7 +16,7 @@
         <div class='popcontent' style="display:none;"></div>
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 '
-          role="region" aria-readonly="true" 
+          role="region" 
          ng-keydown="grid.appScope.vm.openContextMenu($event, row.entity)"
          tabindex="0" id="matcoltemp" aria-live="polite">
 

@@ -665,9 +665,9 @@
             link: function (scope, element, attrs) {
                 var el = angular.element('<div></div>');
                 var htmlTxt = '<div class="col-xs-12 pad0 marginTop10">\
-                     <div class="col-xs-12 col-sm-5 pad0">\
+                     <div class="col-xs-12 col-sm-5 pad0" role="region">\
                          <div class="row margin0">\
-                             <div class="col-xs-12 defaultFontStyle displayInline pad0">'+
+                             <div class="col-xs-12 defaultFontStyle displayInline pad0" tabindex="0" aria-live="assertive"  aria-atomic="true" aria-label="' + scope.input.name + '">' +
                                scope.input.name
                              + '</div>\
                              <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">\
@@ -678,15 +678,15 @@
                          <div class="col-xs-12 defaultFontStyle displayInline pad0">'
                            + scope.$parent.vm.settingsConfigs.LabelDirectiveDisplayInUI +
                          '</div>\
-                         <span class="marginRight10"> <input type="radio" ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" Value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
-                         <span><input type="radio" name="ui_' + scope.input.fieldInternalName + '" Value="false" ng-model="input.displayInUI" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
+                         <span class="marginRight10"> <input type="radio" tabindex="0" aria-live="assertive"  aria-atomic="true" aria-label=" Yes radio button to make ' + scope.input.name + ' display in UI? " ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" Value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" tabindex="0" aria-live="assertive"  aria-atomic="true" aria-label=" No radio button to make ' + scope.input.name + ' not to display in UI? " name="ui_' + scope.input.fieldInternalName + '" Value="false" ng-model="input.displayInUI" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
                      </div>\
                      <div class="col-xs-12 col-sm-3 pad0 marginTop7" ng-show="input.displayInUI==\'true\'">\
                          <div class="col-xs-12 defaultFontStyle displayInline pad0">'
                          + scope.$parent.vm.settingsConfigs.LabelDirectiveIsRequired +
                          '</div>\
-                         <span class="marginRight10"> <input type="radio" ng-model="input.required" name="req_' + scope.input.fieldInternalName + '" value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
-                         <span><input type="radio" name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.required" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
+                         <span class="marginRight10"> <input type="radio" tabindex="0" aria-live="assertive" aria-label=" Yes radio button to make ' + scope.input.name + ' required field? "  aria-atomic="true" ng-model="input.required" name="req_' + scope.input.fieldInternalName + '" value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" tabindex="0" aria-live="assertive"  aria-atomic="true" aria-label=" No radio button to make ' + scope.input.name + ' not a required field? " name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.required" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
                      </div>\
                  </div>'
                 el.append(htmlTxt);

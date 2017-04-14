@@ -170,7 +170,7 @@
             columnDefs1.push({
                 field: 'pin',
                 width: '6%',
-                displayName: '',
+                displayName: 'Pin/Unpin',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img title={{row.entity.pinType}} src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
@@ -931,6 +931,7 @@
             vm.pinorunpin = function (e, currentRowData) {
                 vm.popupContainer = false;
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
+                    jQuery.a11yfy.assertiveAnnounce("Pinning document " + currentRowData.documentName)
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
                         Client: {
@@ -961,6 +962,7 @@
                     }
                     pinDocuments(pinRequest, function (response) {
                         if (response.isDocumentPinned) {
+                            jQuery.a11yfy.assertiveAnnounce("Successfully pinned document " + currentRowData.documentName)
                             e.currentTarget.src = "../images/unpin-666.png";
                             e.currentTarget.title = "unpin";
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) + 1;
@@ -970,6 +972,7 @@
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
+                    jQuery.a11yfy.assertiveAnnounce("Unpinning document " + currentRowData.documentName)
                     var unpinRequest = {
                         Client: {
                             Url: configs.global.repositoryUrl
@@ -980,6 +983,7 @@
                     }
                     UnpinDocuments(unpinRequest, function (response) {
                         if (response.isDocumentUnPinned) {
+                            jQuery.a11yfy.assertiveAnnounce("Successfully unpinned document " + currentRowData.documentName)
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";

@@ -831,6 +831,7 @@
             //#region This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
                 vm.popupContainer = false;
+                jQuery.a11yfy.assertiveAnnounce("Pinning matter " + currentRowData.matterName)
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -861,11 +862,13 @@
                             e.currentTarget.src = "../images/unpin-666.png";
                             e.currentTarget.title = "unpin"
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
+                            jQuery.a11yfy.assertiveAnnounce(currentRowData.matterName + " has pinned successfully")
                         }
                         vm.popupContainer = true;
                     });
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
+                    jQuery.a11yfy.assertiveAnnounce("UnPinning matter " + currentRowData.matterName)
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var unpinRequest = {
                         Client: {
@@ -877,7 +880,7 @@
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-
+                            jQuery.a11yfy.assertiveAnnounce(currentRowData.matterName + " has been unpinned successfully")
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
@@ -1576,7 +1579,7 @@
                     fd.append('file', file);
                     fd.append("Overwrite" + nCount++, isOverwrite);
                 });
-
+                jQuery.a11yfy.assertiveAnnounce('Uploading files. Please wait...');
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
                     headers: { 'Content-Type': undefined },
@@ -1592,6 +1595,7 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
+                                    jQuery.a11yfy.assertiveAnnounce('files uploaded successfully to folder' + response.data[i].dropFolder);
                                     vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
                                         return item.fileName !== response.data[i].fileName;
                                     });
@@ -1611,6 +1615,7 @@
                                             vm.ducplicateSourceFile.push(response.data[i]);
                                             vm.oUploadGlobal.arrFiles.push(vm.files[i]);
                                             vm.oUploadGlobal.successBanner = false;
+                                            jQuery.a11yfy.assertiveAnnounce(response.data[i].value)
                                         }
                                         else {
                                             var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
@@ -1621,6 +1626,7 @@
                                                 file[0].saveLatestVersion = "True";
                                                 file[0].cancel = "True";
                                                 file[0].contentCheck = "False";
+                                                jQuery.a11yfy.assertiveAnnounce(file[0].value)
                                             }
 
                                         }
@@ -1630,6 +1636,7 @@
                                         response.data[i].ok = "True";
                                         response.data[i].value = "The file <b >" + response.data[i].fileName + " </b> is failed to upload";
                                         vm.ducplicateSourceFile.push(response.data[i]);
+                                        jQuery.a11yfy.assertiveAnnounce(response.data[i].value)
                                     }
                                 }
 

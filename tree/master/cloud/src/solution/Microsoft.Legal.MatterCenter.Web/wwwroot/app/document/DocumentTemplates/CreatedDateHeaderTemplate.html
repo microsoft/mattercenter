@@ -1,20 +1,31 @@
-﻿<div ng-mouseenter='grid.appScope.vm.createddateDropDown = true' ng-mouseleave='grid.appScope.vm.createddateDropDown = false'>
-    <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.createddateDropDown'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" type='button' ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)">
-            <img src='/../../images/icon-combobox.png' />
-        </a>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" type='button' ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)">
-            <img src='/../../images/icon-combobox.png' />
-        </a>
-    </div>
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-        <span class='ui-grid-header-cell-label ng-binding'
+﻿<div ng-mouseenter='grid.appScope.vm.createddateDropDown = true' col-index='renderIndex' ng-mouseleave='grid.appScope.vm.createddateDropDown = false'  role="columnheader">
+    
+        <span role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus  ui-grid-header-cell-label ng-binding' tabindex="0" ng-focus='grid.appScope.vm.createddateDropDown = true'
               title='{{grid.appScope.vm.globalSettings.isBackwardCompatible ? grid.appScope.vm.documentConfigContent.GridColumn5HeaderTitle : grid.appScope.vm.documentConfigContent.GridColumn8HeaderTitle }}'>
             {{ col.colDef.displayName }}
             <span class="headerfilter" ng-if="grid.appScope.vm.createddatefilter"><i class="ms-Icon ms-Icon--filter"></i></span>
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
-    </div>
+        <span role='button' class='sorticon keep-open'               
+              ng-show='grid.appScope.vm.createddateDropDown'
+              ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header):null"
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)"
+              >
+            <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" type='button'
+               ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header):null"
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)">
+                <img src='/../../images/icon-combobox.png' tabindex="0" />
+            </a>
+            <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" type='button'
+               ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header):null"
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)">
+                <img src='/../../images/icon-combobox.png' tabindex="0" />
+            </a>
+        </span>
+
+   
+    
+    
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
 
         <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>

@@ -840,6 +840,10 @@
             vm.selectMatterType = function (value) {
                 vm.popupContainer = "Show";
                 vm.popupContainerBackground = "Show";
+                $timeout(function () {
+                    angular.element("#pgDropDownEle").focus();
+                    
+                }, 10);
             }
 
             vm.addToDocumentTemplate = function () {
@@ -981,6 +985,7 @@
                 else {
                     if (vm.documentTypeLawTerms.length >= 0) {
                         vm.errorPopUp = true;
+                        $timeout(function () { angular.element('#errMatterType').focus(); }, 500);
                     } else {
                         vm.popupContainerBackground = "hide";
                         vm.popupContainer = "hide";

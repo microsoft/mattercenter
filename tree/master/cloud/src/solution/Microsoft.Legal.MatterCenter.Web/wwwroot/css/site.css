@@ -1589,4 +1589,12 @@ input[type=checkbox]:focus, input[type=radio]:focus,a.ms-Button:focus, button:fo
     outline:dotted 3px !important;
 }
 
+.offscreen {
+        display:none
+    }
+
+.gridHeaderColumnsFloat {
+        float:left
+    }
+
 
