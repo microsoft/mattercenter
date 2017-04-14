@@ -25,7 +25,8 @@
                         </div>
                         <ul role="menu" tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
                             <li>
-                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item1}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}"
+                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item1}}" 
+                                   class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}"
                                    href="" tabindex="0" aria-live="assertive" aria-atomic="true" role="menuitem"
                                    ng-click="vm.SetMatters(1,vm.matterConfigContent.Dropdown1Item1)">
                                     {{vm.matterConfigContent.Dropdown1Item1}}
@@ -398,7 +399,7 @@
                      ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header"
                      ng-repeat='matter in vm.details'
                      ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'
-                     title={{matter.matterName}}>
+                     title="{{matter.matterName}}">
                     <span tabindex="0">{{matter.matterName}}</span>
                 </div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight'

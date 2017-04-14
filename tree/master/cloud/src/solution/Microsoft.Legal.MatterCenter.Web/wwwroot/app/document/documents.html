@@ -4,9 +4,9 @@
         width: 100%;
     }
 
-      #doccelltemp:focus{
-        border:1px dashed !important
-    } 
+    #doccelltemp:focus {
+        border: 1px dashed !important;
+    }
 </style>
 
 <head>
@@ -22,26 +22,26 @@
                 <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
                     <div class="input-group-btn zindex6" id="comboDocumentsOpt" ng-keydown="vm.documentsCombobox($event,0)">
                         <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
-                            <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
+                            <span role="listitem" class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
                             <span class="caret"></span>
                         </div>
                         <ul role="menu" tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
                             <li>
                                 <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
                                    role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item1}}"
-                                    class="searchPanelDropdown ms-font-weight-semilight" 
-                                   ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" 
+                                   class="searchPanelDropdown ms-font-weight-semilight"
+                                   ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}"
                                    ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</a>
                             </li>
                             <li>
                                 <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
-                                   role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item2}}" 
+                                   role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item2}}"
                                    class="searchPanelDropdown ms-font-weight-semilight"
-                                    ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" 
+                                   ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}"
                                    ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</a>
                             </li>
                             <li>
-                                <a href="" tabindex="0" aria-live="assertive" aria-atomic="true" 
+                                <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
                                    role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}"
                                    ng-keydown="vm.documentsCombobox($event,3)"
                                    ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">
@@ -53,19 +53,19 @@
 
                 </div>
             </div>
-            <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+            <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
-                    <input type="text" tabindex="0"  role="textbox" aria-label="{{vm.documentConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                    <span class="input-group-addon cursor" tabindex="0"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <input type="text" tabindex="0" role="textbox" aria-label="{{vm.documentConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <span class="input-group-addon cursor" tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
-                <div class="col-xs-12">     
+                <div class="col-xs-12">
                 </div>
             </div>
-            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth" role="region">
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button tabindex="0"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></div>
                     </div>
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
@@ -76,7 +76,7 @@
                     <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                 </ul>
                 <div class="col-xs-12">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>                
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                 </div>
             </div>
         </div>
@@ -87,9 +87,9 @@
         <div class="warningMessageText" title="{{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
     </div>
     <div class="row title">
-        <div tabindex="0" class="col-sm-12" id="gridViewPageHeaderContainer">
+        <h3 tabindex="0" class="col-sm-12" id="gridViewPageHeaderContainer">
             <span aria-label="{{vm.documentname}}" role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
-        </div>
+        </h3>
     </div>
     <div class="row">
         <!--Start For attaching documents messages to the current mail item-->
@@ -124,15 +124,17 @@
         </div>
 
         <!--End For attaching documents messages to the current mail item-->
-        <div class="row" id="documentgrid" style="margin-left:5px;margin-right: 5px;">
+        <div class="row" id="documentgrid" role="region" style="margin-left:5px;margin-right: 5px;">
             <div class="col-sm-12" ng-if="vm.divuigrid" role="grid">
-                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()" role="presentation">
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll
+                     aria-labelledby="gridViewPageHeaderContainer"
+                     class="grid" ng-style="vm.getTableHeight()" role="presentation">
                     <div class="col-xs-12 col-sm-12 noResultsText" ng-if="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
                     </div>
                 </div>
             </div>
         </div>
-      
+
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
                     id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()">
@@ -146,25 +148,25 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
         </div>
     </div>
-    <div class="popupContainerBackground"  ng-hide="vm.lazyloader"></div>
+    <div class="popupContainerBackground" ng-hide="vm.lazyloader"></div>
     <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
-            <input id="docFileName" tabindex="0" role="textbox" class='form-control' my-Enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docClientName" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docMatterName" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.projectSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docAuthor1" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docAuthor2" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docPGFil" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.practiceGroupSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input id="docDocCheckOutUser" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by document name" tabindex="0" id="docFileName" tabindex="0" role="textbox" class='form-control' my-Enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by client name" tabindex="0" id="docClientName" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by Matter name" tabindex="0" id="docMatterName" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.projectSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by Author name" tabindex="0" id="docAuthor1" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by Author name" tabindex="0" id="docAuthor2" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by Practice group" tabindex="0" id="docPGFil" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.practiceGroupSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input aria-label="enter search criteria to filter by checkout user name" tabindex="0" id="docDocCheckOutUser" tabindex="0" role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header &&  vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header &&  !vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by document name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by clients" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by matter name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header &&  vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header &&  !vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by practice groups" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0" role="button" type='button' aria-label="filter by checkout user name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />
@@ -179,14 +181,72 @@
                 </div>
             </div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)' title={{document.documentName}}>{{document.documentName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)' title={{client.documentClient}}>{{client.documentClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentMatterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)' title={{matter.documentMatterName}}>{{matter.documentMatterName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)' title={{matter.documentOwner}}>{{matter.documentOwner}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)' title={{matter.documentOwner}}>{{matter.documentOwner}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentPracticeGroup,""+vm.configSearchContent.ManagedPropertyPracticeGroup+"",true)' title={{matter.documentPracticeGroup}}>{{matter.documentPracticeGroup}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)' title={{matter.documentCheckoutUser}}>{{matter.documentCheckoutUser}}</div>
-                <div title="{{vm.documentConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.documentConfigContent.NoFilterMatchMsgText}}</span></div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header"
+                     ng-repeat='document in vm.details'
+                     ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'
+                     title="{{document.documentName}}">
+                    <span tabindex="0">{{document.documentName}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header"
+                     ng-repeat='client in vm.details'
+                     ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'
+                     title="{{client.documentClient}}">
+                    <span tabindex="0">  {{client.documentClient}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible"
+                     ng-repeat='matter in vm.details'
+                     ng-click='vm.documentsearch(matter.documentMatterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'
+                     title="{{matter.documentMatterName}}">
+                    <span tabindex="0"> {{matter.documentMatterName}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible"
+                     ng-repeat='matter in vm.details'
+                     ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'
+                     title="{{matter.documentOwner}}">
+                    <span tabindex="0">    {{matter.documentOwner}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible"
+                     ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'
+                     title={{matter.documentOwner}}>
+                    <span tabindex="0">  {{matter.documentOwner}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible"
+                     ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentPracticeGroup,""+vm.configSearchContent.ManagedPropertyPracticeGroup+"",true)'
+                     title={{matter.documentPracticeGroup}}>
+                    <span tabindex="0">  {{matter.documentPracticeGroup}}</span>
+                </div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-repeat='matter in vm.details'
+                     ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'
+                     title={{matter.documentCheckoutUser}}>
+                    <span tabindex="0"> {{matter.documentCheckoutUser}}</span>
+                </div>
+                <div title="{{vm.documentConfigContent.NoFilterMatchMsgTitle}}"
+                     aria-label="use tab to move to next item"
+                     tabindex="0"
+                     ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults">
+                    <span>{{vm.documentConfigContent.NoFilterMatchMsgText}}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -198,10 +258,13 @@
                        ng-model='vm.startDate'
                        is-open='vm.openedStartDate'
                        ng-keydown="vm.changeOnCreateDate($event)"
-                      ng-blur="vm.changeOnCreateDate($event)"
+                       ng-blur="vm.changeOnCreateDate($event)"
                        datepicker-options='vm.dateOptions'
                        ng-required='true' close-text='Close'
-                       alt-input-formats='altInputFormats' />
+                       alt-input-formats='altInputFormats'
+                       aria-label="select start date"
+                       aria-live="assertive"
+                       aria-atomic="true" />
                 <span class='input-group-btn'>
                     <button type='button' class='btn btn-default' ng-click='vm.openStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
@@ -215,9 +278,19 @@
                        ng-blur="vm.changeOnCreateDate($event)"
                        datepicker-options='vm.endDateOptions'
                        ng-required='true' close-text='Close'
-                       alt-input-formats='altInputFormats' />
+                       alt-input-formats='altInputFormats'
+                       aria-atomic="true"
+                       aria-label="select end date"
+                       aria-live="assertive"
+                       today-text="Today"
+                       clear-text="Clear" />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default'
+                            tabindex="0"
+                            aria-label="open calendar control"
+                            ng-click='vm.openEndDate($event)'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                    </button>
                 </span>
             </div>
         </div>
@@ -231,9 +304,19 @@
                        ng-blur="vm.changeOnModifiedDate($event)"
                        datepicker-options='vm.modDateOptions'
                        ng-required='true' close-text='Close'
+                       aria-live="assertive"
+                       today-text="Today"
+                       clear-text="Clear"
+                       aria-atomic="true"
+                       aria-label="select end date"
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openModStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default'
+                            tabindex="0"
+                            aria-label="open calendar control"
+                            ng-click='vm.openModStartDate($event)'>
+                        <i class='glyphicon glyphicon-calendar'></i>
+                    </button>
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
@@ -245,19 +328,39 @@
                        ng-blur="vm.changeOnModifiedDate($event)"
                        datepicker-options='vm.modEndDateOptions'
                        ng-required='true' close-text='Close'
+                       aria-live="assertive"
+                       today-text="Today"
+                       clear-text="Clear"
+                       aria-atomic="true"
+                       aria-label="select end date"
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openModEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' tabindex="0" class='btn btn-default' ng-click='vm.openModEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>
-        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>{{vm.documentConfigContent.ButtonOkText}}</div>
+        <div class='okDateButton' id='btnOK'
+             tabindex="0"
+             aria-live="assertive"
+             aria-atomic="true"
+             aria-label="press ok button to filter matters by date criteria"
+             ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>{{vm.documentConfigContent.ButtonOkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
             <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.documentConfigContent.ImageClearTitle}}' title='{{vm.documentConfigContent.ImageClearAltText}}'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png'
+                     tabindex="0"
+                     alt='clear'
+                     title='{{vm.documentConfigContent.ImageClearAltText}}'>
             </div>
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div class='ms-font-m ms-font-weight-semilight clearText'
+                 title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}'
+                 ng-click='vm.clearFilters(vm.filtername)'>
+                <span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span>
+            </div>
         </div>
     </div>
 </div>
+
+
+
