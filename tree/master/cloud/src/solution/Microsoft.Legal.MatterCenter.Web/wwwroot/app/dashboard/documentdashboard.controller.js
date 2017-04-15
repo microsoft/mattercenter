@@ -136,6 +136,37 @@
             };
             //#endregion
 
+            //#region to announce document type to Jaws tool.
+            vm.getDocumentName = function (docExtension) {
+                var docName = '';
+                switch (docExtension) {
+                    case 'docx':
+                        docName = 'Word document';
+                        break;
+                    case 'eml':
+                        docName = 'Email document';
+                        break;
+                    case 'xls':
+                        docName = 'Excel document';
+                        break;
+                    case 'txt':
+                        docName = 'Text document';
+                        break;
+                    case 'pdf':
+                        docName = 'PDF document';
+                        break;
+                    case 'zip':
+                        docName = 'Zip file document';
+                        break;
+                    default:
+                        docName = docExtension
+                        break;
+                }
+
+                return docName;
+            }
+            //#endregion
+
             //#region To get the column schema and populate in column collection for grid with sorting of column display
             var columnDefs1 = [];
             columnDefs1.push({
@@ -1763,6 +1794,10 @@
             vm.toggleCheckerForKeyDown = function (temp, currentRow, event) {
                 temp = temp ? false : true;
                 currentRow.checker = temp;
+            }
+
+            vm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Documents dashboard page loaded successfully");
             }
         }
     ]);

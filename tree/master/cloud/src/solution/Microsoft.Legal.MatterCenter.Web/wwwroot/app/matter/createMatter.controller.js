@@ -2320,7 +2320,7 @@
                     console.log(response);
                     cm.successMsg = cm.createContent.LabelSuccessEntityCreation + " <a target='_blank' href='" + cm.clientUrl + "/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
                     clearAllProperties();
-
+                    jQuery.a11yfy.assertiveAnnounce(cm.createContent.LabelSuccessEntityCreation);
                     cm.navigateToSecondSection(cm.sectionName);
                     cm.popupContainerBackground = "Show";
                 });
@@ -3593,6 +3593,10 @@
             }
 
             angular.element("#conflictCheck ul li a").prop("tabindex", "0");
+
+            cm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Matter provisioning page loaded successfully");
+            }
 
         }]);
 

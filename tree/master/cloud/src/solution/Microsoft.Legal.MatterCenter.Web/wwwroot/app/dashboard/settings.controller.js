@@ -1354,6 +1354,10 @@
                 return Fields;
             }
             vm.isLoginUserOwner();
+
+            vm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Settings page loaded successfully");
+            }
         }]);
     app.filter('getAssociatedDocumentTemplatesCount', function () {
         return function (input, splitChar) {

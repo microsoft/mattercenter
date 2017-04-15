@@ -2400,6 +2400,9 @@
                     }
                 }
             }
+            vm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Matters dashboard page loaded successfully");
+            }
             //#endregion
         }
     ]);
