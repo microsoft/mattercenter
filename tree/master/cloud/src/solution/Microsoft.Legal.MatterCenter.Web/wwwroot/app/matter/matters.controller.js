@@ -3259,6 +3259,11 @@
             angular.element('#menuitem-1').dblclick(function (e) {
                 e.preventDefault();
             });
+
+            vm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Matters search page loaded successfully");
+            }
+
         }]);
 
     //#region For adding custom filter 

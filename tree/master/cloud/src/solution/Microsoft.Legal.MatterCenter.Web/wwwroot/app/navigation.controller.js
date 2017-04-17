@@ -48,5 +48,9 @@
                 })
             }
             vm.canCreateMatter();
+
+            vm.pageLoadCompleted = function () {
+                jQuery.a11yfy.assertiveAnnounce("Home page loaded successfully");
+            }
         }]);
 })();

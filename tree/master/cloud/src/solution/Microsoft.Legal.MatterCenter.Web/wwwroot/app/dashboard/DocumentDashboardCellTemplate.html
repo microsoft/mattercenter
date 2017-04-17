@@ -1,9 +1,9 @@
 ﻿<div class='row'>
     <div class='col-xs-12' id='documentPopup' title='{{row.entity.documentName}}'>
         <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left'
-          href='' tabindex="0"  details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
+          role="button" tabindex="0"  details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
             <img class="docTypeIconHeader" id="docTypeIcon"  style="padding-left:0px;padding-right:4px"
-                 src="{{row.entity.documentIconUrl}}" alt="{{row.entity.documentExtension}}" />
+                 src="{{row.entity.documentIconUrl}}"  ng-attr-title="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}"/>
             {{row.entity.documentName}}
         </a>
         <div class='popcontent' style="display:none;" role="region" aria-live="assertive" aria-atomic="true" aria-label="document flyout menu">

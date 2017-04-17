@@ -2380,7 +2380,9 @@
         }
 
         //#endregion
-
+        vm.pageLoadCompleted = function () {
+            jQuery.a11yfy.assertiveAnnounce("Documents search page loaded successfully");
+        }
     }]);
 
     //#region For adding custom filter 

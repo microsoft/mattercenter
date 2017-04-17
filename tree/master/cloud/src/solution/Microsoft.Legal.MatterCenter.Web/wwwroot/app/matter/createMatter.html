@@ -182,6 +182,7 @@
                            is-open="cm.opened" placeholder="mm/dd/yyyy"
                            datepicker-options="cm.dateOptions"
                            ng-required="true" close-text="Close" readonly
+                           ng-keydown="$event.keyCode==13?cm.open1():null"
                            ng-click="cm.open1()" alt-input-formats="['M!/d!/yyyy']" />
 
                     <div class="gutter"></div>
@@ -278,8 +279,8 @@
                 <label class="mediumSmallRole contentLabel labelRoles" ng-show="cm.showRoles"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown1Label}}</label>
                 <div class="gutter"></div>
                 <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown2Label}}</label>
-                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam" role="region">
-                    <div class="row{{$index}} assignNewPerm"  role="region">
+                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam" role="region" >
+                    <div class="row{{$index}} assignNewPerm"  role="region" aria-live="assertive" aria-atomic="true" aria-relevant="additions removals">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                         <input aria-autocomplete="list" aria-haspopup="true"
                                role="textbox"
@@ -616,12 +617,12 @@
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:207px;margin-top:5px;">
                         <div class="popUpCommonContent popDT" role="combobox">
                             <div class="popUpDTContent" style="padding:0px !important;"
-                                 ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
+                                 ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm):null"
                                  ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
                                 <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}'>
                                     <a href="" class="visitedlink"
-                                       ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
-                                       ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                       ng-keydown="$event.keyCode==13?cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm):null"
+                                       ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm):null'
                                        tabindex="0"
                                        aria-label="{{documentTypeLawTerm.termName}}"
                                        data-value='{{$index}}'>
@@ -936,3 +937,5 @@
              alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
     </div>
 </div>
+
+<div ng-init="cm.pageLoadCompleted()"></div>
