@@ -30,7 +30,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         Task<dynamic> GetDocumentAndClientGUIDAsync(Client client);
-        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
+        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, 
+            string folderPath, Dictionary<string, string> mailProperties, MatterExtraProperties documentExtraProperties);
        
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);

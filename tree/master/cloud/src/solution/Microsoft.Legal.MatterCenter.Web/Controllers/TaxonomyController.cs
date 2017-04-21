@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Newtonsoft.Json;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
@@ -82,8 +82,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("gettaxonomy")]
         [Produces(typeof(TermSets))]
         [SwaggerOperation("getTaxonomy")]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains either ClientTermSets or  TermSets either ", Type = typeof(TermSets))]
-        [SwaggerResponseRemoveDefaults]
+         [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which contains either ClientTermSets or  TermSets either ", Type = typeof(TermSets))]
+         
         public async Task<IActionResult> GetTaxonomy([FromBody]TermStoreViewModel termStoreViewModel)
         {
             try

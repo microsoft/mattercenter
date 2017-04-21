@@ -93,5 +93,15 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// </summary>
         /// <value>Original name of the mail</value>
         public string originalName { get; set; }
+
+        /// <summary>
+        /// Get or sets the attachements associated with the current mail message
+        /// </summary>
+        public List<AttachmentDetails> AttachmentDetails { get; set; }
+
+        /// <summary>
+        /// Get or sets the message id
+        /// </summary>
+        public string id { get; set; }
     }
 }

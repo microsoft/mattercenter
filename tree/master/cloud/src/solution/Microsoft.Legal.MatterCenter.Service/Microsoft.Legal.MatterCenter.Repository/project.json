@@ -10,7 +10,9 @@
     "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Newtonsoft.Json": "9.0.1",
     "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
+    "Microsoft.Graph": "1.2.1",
+    "Microsoft.Exchange.WebServices": "2.2.0"
   },
   "frameworks": {
     "net46": {}

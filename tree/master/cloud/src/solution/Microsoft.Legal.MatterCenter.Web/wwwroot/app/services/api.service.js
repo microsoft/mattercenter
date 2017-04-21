@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular.module('matterMain')
-  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource','homeResource','navigationResource','settingsResource','adminResource',
-    function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource, homeResource, navigationResource, settingsResource, adminResource) {
+  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource','homeResource','navigationResource','settingsResource','adminResource', 'bulkuploadResource',
+function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource, homeResource, navigationResource, settingsResource, adminResource, bulkuploadResource) {
         var resources = {
             'matterResource': matterResource,
             'documentResource': documentResource,
@@ -11,7 +11,8 @@ angular.module('matterMain')
             'homeResource': homeResource,
             'navigationResource': navigationResource,
             'settingsResource': settingsResource,
-            'adminResource': adminResource
+            'adminResource': adminResource,
+            'bulkuploadResource': bulkuploadResource,
         };
 
         function callAPI(options) {

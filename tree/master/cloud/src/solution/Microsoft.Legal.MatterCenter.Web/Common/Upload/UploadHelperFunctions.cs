@@ -40,17 +40,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private DocumentSettings documentSettings;
         private IUploadHelperFunctionsUtility uploadHelperFunctionsUtility;
         private IUserRepository userRepositoy;
-       
+        private IMailMessageRepository mailMessageRepository;
+
         public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptions<ErrorSettings> errorSettings, IUserRepository userRepositoy,
-            
-            IDocumentRepository documentRepository, IOptions<DocumentSettings> documentSettings, IUploadHelperFunctionsUtility uploadHelperFunctionsUtility)
+
+            IDocumentRepository documentRepository, IOptions<DocumentSettings> documentSettings,
+            IUploadHelperFunctionsUtility uploadHelperFunctionsUtility, IMailMessageRepository mailMessageRepository)
         {
             this.spoAuthorization = spoAuthorization;
             this.errorSettings = errorSettings.Value;
             this.documentRepository = documentRepository;
             this.documentSettings = documentSettings.Value;
             this.uploadHelperFunctionsUtility = uploadHelperFunctionsUtility;
-            this.userRepositoy = userRepositoy;            
+            this.userRepositoy = userRepositoy;
+            this.mailMessageRepository = mailMessageRepository;
         }
         /// <summary>
         /// 
@@ -126,6 +129,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return null;
         }
 
+
         /// <summary>
         /// Acts as entry point from service to place the request to upload email/attachment. Reads the web request headers and requests applicable methods based on headers.
         /// </summary>
@@ -183,8 +187,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     //// If the response is okay, create an XML document from the response and process the request.
                     if (webResponse.StatusCode == HttpStatusCode.OK)
                     {
-                        genericResponse = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, 
-                            serviceRequest.AllowContentCheck, documentLibraryName, webResponse, isMailUpload, client, fileName, folderPath, ref message);
+                        genericResponse = UploadFilesMail(serviceRequest, documentLibraryName, webResponse, isMailUpload,
+                            client, fileName, folderPath, ref message);
                     }
                     if (genericResponse!=null && genericResponse.IsError == true && genericResponse.Code==UploadEnums.UploadFailure.ToString() && isFirstCall)
                     {
@@ -206,21 +210,19 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
         /// <summary>
-        /// Reads the XMLDocument and determines whether the request is to upload entire mail/attachment/.eml file/.msg file and calls respective method.
+        /// 
         /// </summary>
-        /// <param name="isOverwrite">Overwrite check</param>
-        /// <param name="documentLibraryName">Name of the document library</param>
-        /// <param name="folderName">Name of the folder</param>
-        /// <param name="webResponse">HTTP web response to get the response stream</param>
-        /// <param name="isMailUpload">Mail Upload Flag</param>
-        /// <param name="requestObject">request object for web</param>
-        /// <param name="client">Service Client Object</param>
-        /// <param name="fileName">Name of the file</param>
-        /// <param name="folderPath">upload folder path</param>
-        /// <param name="message">Reference object for the message to be returned</param>
-        /// <returns>Returns whether File Uploaded successfully or failed</returns>
-        internal GenericResponseVM UploadFilesMail(bool isOverwrite, bool isContentCheckRequired, bool allowContentCheck, 
-            string documentLibraryName, HttpWebResponse webResponse, bool isMailUpload, 
+        /// <param name="serviceRequest"></param>
+        /// <param name="documentLibraryName"></param>
+        /// <param name="webResponse"></param>
+        /// <param name="isMailUpload"></param>
+        /// <param name="client"></param>
+        /// <param name="fileName"></param>
+        /// <param name="folderPath"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        internal GenericResponseVM UploadFilesMail(ServiceRequest serviceRequest,
+            string documentLibraryName, HttpWebResponse webResponse, bool isMailUpload,
             Client client, string fileName, string folderPath, ref string message)
         {
             bool isMsg = true;
@@ -266,13 +268,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
                     }
 
-                    genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
+                    genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, serviceRequest.AllowContentCheck, ref message);
 
-                    if (!isOverwrite && !isContentCheckRequired && (genericResponse!=null && genericResponse.IsError==true))
+                    if (!serviceRequest.Overwrite && !serviceRequest.PerformContentCheck && (genericResponse != null && genericResponse.IsError == true))
                     {
                         return genericResponse;
                     }
-                    else if (isContentCheckRequired)
+                    else if (serviceRequest.PerformContentCheck)
                     {
                         genericResponse = uploadHelperFunctionsUtility.PerformContentCheckUtility(isMailUpload, folderPath, isMsg, xmlDocument, nsmgr, extension, uploadFileName, clientContext);
                         return genericResponse;
@@ -282,20 +284,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         genericResponse = null;
                         if (isMailUpload)       //Upload entire Email
                         {
-                            UploadMail(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message);
+                            UploadMail(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message, serviceRequest);
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(extension) && isMsg)       //Upload .msg file
                             {
-                                UploadAttachedMailExtBlank(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message);
+                                UploadAttachedMailExtBlank(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message, serviceRequest);
                             }
                             else
                             {
                                 if (string.Equals(extension, ServiceConstants.EMAIL_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    UploadEMLFile(documentLibraryName, client, folderPath, fileName, ref message, xmlDocument, nsmgr, 
-                                        ref mailMetaData, ref bytes, extension);
+                                    UploadEMLFile(documentLibraryName, client, folderPath, fileName, ref message, xmlDocument, nsmgr,
+                                        ref mailMetaData, ref bytes, extension, serviceRequest);
                                 }
                                 else
                                 {
@@ -312,7 +314,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                         mailMetaData.mailImportance = string.Empty;
                                         mailMetaData.mailSubject = string.Empty;
                                         mailMetaData.originalName = originalName;
-                                        if (!UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message))
+                                        if (!UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream,
+                                            documentLibraryName, mailMetaData, ref message, serviceRequest))
                                         {
                                             //result = ServiceConstants.UPLOAD_FAILED;
                                             genericResponse = new GenericResponseVM()
@@ -410,7 +413,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="mailMetaData">Mail metadata object storing property values</param>
         /// <param name="bytes">Array of bytes</param>
         /// <param name="extension">File extension object contains extension of file to be uploaded.</param>
-        private void UploadEMLFile(string documentLibraryName, Client client, string folderPath, string fileName, ref string message, XmlDocument xmlDocument, XmlNamespaceManager nsmgr, ref MailMetaData mailMetaData, ref dynamic bytes, string extension)
+        private void UploadEMLFile(string documentLibraryName, Client client, string folderPath, string fileName,
+            ref string message, XmlDocument xmlDocument, XmlNamespaceManager nsmgr, ref MailMetaData mailMetaData,
+            ref dynamic bytes, string extension, ServiceRequest serviceRequest)
         {
             string mailMessage = xmlDocument.SelectSingleNode("/s:Envelope/s:Body/m:GetAttachmentResponse/m:ResponseMessages/m:GetAttachmentResponseMessage/m:Attachments/t:FileAttachment/t:Content", nsmgr).InnerXml;
             bytes = Convert.FromBase64String(mailMessage);
@@ -450,7 +455,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 mailMetaData.mailSender = mailProperties[ServiceConstants.MAIL_SENDER_KEY];
                 mailMetaData.sentDate = mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY];
                 mailMetaData.originalName = mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT];
-                UploadToFolder(client, folderPath, fileName, mailProperties[ServiceConstants.MAIL_FILE_EXTENSION_KEY], memoryStream, documentLibraryName, mailMetaData, ref message);
+                UploadToFolder(client, folderPath, fileName, mailProperties[ServiceConstants.MAIL_FILE_EXTENSION_KEY],
+                    memoryStream, documentLibraryName, mailMetaData, ref message, serviceRequest);
             }
         }
 
@@ -464,7 +470,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="documentLibraryName">Name of the document library</param>
         /// <param name="xmlDocument">Mail XML Content</param>
         /// <param name="message">Reference object for the message to be returned</param>
-        internal void UploadMail(Client client, string folderPath, string fileName, string documentLibraryName, XmlDocument xmlDocument, ref string message)
+        internal void UploadMail(Client client, string folderPath, string fileName, string documentLibraryName,
+            XmlDocument xmlDocument, ref string message, ServiceRequest serviceRequest)
         {
             var bytes = (dynamic)null;
 
@@ -485,7 +492,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         MailMessageParser messageParser = mime.GetEmail(memoryStream);
                         mailMetaData.mailImportance = (string.IsNullOrWhiteSpace(messageParser.MailImportance)) ? ServiceConstants.MAIL_DEFAULT_IMPORTANCE : messageParser.MailImportance;
                         mailMetaData.receivedDate = (string.IsNullOrWhiteSpace(messageParser.ReceivedDate.Date.ToShortDateString())) ? string.Empty : Convert.ToString(messageParser.ReceivedDate, CultureInfo.InvariantCulture);
-                        UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message);
+                        UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message, serviceRequest);
                     }
                 }
             }
@@ -537,7 +544,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="documentLibraryName">Name of the document library</param>
         /// <param name="xmlDocument">XML Document containing read values from Request</param>
         /// <param name="message">Reference object for the message to be returned</param> 
-        internal void UploadAttachedMailExtBlank(Client client, string folderPath, string fileName, string documentLibraryName, XmlDocument xmlDocument, ref string message)
+        internal void UploadAttachedMailExtBlank(Client client, string folderPath, string fileName, string documentLibraryName,
+            XmlDocument xmlDocument, ref string message, ServiceRequest serviceRequest)
         {
             var bytes = (dynamic)null;
             MailMetaData mailMetaData = new MailMetaData();
@@ -567,7 +575,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 mailMetaData.mailImportance = (string.IsNullOrWhiteSpace(mailMetaData.mailImportance)) ? ServiceConstants.MAIL_DEFAULT_IMPORTANCE : mailMetaData.mailImportance;
                 using (MemoryStream memoryStream = new MemoryStream(bytes))
                 {
-                    UploadToFolder(client, folderPath, fileName + ServiceConstants.EMAIL_FILE_EXTENSION, string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message);
+                    UploadToFolder(client, folderPath, fileName + ServiceConstants.EMAIL_FILE_EXTENSION,
+                        string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message, serviceRequest);
                 }
             }
             catch (Exception exception)
@@ -717,7 +726,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <returns>
         /// Returns True if upload is successful or False if upload fails
         /// </returns>
-        internal bool UploadToFolder(Client client, string folderPath, string filename, string extension, MemoryStream memoryStream, string documentLibraryName, MailMetaData mailMetaData, ref string message)
+        internal bool UploadToFolder(Client client, string folderPath, string filename, string extension,
+            MemoryStream memoryStream, string documentLibraryName, MailMetaData mailMetaData, ref string message, ServiceRequest serviceRequest)
         {
             bool isUploadSuccessful = false;
             try
@@ -732,7 +742,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     {
                         using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                         {
-                            isUploadSuccessful = UploadFolderUtility(client, folderPath, ref filename, extension, memoryStream, mailMetaData, documentLibraryName, ref message, clientContext);
+                            isUploadSuccessful = UploadFolderUtility(client, folderPath, ref filename, extension, memoryStream, mailMetaData, documentLibraryName, ref message, clientContext, serviceRequest);
                         }
                     }
                 }
@@ -759,7 +769,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="message">Reference object for the message to be returned</param>
         /// <param name="clientContext">Client context object for connection between SP & client</param>
         /// <returns>Returns True if upload operation is successful or False if operation fails</returns>
-        private bool UploadFolderUtility(Client client, string folderPath, ref string filename, string extension, MemoryStream memoryStream, MailMetaData mailMetadata, string documentLibraryName, ref string message, ClientContext clientContext)
+        private bool UploadFolderUtility(Client client, string folderPath, ref string filename,
+            string extension, MemoryStream memoryStream, MailMetaData mailMetadata, string documentLibraryName,
+            ref string message, ClientContext clientContext, ServiceRequest serviceRequest)
         {
             bool isUploadSuccessful = true;
             string folderName = folderPath.Substring(folderPath.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
@@ -768,7 +780,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 if (documentRepository.FolderExists(folderPath, clientContext, documentLibraryName))
                 {
                     filename = CreateFileInsideFolder(folderPath, filename, extension, memoryStream, clientContext);
-                    SaveFields(client, folderPath, filename, mailMetadata, documentLibraryName);
+                    SaveFields(client, folderPath, filename,
+                        mailMetadata, documentLibraryName, serviceRequest.DocumentExtraProperties);
                 }
                 else
                 {
@@ -825,7 +838,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="fileName">Name of the file</param>
         /// <param name="mailMetadata">MailMetadata object</param>
         /// <param name="documentLibraryName">Name of the document library</param>
-        public void SaveFields(Client client, string folderPath, string fileName, MailMetaData mailMetadata, string documentLibraryName)
+        public void SaveFields(Client client, string folderPath, string fileName, MailMetaData mailMetadata, string documentLibraryName, MatterExtraProperties documentExtraProperties)
         {
             try
             {
@@ -854,7 +867,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             { ServiceConstants.MAIL_ORIGINAL_NAME, string.IsNullOrEmpty(mailMetadata.originalName) ? string.Empty : mailMetadata.originalName }
 
                         };
-                        documentRepository.SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
+                        documentRepository.SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties, documentExtraProperties);
                     }
                 }
             }
@@ -863,5 +876,110 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
             }
         }
+
+        /// <summary>
+        /// this method is to upload the emails to the matter
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="serviceRequest"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public GenericResponseVM Upload(Client client, ServiceRequest serviceRequest, ref string message)
+        {
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                if (null != client && null != serviceRequest &&
+                    !string.IsNullOrWhiteSpace(serviceRequest.MailId) && !string.IsNullOrWhiteSpace(serviceRequest.Subject) &&
+                    !string.IsNullOrWhiteSpace(serviceRequest.FolderPath[0]))
+                {
+                    string fileName = serviceRequest.Subject;
+                    string documentLibraryName = serviceRequest.DocumentLibraryName;
+                    byte[] mailAttachment = mailMessageRepository.GetEmailContent(serviceRequest.MailId);
+                    MailMetaData mailMetaData = new MailMetaData();
+                    using (MemoryStream memoryStream = new MemoryStream(mailAttachment))
+                    {
+                        mailMetaData.mailImportance = string.Empty;
+                        mailMetaData.mailSubject = string.Empty;
+                        mailMetaData.originalName = fileName;
+                        if (!UploadToFolder(client, serviceRequest.FolderPath[0], fileName, string.Empty, memoryStream,
+                            documentLibraryName, mailMetaData, ref message, serviceRequest))
+                        {
+                            //result = ServiceConstants.UPLOAD_FAILED;
+                            genericResponse = new GenericResponseVM()
+                            {
+                                IsError = true,
+                                Code = UploadEnums.UploadToFolder.ToString(),
+                                Value = message
+                            };
+                            return genericResponse;
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+            return genericResponse;
+        }
+
+
+
+
+        /// <summary>
+        /// this method is to upload the email attachements to the matter
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="serviceRequest"></param>
+        /// <param name="attachment"></param>
+        /// <param name="folderPath"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public GenericResponseVM UploadAttachmentOfEmail(Client client,
+                    ServiceRequest serviceRequest,
+                    AttachmentDetails attachment, string folderPath,
+                   ref string message)
+        {
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                if (null != client && null != serviceRequest &&
+                    !string.IsNullOrWhiteSpace(attachment.id) && !string.IsNullOrWhiteSpace(attachment.name) &&
+                    !string.IsNullOrWhiteSpace(folderPath))
+                {
+                    string fileName = attachment.name;
+                    string documentLibraryName = serviceRequest.DocumentLibraryName;
+                    byte[] mailAttachment = mailMessageRepository.GetAttachments(serviceRequest.MailId, serviceRequest.Attachments[0].id);
+                    MailMetaData mailMetaData = new MailMetaData();
+                    using (MemoryStream memoryStream = new MemoryStream(mailAttachment))
+                    {
+                        mailMetaData.mailImportance = string.Empty;
+                        mailMetaData.mailSubject = string.Empty;
+                        mailMetaData.originalName = fileName;
+                        if (!UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream,
+                            documentLibraryName, mailMetaData, ref message, serviceRequest))
+                        {
+                            //result = ServiceConstants.UPLOAD_FAILED;
+                            genericResponse = new GenericResponseVM()
+                            {
+                                IsError = true,
+                                Code = UploadEnums.UploadToFolder.ToString(),
+                                Value = message
+                            };
+                            return genericResponse;
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw;
+            }
+            return genericResponse;
+        }
+
+
+
     }
 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 
 #region Matter Namespaces
@@ -97,10 +97,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getdocumentcounts")]
         [Produces(typeof(int))]
         [SwaggerOperation("getDocumentCounts")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+        [SwaggerResponse((int)HttpStatusCode.OK, 
             Description = "Get all counts for all documentCounts, my documentCounts and pinned documentCounts", 
             Type = typeof(int))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetDocumentCounts([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -152,10 +152,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getdocuments")]
         [Produces(typeof(SearchResponseVM))]
         [SwaggerOperation("getDocuments")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Gets the documents based on search criteria.",
             Type = typeof(SearchResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -197,10 +197,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getpinneddocuments")]
         [Produces(typeof(SearchResponseVM))]
         [SwaggerOperation("getGinnedDocuments")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Get all the documents which are pinned by the logged in user",
             Type = typeof(SearchResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetPin([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -244,10 +244,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("pindocument")]
         [Produces(typeof(bool))]
         [SwaggerOperation("pinDocument")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This api will store the metadata of the document in a sharepoint list as a JSON object which is getting pinned",
             Type = typeof(bool))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> Pin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
@@ -292,10 +292,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("unpindocument")]
         [Produces(typeof(bool))]
         [SwaggerOperation("unpinDocument")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This api will unpin the document which is already pinned and the unpinned document will be removed from the sharepoint lists",
             Type = typeof(bool))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> UnPin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
@@ -338,9 +338,9 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getassets")]
         
         [SwaggerOperation("getAssets")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This api will return document guid and list guid for the matter that has been selected")]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetDocumentAssets([FromBody]Client client)
         {
             try
@@ -379,10 +379,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("uploadattachments")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("uploadAttachments")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Uploads attachment which are there in the current mail item to SharePoint library.",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UploadAttachments([FromBody] AttachmentRequestVM attachmentRequestVM)
         {            
             try
@@ -448,10 +448,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("uploadfiles")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("uploadFiles")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Uploads attachments from the user desktop to sharepoint library",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UploadFiles()
         {
             try
@@ -597,10 +597,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("uploadmail")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("uploadMail")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Uploads user selected email from outlook to SharePoint library with all the attachments",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UploadMail([FromBody] AttachmentRequestVM attachmentRequestVM)
         {
             try

@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Http;
 
 
 
-using Swashbuckle.Swagger.Model;
-
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
@@ -24,6 +22,8 @@ using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
+using Swashbuckle.AspNetCore.Swagger;
 #endregion
 
 
@@ -196,7 +196,23 @@ namespace Microsoft.Legal.MatterCenter.Web
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
                 app.UseSwagger();
-                app.UseSwaggerUi();
+                app.UseSwaggerUI(c => {
+                    //c.ConfigureOAuth2("55620714-62b4-49fb-9c3a-70976b11fd53", "0GrGhdAbSf2IVnE3t/bxGM1wLd3rcV/1uL2YiIZpYyo=",
+                    //    "https://localhost:44324/swagger/ui/o2c-html",
+                    //    "swagger-ui",
+                    //    "", new Dictionary<string, string> { { "resource", "b94f07df-c825-431f-b9c5-b9499e8e9ac1" } });
+
+                    c.EnabledValidator();
+                    c.BooleanValues(new object[] { 0, 1 });
+                    c.DocExpansion("full");
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Matter Web App API");
+                    //c.InjectOnCompleteJavaScript("/swagger-ui/on-complete.js");
+                    //c.InjectOnFailureJavaScript("/swagger-ui/on-failure.js");
+                    c.SupportedSubmitMethods(new[] { "get", "post", "put", "patch" });
+                    c.ShowRequestHeaders();
+                    c.ShowJsonEditor();
+
+                });
             }
             catch (Exception ex)
             {
@@ -220,30 +236,44 @@ namespace Microsoft.Legal.MatterCenter.Web
         private void ConfigureSwagger(IServiceCollection services)
         {
             string pathToDoc = $"{System.AppDomain.CurrentDomain.BaseDirectory}Microsoft.Legal.MatterCenter.Web.xml";
-            services.AddSwaggerGen();
-            services.ConfigureSwaggerGen(options => {
-                options.SingleApiVersion(new Info
-                {
-                    Version = "v1",
-                    Title = "Matter Center API Version V1",
-                    Description = "This matter center api is for V1 release",
-                    TermsOfService = "None",
-                    Contact = new Contact() {
-                        Name="Matter Admin",
-                        Email= "matteradmin@msmatter.onmicrosoft.com",
-                        Url = "https://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx"
-                    }
-                });
-                options.IncludeXmlComments(pathToDoc);
-                options.DescribeAllEnumsAsStrings();
-                options.IgnoreObsoleteActions();
-
-            });
-            services.ConfigureSwaggerGen(options =>
+            services.AddSwaggerGen(c =>
             {
-                options.DescribeAllEnumsAsStrings();
-                options.IgnoreObsoleteProperties();
-
+                // Define the OAuth2.0 scheme that's in use (i.e. Implicit Flow)
+                Dictionary<string, string> scopes = new Dictionary<string, string>();
+                scopes.Add("user_impersonation", "Access https://matterwebapp.azurewebsites.net");
+                //c.AddSecurityDefinition("matterCenterAuthorization", new OAuth2Scheme
+                //{
+                //    Type = "oauth2",
+                //    AuthorizationUrl = "https://login.windows.net/3c4562ca-39a4-4d8b-91ff-6d3eefab5c1d/oauth2/authorize",
+                //    Flow = "implicit",
+                //    Scopes = scopes
+                //});
+                //c.OperationFilter<SecurityRequirementsOperationFilter>();
+                c.IncludeXmlComments(pathToDoc);
+                c.DescribeAllEnumsAsStrings();
+                c.DescribeStringEnumsInCamelCase();
+                c.CustomSchemaIds((type) => type.FullName);
+                c.TagActionsBy(api => api.HttpMethod);
+                c.IgnoreObsoleteActions();
+                c.SwaggerDoc("v1",
+                    new Info
+                    {
+                        Title = "Matter Center API - V1",
+                        Version = "v1",
+                        Description = "Matter Center API - V1",
+                        TermsOfService = "Matter Center Terms",
+                        Contact = new Contact
+                        {
+                            Name = "Matter Center",
+                            Email = "matteradmin@msmatter.onmicrosoft.com"
+                        },
+                        License = new License
+                        {
+                            Name = "Apache 2.0",
+                            Url = "http://www.apache.org/licenses/LICENSE-2.0.html"
+                        }
+                    }
+                );
             });
         }
 
@@ -307,6 +337,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IExternalSharing, ExternalSharing>();
             services.AddSingleton<IConfigRepository, ConfigRepository>();
             services.AddSingleton<IExternalSharing, ExternalSharing>();
+            services.AddSingleton<IMailMessageRepository, MailMessageRepository>();
+            services.AddSingleton<IEmailProvision, EmailProvision>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
@@ -480,7 +512,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WritePropertyName("matterProvisionExtraPropertiesContentType");
                     jw.WriteValue(taxonomySettingsSection["MatterProvisionExtraPropertiesContentType"]);
 
-                    jw.WriteEndObject();
+                jw.WriteEndObject();
 
             jw.WritePropertyName("search");
                 jw.WriteStartObject();

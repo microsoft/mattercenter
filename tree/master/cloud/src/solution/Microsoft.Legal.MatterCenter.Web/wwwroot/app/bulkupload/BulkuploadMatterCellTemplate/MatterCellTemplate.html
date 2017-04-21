@@ -1,0 +1,118 @@
+<div class='row'>
+
+    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-9' id='matterPopup' title='{{row.entity.matterName}}'>
+        <!--<a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>-->
+        <a matterbulkuploadflyout folderlist="grid.appScope.vm.foldersList" type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis'
+           style='text-align:left;text-decoration: none;' details={{row.entity}}>{{row.entity.matterName}}</a>
+
+        <div class='popcontent' style="display:none">
+        </div>
+
+        <div class='popcontent1' id="{{row.entity.matterGuid}}" style="display:none;position:absolute; border:1px solid #c8c8c8;height:280px;z-index:1001;    background: #fff;">
+            <div>
+
+                <div class="" style="position:relative;display:table-row;" ng-click="stopEvent($event)">
+                    <div class="FlyoutBoxContent flyoutwidth">
+                        <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>
+                        <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>
+
+
+
+
+                        <div class="col-sm-12 folderContent" style="border-bottom:none; float:left; ">
+                            <!--<div>
+                    <span role="heading" class="add-margin-bottom ng-binding">{{grid.appScope.vm.selectedRow.matterName}}</span>
+                </div>-->
+
+                            <div class="FlyoutContent FlyoutHeading" style="width: 200px;">
+                                <div class="ms-Callout-content FlyoutHeadingText" title="{{grid.appScope.vm.selectedRow.matterName}}"> {{grid.appScope.vm.selectedRow.matterName}}</div>
+                            </div>
+                            <div ng-show="grid.appScope.vm.oUploadGlobal.successBanner"
+                                 class="notification successNotification ms-font-weight-semibold successUpload" style="width:300px">
+                                {{grid.appScope.vm.matterConfigContent.UploadCompleteLabel1Text}}
+                                <span class="closeNotification" ng-click="grid.appScope.vm.closeSuccessBanner()">{{grid.appScope.vm.matterConfigContent.CloseIconText}}</span>
+                            </div>
+                            <div class='loadingprogressbar'>
+                                <img ng-if="grid.appScope.vm.isLoadingFromDesktopStarted" alt='Loading' class='bulkAttachmentListLoading' src='../images/loading_metro.gif' />
+                            </div>
+
+
+                            <div class="" style="width:315px; overflow-y:auto; height:200px;">
+
+                                <script type="text/ng-template" id="folderTree">
+                                    <div id="div{{child.name}}" ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title=""  droppablemultipleitems drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="grid.appScope.vm.showSelectedFolderTree(child)">
+                                        <img class="folderIcon" ng-src="{{grid.appScope.vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="{{grid.appScope.vm.matterConfigContent.AttachmentFolderAltText}}">
+                                        {{child.name}}
+                                    </div>
+                                    <ul ng-if="child.children" style="margin-left:5px;">
+                                        <li id='li{{child.name}}' ng-repeat="child in child.children" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppablemultipleitems drop="handleDrop()" folder="child" class="childNode" ng-include="'folderTree'">
+
+                                        </li>
+                                    </ul>
+                                </script>
+                                <ul>
+                                    <li id='li{{child.name}}' ng-repeat="child in grid.appScope.vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' droppablemultipleitems data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            
+
+            </div>
+
+
+
+
+        <!--<div class="popcontent1" id="{{row.entity.matterGuid}}" style="display:none; position:absolute">
+
+            <div class="ng-scope">
+                <div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)" role="button" tabindex="0">
+                    <div class="FlyoutBoxContent flyoutwidth">
+                        <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>
+                        <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>
+                        <div class="FlyoutContent FlyoutHeading">
+                            <div class="ms-Callout-content FlyoutHeadingText" title="Final Site Cols Properties">  Final Site Cols Properties </div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint" ng-show="true" aria-hidden="false">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>
+                            <div class="ms-font-m FlyoutContent" title="Microsoft">Microsoft</div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint" ng-show="true" aria-hidden="false">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.MatterID:</div>
+                            <div class="ms-font-m FlyoutContent" title="100001.20170112123017775">100001.20170112123017775</div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint ng-hide" ng-show="false" aria-hidden="true">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Practice Group:</div>
+                            <div class="ms-font-m FlyoutContent" title="Litigation">Litigation</div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint ng-hide" ng-show="false" aria-hidden="true">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.MatterID:</div>
+                            <div class="ms-font-m FlyoutContent" title="Intellectual Property; Products Liability">Intellectual Property; Products Liability</div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint" ng-show="true" aria-hidden="false">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub Area of Law:</div>
+                            <div class="ms-font-m FlyoutContent" title="Patent; Automotive">Patent; Automotive</div>
+                        </div>
+                        <div class="ms-Callout-content commonFlyoutContaint" ng-show="true" aria-hidden="false">
+                            <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible Attorney:</div>
+                            <div class="ms-font-m FlyoutContent" title="Wilson Gajarla;">Wilson Gajarla;</div>
+                        </div>
+                        <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters('https://msmatter.sharepoint.com/sites/microsoft','edf4b827ca1509e2ff5cafc2cbe158d7')">View matter details</a><br>
+
+                        <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content ng-scope" id="uploadToMatter" ng-click="openUpload('Final Site Cols Properties','https://msmatter.sharepoint.com/sites/microsoft','edf4b827ca1509e2ff5cafc2cbe158d7')" type="button">Upload to a matter</a> end ngIf: !wordTextDisplay 
+                    </div>
+                </div>
+            </div>
+
+
+        </div>-->
+
+        </div>
+      
+    </div>

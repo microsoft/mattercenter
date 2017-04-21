@@ -109,6 +109,10 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+        /// <summary>
+        /// Gets or sets all the additional matter properties
+        /// </summary>
+        public MatterExtraProperties DocumentExtraProperties { get; set; }
 
     }
 }

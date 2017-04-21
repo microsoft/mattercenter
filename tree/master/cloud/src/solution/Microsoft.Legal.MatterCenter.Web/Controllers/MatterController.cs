@@ -14,7 +14,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 using System.Reflection;
 using System.Globalization;
@@ -92,10 +92,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("getpinned")]
         [Produces(typeof(SearchResponseVM))]
         [SwaggerOperation("getpinned")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+         [SwaggerResponse((int)HttpStatusCode.OK, 
             Description = "Returns Asynchronouns IActionResult which contains list pinned matters which are pinned by the user", 
             Type = typeof(SearchResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetPin([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -135,9 +135,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("getmattercounts")]        
         [SwaggerOperation("getmattercounts")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns Asynchronouns IActionResult anonymous object  which contains count of all matters, pinned matters and my matters")]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetMatterCounts([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -184,9 +184,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("pin")]
         [SwaggerOperation("pin")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns Asynchronouns IActionResult anonymous object  whether the matter is pinned or not")]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> Pin([FromBody]PinRequestMatterVM pinRequestMatterVM)
         {
             try
@@ -228,9 +228,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("unpin")]
         [SwaggerOperation("unpin")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns Asynchronouns IActionResult anonymous object  whether the matter is unpinned or not")]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> UnPin([FromBody]PinRequestMatterVM pinRequestMatterVM)
         {
             try
@@ -277,9 +277,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("get")]
         [Produces(typeof(SearchResponseVM))]
         [SwaggerOperation("get")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns Asynchronouns IActionResult of all matters where the user has got permissions", Type = typeof(SearchResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -321,9 +321,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("getfolderhierarchy")]
         [Produces(typeof(List<FolderData>))]
         [SwaggerOperation("getFolderHierarchy")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns Asynchronouns IActionResult of all folders that are there in a particular document library", Type = typeof(List<FolderData>))]
-        [SwaggerResponseRemoveDefaults]        
+                 
         public async Task<IActionResult> GetFolderHierachy([FromBody]MatterData matterData)
         {
             try
@@ -366,10 +366,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("getstampedproperties")]
         [Produces(typeof(MatterStampedDetails))]
         [SwaggerOperation("getStampedProperties")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of all stamped properties that are associated to a matter", 
             Type = typeof(MatterStampedDetails))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult GetStampedProperties([FromBody]MatterVM matterVM)
         {
             try
@@ -415,10 +415,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("getconfigurations")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("getConfigurations")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of generic reposne which contains configurations for a selected client",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]        
+                 
         public async Task<IActionResult> GetConfigurations([FromBody]string siteCollectionPath)
         {
             try
@@ -458,10 +458,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("saveconfigurations")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("saveConfigurations")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of generic reposne which contains whether configuration for the matter is saved or not",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult SaveConfigurations([FromBody]MatterConfigurations matterConfigurations)
         {
             try
@@ -504,9 +504,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("cancreate")]        
         [SwaggerOperation("canCreate")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of type of bool checks whether the login user can create a matter or not")]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult CanCreateMatter([FromBody]Client client)
         {
             GenericResponseVM genericResponse = null;
@@ -548,10 +548,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("checkmatterexists")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("checkMatterExists")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of generic resposne which checks whether a matter with the given name already exists or not",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult CheckMatterExists([FromBody]MatterMetdataVM matterMetadataVM)
         {
             
@@ -628,10 +628,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("checksecuritygroupexists")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("checksecuritygroupexists")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will check whether a given security group already exists or not",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult CheckSecurityGroupExists([FromBody]MatterInformationVM matterInformationVM)
         {
             
@@ -691,10 +691,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("update")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("update")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will update a given matter information/configuration such as user matter roles, new users to the matter etc",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult Update([FromBody]MatterInformationVM matterInformation)
         {
             string editMatterValidation = string.Empty;
@@ -809,10 +809,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("deletematter")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("deleteMatter")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will delete a given matter and all its associated assets",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult Delete([FromBody] MatterVM matterVM)
         {
             try
@@ -848,10 +848,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("create")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("createMatter")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will create a new matter",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult Create([FromBody] MatterMetdataVM matterMetdataVM)
         {
             
@@ -903,10 +903,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("assigncontenttype")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("assignContenttype")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Assigns specified content types to the specified matter (document library).",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult AssignContentType([FromBody] MatterMetadata matterMetadata)
         {
 
@@ -975,10 +975,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("assignuserpermissions")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("assignUserPermissions")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will assign user permission to the matter",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult AssignUserPermissions([FromBody] MatterMetdataVM matterMetadataVM)
         {
             var client = matterMetadataVM.Client;
@@ -1030,10 +1030,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("createlandingpage")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("createLandingPage")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Creates matter landing page. If there is any error in creating the landing page, the whole matter will get deleted along with document libraries",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult CreateLandingPage([FromBody] MatterMetdataVM matterMetdataVM)
         {
             
@@ -1089,10 +1089,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("updatemetadata")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("updateMetaData")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Updates matter metadata - Stamps properties to the created matter.",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
         {
             string editMatterValidation = string.Empty;
@@ -1177,10 +1177,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("sharematter")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("shareMatter")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will allow the matter to be shared with external user",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult ShareMatter([FromBody] MatterInformationVM matterInformation)
         {
             var client = matterInformation.Client;            
@@ -1229,10 +1229,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("onenoteurlexists")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("onenoteurlexists")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will check whether one note url exists for a selected matter or not",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult OneNoteUrlExists([FromBody]MatterInformationVM matterInformation)
         {
             GenericResponseVM genericResponse = null;
@@ -1273,9 +1273,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("deleteuserfrommatter")]
         [SwaggerOperation("deleteuserfrommatter")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Returns IActionResult of type of generic response which says whether the user has been deleted or not")]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult DeleteUserFromMatter([FromBody]MatterInformationVM matterInformation)
         {
             string editMatterValidation = string.Empty;
@@ -1339,10 +1339,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         [HttpPost("getmatterprovisionextraproperties")]
         [Produces(typeof(GenericResponseVM))]
         [SwaggerOperation("onenoteurlexists")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "This method will check whether one note url exists for a selected matter or not",
             Type = typeof(GenericResponseVM))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult GetMatterProvisionExtraProperties([FromBody]MatterMetadata matterMetadata)
         {
             GenericResponseVM genericResponse = null;

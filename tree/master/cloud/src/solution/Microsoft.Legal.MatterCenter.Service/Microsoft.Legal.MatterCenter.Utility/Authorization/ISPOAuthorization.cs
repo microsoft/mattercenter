@@ -13,5 +13,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         //ErrorResponse ValidateClientToken(string authToken);
         ClientContext GetClientContext(string url);
         string GetGraphAccessToken();
+        string GetExchangeAccessToken();
     }
 }

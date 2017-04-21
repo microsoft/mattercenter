@@ -732,6 +732,134 @@
             }
         }
     }
+ 'use strict';
+    function matterbulkuploadflyout($compile, $templateCache, $rootScope) {
+        return {
+            restrict: 'A',
+            scope: {
+                control: '&',
+                folderlist:'=',
+            },
+            link: function (scope, element, attrs) {
+                $(element).click(function (e) {
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.contextualhelp = false;
+                    $rootScope.displayinfo = false;
+                    $rootScope.dispinner = true;
+                    $rootScope.appMenuFlyOut = false;
+                    $rootScope.flagAppMenuFlyOut = true;
+                    $(".topheader").css("z-index", "4");
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    if (obj.matterSubAreaOfLaw == "") {
+                        obj.matterSubAreaOfLaw = "NA";
+                    }
+                    scope.$parent.$parent.$parent.grid.appScope.vm.currentRow = obj;
+                    var actualcontent = "";
+                    var matterUrl = obj.matterClientUrl + "/" + obj.matterGuid;
+                    actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
+                                   <div class="FlyoutBoxContent flyoutwidth">\
+                                      <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
+                                      <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText" title="' + obj.matterName + '">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClient.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn1DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterClient + '">' + obj.matterClient + '</div>\
+                                       </div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClientId.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn3DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterClientId + '.' + obj.matterID + '">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterPracticeGroup.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn2DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterPracticeGroup + '">' + obj.matterPracticeGroup + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn3DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterAreaOfLaw + '">' + obj.matterAreaOfLaw + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterSubAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn4DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterSubAreaOfLaw + '">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterResponsibleAttorney.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutMenuColumn6DisplayName + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" title="' + obj.matterResponsibleAttorney + '">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                        <div ng-if="wordTextDisplay" class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading" style="width:250px">Save the document to this locations</div><br/>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
+                                          <input type="text" value="' + matterUrl + '"><br/>\
+                                       </div>\<a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
+                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                      </div>\
+                                </div>';
+
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + actualcontent + "</div>")(scope);
+                    $('.dropdown').removeClass('open');
+                    $('.popcontent').css('display', 'none');
+                    $('.popcontent1').css('display', 'none');
+                    e.stopPropagation();
+                    var obj = e.target.getBoundingClientRect();
+                    $(this).parent().find('.popcontent').html(a[0]);
+                    var dashboardTop = 350;
+                    if ($(".commonContent").css('display') === 'block') {
+                        dashboardTop = 450;
+                    } else {
+                        dashboardTop = 350;
+                    }
+
+                    if (obj.top < dashboardTop) {
+                      
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '80px', 'top': '0' });
+                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
+
+                        $(this).parent().find('.popcontent1').css({ 'display': 'none', 'left': '80px', 'top': '0' });
+                        $(this).parent().find('.popcontent1').find('.flyoutLeftarrow').css('top', '11px');
+                    } else {
+                        if (scope.$parent.$parent.$parent.grid.appScope.vm.center == "mattercenter") {
+                            $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '80px', 'top': '-238px' });
+                            $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
+
+                            $(this).parent().find('.popcontent1').css({ 'display': 'none', 'left': '80px', 'top': '-238px' });
+                            $(this).parent().find('.popcontent1').find('.flyoutLeftarrow').css('top', '244px');
+                        } else {
+                            $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '80px', 'top': '-218px' });
+                            $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '220px');
+                            $(this).parent().find('.popcontent1').css({ 'display': 'none', 'left': '80px', 'top': '-218px' });
+                            $(this).parent().find('.popcontent1').find('.flyoutLeftarrow').css('top', '220px');
+                        }
+                    }
+                    scope.$apply();
+                });
+            },
+            controller: function ($scope) {
+                $scope.openUpload = function (matterName, matterUrl, matterGUID) {
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);
+                    $('.popcontent').css('display', 'none');
+                    $('#' + matterGUID).css('display', 'block');
+                };
+                $scope.redirectViewMatters = function (url, guid) {
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.viewMatterDetails(url, guid);
+                }
+                $scope.stopEvent = function ($event) {
+                    $event.stopPropagation();
+                };
+                if (typeof Word != 'undefined') {
+                    $scope.wordTextDisplay = true;
+                } else {
+                    $scope.wordTextDisplay = false;
+                }
+            }
+        }
+    };
 
 
     var app = angular.module('matterMain');
@@ -741,6 +869,7 @@
     app.directive("toggletab", [toggletab]);
     app.directive('infopopover', [infopopover]);
     app.directive('matterflyout', ['$compile', '$templateCache', '$rootScope', matterflyout]);
+    app.directive('matterbulkuploadflyout', ['$compile', '$templateCache', '$rootScope', matterbulkuploadflyout]);
     app.directive('documentflyout', ['$http', '$compile', '$templateCache', '$rootScope', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
