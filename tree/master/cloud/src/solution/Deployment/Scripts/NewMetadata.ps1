@@ -7,7 +7,7 @@ $ExcelFilePath = "$RootPath\deployments\MCDeploymentConfig.xlsx"
 $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
 $SPPassword = $SPCredential.GetNetworkCredential().Password
 $parentContentTypeName = "Document"
-$newContentTypeName = "New Additional Matter Properties 6"
+$newContentTypeName = Read-Host "Enter the content type that needs to be created"
 $global:contentTypeId = "";
 $global:isNewContentTypeExists = $false
 #enum for the column types that are being supported
