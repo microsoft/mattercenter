@@ -208,7 +208,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return fileStream.Value;
         }
 
-        public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName)
+        public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName, MatterExtraProperties documentExtraProperites)
         {
             IList<string> listResponse = new List<string>();
             GenericResponseVM genericResponse = null;
@@ -231,7 +231,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (genericResponse==null)
                 {
-                    SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
+                    SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties, documentExtraProperites);
                 }
                 
             }
@@ -742,7 +742,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="fileName">Name of the file.</param>
         /// <param name="folderPath">Path of the folder.</param>
         /// <param name="mailProperties">The mail properties.</param>
-        public void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties)
+        public void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, 
+            string folderPath, Dictionary<string, string> mailProperties, MatterExtraProperties matterExtraProperties)
         {
             try
             {
@@ -813,7 +814,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                             {
                                                 if (field.Group == contentTypesConfig.OneDriveContentTypeGroup)
                                                 {
-                                                    listItem[field.InternalName] = field.DefaultValue;
+                                                    string fieldValue = string.Empty;
+                                                    if (matterExtraProperties != null && matterExtraProperties.Fields.Count > 0)
+                                                    {
+                                                        foreach (var extraProp in matterExtraProperties.Fields)
+                                                        {
+                                                            if (extraProp.FieldName == field.InternalName)
+                                                            {
+                                                                fieldValue = extraProp.FieldValue != null && extraProp.FieldValue != string.Empty ? extraProp.FieldValue : field.DefaultValue;
+                                                            }
+                                                        }
+                                                    }
+
+                                                        listItem[field.InternalName] = fieldValue!= string.Empty? fieldValue:field.DefaultValue;
                                                 }
                                             }
                                         }

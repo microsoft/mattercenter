@@ -13,7 +13,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Legal.MatterCenter.Models;
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Extensions.Options;
@@ -29,6 +29,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
+using Microsoft.Legal.MatterCenter.Repository;
 
 namespace Microsoft.Legal.MatterCenter.Web
 {
@@ -47,7 +48,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         private LogTables logTables;
         IDocumentProvision documentProvision;
         DocumentSettings documentSettings;
-        
+        private IMailMessageRepository mailMessageRepository;
+        private IEmailProvision emailProvision;
 
         /// <summary>
         /// Controlls the functionality for email related.
@@ -62,14 +64,17 @@ namespace Microsoft.Legal.MatterCenter.Web
             ICustomLogger customLogger,             
             IMatterCenterServiceFunctions matterCenterServiceFunctions, 
             IOptions<LogTables> logTables, IDocumentProvision documentProvision,            
-            IOptions<DocumentSettings> documentSettings)
+            IOptions<DocumentSettings> documentSettings, IMailMessageRepository mailMessageRepository,
+            IEmailProvision emailProvision)
         {            
             this.errorSettings = errorSettings.Value;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
-            this.documentSettings = documentSettings.Value;       
+            this.documentSettings = documentSettings.Value;
+            this.mailMessageRepository = mailMessageRepository;
+            this.emailProvision = emailProvision;
         }
 
         /// <summary>
@@ -80,8 +85,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("downloadattachmentsasstream")]
         [Produces(typeof(Stream))]
         [SwaggerOperation("downloadAttachmentsAsStream")]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains the file streams which needs to be downloaded to the client", Type = typeof(Stream))]
-        [SwaggerResponseRemoveDefaults]
+        [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which contains the file streams which needs to be downloaded to the client", Type = typeof(Stream))]
+         
         public IActionResult DownloadAttachmentsAsStream([FromBody]MailAttachmentDetails mailAttachmentDetails)
         {
             try
@@ -132,5 +137,160 @@ namespace Microsoft.Legal.MatterCenter.Web
                 throw;
             }
         }        
+        /// <summary>
+        /// Get login user inbox emails
+        /// </summary>
+        /// <remarks>This api will get login user inbox emails</remarks>        
+        /// <returns>IActionResult with user inbox emails</returns>
+        [HttpPost("getuserinboxemails")]
+        [Produces(typeof(IActionResult))]
+        [SwaggerOperation("getuserinboxemails")]
+        [SwaggerResponse((int)HttpStatusCode.OK,
+            Description = "This api will get login user inbox emails",
+            Type = typeof(IActionResult))]
+        
+        public IActionResult GetUserInboxEmails([FromBody]MailRequest mailRequest)
+        {
+            try
+            {
+                var userInboxEmails = this.mailMessageRepository.GetUserInboxEmails(mailRequest);
+                return matterCenterServiceFunctions.ServiceResponse(userInboxEmails, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+///code for multiple attachments
+        /// <summary>
+        /// Uploads attachment which are there in the current mail item to SharePoint library.
+        /// </summary>
+        /// <remarks>When the user drag an attachment from the outlook add in, this api will be called</remarks>
+        /// <param name="attachmentRequestVM">This object contains information about the attachment that is getting uploaded to sharepoint</param>
+        /// <returns>IActionResult with file upload success or failure</returns>
+        [HttpPost("uploadattachmentsofemail")]
+        [Produces(typeof(GenericResponseVM))]
+        [SwaggerOperation("uploadattachmentsofemail")]
+        [SwaggerResponse((int)HttpStatusCode.OK,
+             Description = "Uploads attachment which are there in the current mail item to SharePoint library.",
+             Type = typeof(GenericResponseVM))]
+
+        public IActionResult UploadAttachmentsOfEmail([FromBody] AttachmentRequestVM[] attachmentRequestsVM)
+        {
+            try
+            {
+                IList<object> listResponse = new List<object>();
+                GenericResponseVM genericResponse = null;
+                if (attachmentRequestsVM != null && attachmentRequestsVM.Length > 0)
+                {
+                    foreach (var attachmentRequestVM in attachmentRequestsVM)
+                    {
+                        var serviceRequest = attachmentRequestVM.ServiceRequest;
+                        genericResponse = emailProvision.UploadAttachments(attachmentRequestVM);
+                        //If there is any error in uploading the email attachment, send that error information to the UI
+                        if (genericResponse != null && genericResponse.IsError == true)
+                        {
+                            var errorFile = new
+                            {
+                                IsError = true,
+                                Code = genericResponse.Code.ToString(),
+                                Value = genericResponse.Value.ToString(),
+                                FileName = serviceRequest.Subject,
+                                DropFolder = serviceRequest.DocumentLibraryName,
+                                MailId = serviceRequest.MailId
+                            };
+                            listResponse.Add(errorFile);
+                        }
+                        var successFile = new
+                        {
+                            IsError = false,
+                            Code = HttpStatusCode.OK.ToString(),
+                            Value = UploadEnums.UploadSuccess.ToString(),
+                            FileName = serviceRequest.Subject,
+                            DropFolder = serviceRequest.DocumentLibraryName,
+                            MailId = serviceRequest.MailId
+                        };
+                        listResponse.Add(successFile);
+                    }
+                }
+                return matterCenterServiceFunctions.ServiceResponse(listResponse, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+        /// <summary>
+        /// Uploads user selected email from outlook to SharePoint library with all the attachments
+        /// </summary>
+        /// <remarks>This api will allow the user to upload mail with attachments to the sharepoint document libarary associated to the matter</remarks>
+        /// <param name="attachmentRequestVM"></param>
+        /// <returns>IActionResult with mail upload failure or success</returns>
+        [HttpPost("uploadmail")]
+        [Produces(typeof(GenericResponseVM))]
+        [SwaggerOperation("bulkuploadMail")]
+        [SwaggerResponse((int)HttpStatusCode.OK,
+            Description = "Uploads user selected email from outlook to SharePoint library with all the attachments",
+            Type = typeof(GenericResponseVM))]
+
+        public IActionResult UploadMail([FromBody] AttachmentRequestVM[] attachmentRequestsVM)
+        {
+            try
+            {
+                GenericResponseVM genericResponse = null;
+                IList<object> listResponse = new List<object>();
+                if (attachmentRequestsVM != null && attachmentRequestsVM.Length > 0)
+                {
+                    foreach (var attachmentRequestVM in attachmentRequestsVM)
+                    {
+                        var client = attachmentRequestVM.Client;
+                        var serviceRequest = attachmentRequestVM.ServiceRequest;
+                        genericResponse = emailProvision.UploadEmails(attachmentRequestVM);
+                        //If there is any error in uploading the email attachment, send that error information to the UI
+                        if (genericResponse != null && genericResponse.IsError == true)
+                        {
+                            var errorFile = new
+                            {
+                                IsError = true,
+                                Code = genericResponse.Code.ToString(),
+                                Value = genericResponse.Value.ToString(),
+                                FileName = serviceRequest.Subject,
+                                DropFolder = serviceRequest.DocumentLibraryName,
+                                MailId = serviceRequest.MailId
+                            };
+                            listResponse.Add(errorFile);
+                        }
+                        var successFile = new
+                        {
+                            IsError = false,
+                            Code = HttpStatusCode.OK.ToString(),
+                            Value = UploadEnums.UploadSuccess.ToString(),
+                            FileName = serviceRequest.Subject,
+                            DropFolder = serviceRequest.DocumentLibraryName,
+                            MailId = serviceRequest.MailId
+                        };
+                        listResponse.Add(successFile);
+                    }
+                    return matterCenterServiceFunctions.ServiceResponse(listResponse, (int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
     }
 }

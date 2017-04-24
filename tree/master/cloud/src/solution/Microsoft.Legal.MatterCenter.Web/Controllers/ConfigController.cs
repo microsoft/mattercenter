@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 using System.Reflection;
 using Microsoft.Legal.MatterCenter.Web.Common;
@@ -81,9 +80,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <returns></returns>
         [HttpPost("Get")]
         [Produces(typeof(List<DynamicTableEntity>))]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for matter web app azure web site", 
+        [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for matter web app azure web site", 
             Type = typeof(List<DynamicTableEntity>))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> Get([FromBody] String filter)
         {
             string result = string.Empty;
@@ -130,9 +129,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <returns></returns>
         [HttpPost("getconfigsforspo")]
         [Produces(typeof(List<DynamicTableEntity>))]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for SPO dashboard pages",
+        [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for SPO dashboard pages",
             Type = typeof(List<DynamicTableEntity>))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetConfigsForSPO([FromBody] String filter)
         {
             string result = string.Empty;
@@ -181,9 +180,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="configs">Request object for POST</param>   
         [HttpPost("Insertupdate")]
         [Produces(typeof(bool))]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult of type bool",
+        [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult of type bool",
             Type = typeof(List<DynamicTableEntity>))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> InsertUpdate([FromBody] String configs)
         {
             string result = string.Empty;

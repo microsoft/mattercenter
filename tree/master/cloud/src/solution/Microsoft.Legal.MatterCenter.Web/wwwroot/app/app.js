@@ -115,6 +115,15 @@ angular.module('matterMain', [
                  }
              }, requireADLogin: true
          })
+        .state('mc.bulkupload', {
+            url: "^/bulkupload",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/bulkupload/bulkupload.html',
+                    controller: 'bulkuploadController as vm'
+                }
+            }, requireADLogin: true
+        })
         ;;
 
         //#region error handling.

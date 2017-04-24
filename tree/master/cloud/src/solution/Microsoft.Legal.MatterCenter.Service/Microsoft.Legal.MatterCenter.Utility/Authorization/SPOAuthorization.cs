@@ -101,11 +101,56 @@ namespace Microsoft.Legal.MatterCenter.Utility
         }
 
         /// <summary>
-        /// This method will get access for the web api from the Azure Active Directory. 
-        /// This method internally uses the Authorization token sent by the UI application
+        /// This method will get the access token for the Exchange online and returns that token
+        /// </summary>
+        /// <param name="url">The SharePoint Url for which the client context needs to be creatwed</param>
+        /// <returns>ClientContext - Return SharePoint Client Context Object</returns>
+        public string GetExchangeAccessToken()
+        {
+            try
+            {
+                return GetAccessTokenForExchange().Result;
+
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// This method will get token for exchange online so that
+        /// we can pass the token to exchange online to get the required data.
         /// </summary>
         /// <returns>Access Token for the web api service</returns>
         private async Task<string> GetAccessTokenForGraph()
+        {
+            try
+            {
+                return  await GetTokenForResource(generalSettings.GraphUrl);
+               
+            }
+            catch (AggregateException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This helper method will get token access form the Azure Active Directory for the 
+        /// resource application that is being passed as a parameter.       
+        /// </summary>
+        /// <returns>Access Token for the web api service</returns>
+        private async Task<string> GetTokenForResource(string resourceUrl)
         {
             try
             {
@@ -113,7 +158,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 string appKey = generalSettings.AppKey;
                 string aadInstance = generalSettings.AADInstance;
                 string tenant = generalSettings.Tenant;
-                string resource = generalSettings.GraphUrl;
+                string resource = resourceUrl;
                 ClientCredential clientCred = new ClientCredential(clientId, appKey);
                 string accessToken = Context.Request.Headers["Authorization"].ToString().Split(' ')[1];
                 UserAssertion userAssertion = new UserAssertion(accessToken);
@@ -136,28 +181,38 @@ namespace Microsoft.Legal.MatterCenter.Utility
         }
 
         /// <summary>
-        /// This method will get access for the web api from the Azure Active Directory. 
-        /// This method internally uses the Authorization token sent by the UI application
+        /// This method will get token for exchange online so that
+        /// we can pass the token to exchange online to get the required data.
+        /// </summary>
+        /// <returns>Access Token for the web api service</returns>
+        private async Task<string> GetAccessTokenForExchange()
+        {
+            try
+            {
+                return await GetTokenForResource(generalSettings.ExchangeURL);               
+            }
+            catch (AggregateException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This method will get token for exchange online so that
+        /// we can pass the token to exchange online to get the required data.
         /// </summary>
         /// <returns>Access Token for the web api service</returns>
         private async Task<string> GetAccessToken()
         {
             try
             {
-                string clientId = generalSettings.ClientId;
-                string appKey = generalSettings.AppKey;
-                string aadInstance = generalSettings.AADInstance;
-                string tenant = generalSettings.Tenant;
-                string resource = generalSettings.SiteURL;                
-                ClientCredential clientCred = new ClientCredential(clientId, appKey);
-                string accessToken = Context.Request.Headers["Authorization"].ToString().Split(' ')[1];
-                UserAssertion userAssertion = new UserAssertion(accessToken);
-                string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
-                //ToDo: Set the TokenCache to null. Need to implement custom token cache to support multiple users
-                //If we dont have the custom cache, there will be some performance overhead.
-                AuthenticationContext authContext = new AuthenticationContext(authority, null);
-                AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion);
-                return result.AccessToken;
+                return await GetTokenForResource(generalSettings.SiteURL);
+               
             }
             catch(AggregateException ex)
             {

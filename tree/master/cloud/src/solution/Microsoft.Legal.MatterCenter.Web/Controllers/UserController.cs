@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -68,8 +68,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getusers")]
         [Produces(typeof(IList<Users>))]
         [SwaggerOperation("get-users")]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains list of Users as Json object",  Type = typeof(IList<Users>))]
-        [SwaggerResponseRemoveDefaults]
+         [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which contains list of Users as Json object",  Type = typeof(IList<Users>))]
+         
         public async Task<IActionResult> GetUsers([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -122,10 +122,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getuserprofilepicture")]
         [Produces(typeof(Users))]
         [SwaggerOperation("get-user-profile-picture")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+         [SwaggerResponse((int)HttpStatusCode.OK, 
             Description ="Returns user object which contains information about the current login user such as his profile picture", 
             Type = typeof(Users))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UserProfilePicture([FromBody]Client client)
         {
             try
@@ -164,10 +164,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getroles")]
         [Produces(typeof(IList<Role>))]
         [SwaggerOperation("get-roles")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+         [SwaggerResponse((int)HttpStatusCode.OK, 
             Description ="Get all the roles suich as Responsible Attorney, Attorney, Para Legal etc as a JOSN object", 
             Type = typeof(IList<Role>))]
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetRoles([FromBody]Client client)
         {
             try
@@ -214,10 +214,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getpermissionlevels")]
         [Produces(typeof(IList<Role>))]
         [SwaggerOperation("get-permission-levels")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+         [SwaggerResponse((int)HttpStatusCode.OK, 
             Description ="Get all the permissions such as FullControl, Contribute, Read as a JSON object", 
             Type=typeof(IList<Role>))]        
-        [SwaggerResponseRemoveDefaults]
+         
         public async Task<IActionResult> GetPermissionLevels([FromBody]Client client)
         {
             try
@@ -266,10 +266,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("userexists")]
         [Produces(typeof(bool))]
         [SwaggerOperation("user-exists")]
-        [SwaggerResponse(HttpStatusCode.OK, 
+         [SwaggerResponse((int)HttpStatusCode.OK, 
             Description ="Checks whether the user exists in the teant and returns true or false", 
             Type = typeof(bool))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult UserExists([FromBody]Client client)
         {
             try
@@ -311,10 +311,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("isowner")]
         [Produces(typeof(bool))]
         [SwaggerOperation("is-owner")]
-        [SwaggerResponse(HttpStatusCode.OK,
+        [SwaggerResponse((int)HttpStatusCode.OK,
             Description = "Checks whether the login user is part of site owners group",
             Type = typeof(bool))]
-        [SwaggerResponseRemoveDefaults]
+         
         public IActionResult IsLoginUserOwner([FromBody]Client client)
         {
             try

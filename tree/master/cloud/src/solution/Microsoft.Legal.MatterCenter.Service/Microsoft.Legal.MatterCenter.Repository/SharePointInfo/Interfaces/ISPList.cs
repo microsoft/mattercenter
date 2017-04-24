@@ -33,7 +33,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool Delete(ClientContext clientContext, IList<string> lists);
         bool CheckItemModified(ListItemCollection collection, string cachedItemModifiedDate);
         bool AddView(ClientContext clientContext, List matterList, string[] viewColumnList, string viewName, string strQuery);
-        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
+        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties, MatterExtraProperties documentExtraProperties);
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
@@ -41,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool BreakPermission(ClientContext clientContext, string libraryName, bool isCopyRoleAssignment);
         string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle);
         bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment);
-        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName);
+        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites);
         Stream DownloadAttachments(string attachmentUrl);
         string GetMatterAssignedUsersEmail(ClientContext clientContext, Matter matter);
     }

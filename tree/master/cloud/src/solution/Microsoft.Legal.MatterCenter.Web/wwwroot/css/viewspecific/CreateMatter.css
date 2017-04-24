@@ -111,8 +111,18 @@
     margin-left: 30%;
 }
 
+.bulkAttachmentListLoading {
+    margin-top: -30%;
+    margin-left: 10%;
+    z-index:3;
+}
+
 @media (max-width: 650px) {
     .attachmentListLoading {      
+        margin-left: 15% !important;
+    }
+
+    .bulkAttachmentListLoading {      
         margin-left: 15% !important;
     }
 }
@@ -1590,8 +1600,9 @@ left: -19px;
 }
 
 .directiveMatterExtraFields{
-    padding-right:190px;
-    float:right;
+    /*padding-right:190px;
+    float:right;*/
+        padding-left: 15px;
 }
 
 .directiveMatterExtraBoolField{

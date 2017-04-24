@@ -77,7 +77,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddMvcCore();
             ConfigureMatterPackages(services);
-            ConfigureSwagger(services);
+           // ConfigureSwagger(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -186,7 +186,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
                 app.UseSwagger();
-                app.UseSwaggerUi();
+               // app.UseSwaggerUi();
             }
             catch (Exception ex)
             {
@@ -209,26 +209,27 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         #region Swagger
         private string pathToDoc = "Microsoft.Legal.MatterCenter.Web.xml";
 
-        private void ConfigureSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen();
-            services.ConfigureSwaggerGen(options => {
-                options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
-                {
-                    Version = "v1",
-                    Title = "Matter Center API Version V1",
-                    Description = "This matter center api is for V1 release"
-                });
-                options.IgnoreObsoleteActions();
+        //private void ConfigureSwagger(IServiceCollection services)
+        //{
+        //    services.AddSwaggerGen();
+        //    services.ConfigureSwaggerGen(options =>
+        //    {
+        //        options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
+        //        {
+        //            Version = "v1",
+        //            Title = "Matter Center API Version V1",
+        //            Description = "This matter center api is for V1 release"
+        //        });
+        //        options.IgnoreObsoleteActions();
 
-            });
-            services.ConfigureSwaggerGen(options =>
-            {
-                options.DescribeAllEnumsAsStrings();
-                options.IgnoreObsoleteProperties();
+        //    });
+        //    services.ConfigureSwaggerGen(options =>
+        //    {
+        //        options.DescribeAllEnumsAsStrings();
+        //        options.IgnoreObsoleteProperties();
 
-            });
-        }
+        //    });
+        //}
 
 
         #endregion

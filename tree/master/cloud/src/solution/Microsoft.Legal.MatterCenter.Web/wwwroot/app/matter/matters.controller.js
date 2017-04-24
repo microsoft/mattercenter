@@ -128,7 +128,39 @@
                 vm.OpenDateSort = undefined;
             }
             //#endregion
+            //#region to get the taxonomy term data
 
+            //input parameters building here for all the api's
+            var optionsForPracticeGroup = {
+                Client: {
+
+                    Url: configs.global.repositoryUrl
+                },
+                TermStoreDetails: {
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.practiceGroupTermSetName,
+                    CustomPropertyName: configs.taxonomy.subAreaOfLawCustomContentTypeProperty,
+                    DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
+                }
+            }
+            function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getTaxonomyDetails',
+                    data: optionsForPracticeGroup,
+                    success: callback
+                });
+            }
+            vm.taxonomyData = {};
+            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                if (!response.isError) {
+
+                    vm.taxonomyData = response;
+                }
+
+
+            });
+            //#end region
             //#region For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
@@ -240,7 +272,8 @@
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         vm.selectedRow.matterName = row.entity.matterName
                         vm.selectedRow.matterClientUrl = row.entity.matterClientUrl
-                        vm.selectedRow.matterGuid = row.entity.matterGuid
+                        vm.selectedRow.matterGuid = row.entity.matterGuid;
+                        vm.currentRow = row.entity;
                     });
                     $animate.enabled(gridApi.grid.element, false);
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
@@ -414,6 +447,7 @@
                     MatterUrl: vm.selectedRow.matterClientUrl
                 };
                 vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
+                getAdditionalMatterProperties();
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
                     vm.uploadedFiles = [];
@@ -529,6 +563,12 @@
                     }
                 }
 
+                if (vm.addtionalPropertiesAvaialbleForMatter) {
+                    attachmentRequestVM.ServiceRequest.DocumentExtraProperties = vm.matterExtraPropertiesValues;
+                }
+                
+
+
                 if (sourceFile.isEmail && sourceFile.isEmail === "true") {
                     vm.uploadEmail(attachmentRequestVM, draggedFile);
                 }
@@ -541,28 +581,86 @@
             //#region functionality to handle the files that has been dragged from the outlook
             vm.handleOutlookDrop = function (targetDrop, sourceFile) {
                 vm.oUploadGlobal.successBanner = false;
+                sourceFile.uploadSuccess = false;
                 vm.targetDrop = targetDrop;
                 vm.sourceFile = sourceFile;
-                sourceFile.uploadSuccess = false;
-                var isOverwrite = false;//Todo: Need to get from the config.js
-                var performContentCheck = false;//Todo: Need to get from the config.js
-                vm.isLoadingFromDesktopStarted = true;
-                var draggedFile = $filter("filter")(vm.allAttachmentDetails, sourceFile.attachmentId)[0];
-                mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile);
+                if (vm.addtionalPropertiesAvaialbleForMatter) {
+                    vm.FilesFromDesktopOrMail = "filesfromoutlook"
+                    jQuery('#UploadExtraMatterPropertiesModal').modal("show");
+                } else {
+                    var isOverwrite = false;
+                    var performContentCheck = false;
+                    var draggedFile = $filter("filter")(vm.allAttachmentDetails, sourceFile.attachmentId)[0];
+                    mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile);
+                }
+               
             }
             //#endregion
+            //#region  functionality to handle outlookdrop and desktop drop with extra document properties
 
+            vm.SaveDocPropertiesAndUpload = function (filesFromDesktopOrMail) {
+                jQuery('#UploadExtraMatterPropertiesModal').modal("hide");
+                vm.isLoadingFromDesktopStarted = true;
+                var documentProperties = undefined;
+                var matterExtraPropertiesValues = undefined;
+                //var attachmentRequestVM = vm.uploadedMailItemDetails.attachmentRequestVM;
+                if (vm.addtionalPropertiesAvaialbleForMatter) {
+                    documentProperties = getAdditionalMatterPropertiesFieldsData();
+                    // var sourceFile = vm.uploadedMailItemDetails.sourceFile;
+                    matterExtraPropertiesValues = {
+                        ContentTypeName: vm.matterProvisionExtraPropertiesContentTypeName,
+                        Fields: documentProperties
+                    }
+                    vm.matterExtraPropertiesValues = matterExtraPropertiesValues;
+                }
+                if (filesFromDesktopOrMail == "filesfromdesktop") {
+                    vm.uploadDesktopDroppedFiles(matterExtraPropertiesValues);
+                }
+                else {
+
+                    var isOverwrite = false;//Todo: Need to get from the config.js
+                    var performContentCheck = false;//Todo: Need to get from the config.js
+                    vm.isLoadingFromDesktopStarted = true;
+                    var draggedFile = $filter("filter")(vm.allAttachmentDetails, vm.sourceFile.attachmentId)[0];
+                    mailOrDocUpload(vm.targetDrop, vm.sourceFile, isOverwrite, performContentCheck, draggedFile);
+                }
+
+            }
+            //#endregion
             //#region functionality will handle the files that has been dragged from the user desktop
             vm.ducplicateSourceFile = [];
-            vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
+             vm.DesktopDroppedFiles = {};
+             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
+                 vm.FilesFromDesktopOrMail = "filesfromdesktop";
+               // jQuery('#UploadExtraMatterPropertiesModal').modal("show");
+                vm.oUploadGlobal.successBanner = false;
+                vm.DesktopDroppedFiles = {};
+                vm.DesktopDroppedFiles.targetDropUrl = targetDropUrl;
+                vm.DesktopDroppedFiles.sourceFiles = sourceFiles;
+                vm.DesktopDroppedFiles.isOverwrite = isOverwrite;
+                if (vm.addtionalPropertiesAvaialbleForMatter) {
+                    vm.FilesFromDesktopOrMail = "filesfromdesktop";
+                    jQuery('#UploadExtraMatterPropertiesModal').modal("show");
+                } else {
+                    vm.uploadDesktopDroppedFiles(null);
+                }
+            }
+
+
+            vm.uploadDesktopDroppedFiles = function (matterExtraPropertiesValues) {
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
+                var targetDropUrl=vm.DesktopDroppedFiles.targetDropUrl;
+                var sourceFiles= vm.DesktopDroppedFiles.sourceFiles;
+                var isOverwrite = vm.DesktopDroppedFiles.isOverwrite;
                 var fd = new FormData();
                 fd.append('targetDropUrl', targetDropUrl);
                 fd.append('folderUrl', targetDropUrl)
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
                 fd.append('clientUrl', vm.selectedRow.matterClientUrl);
                 fd.append('AllowContentCheck', vm.oUploadGlobal.bAllowContentCheck);
+                matterExtraPropertiesValues = JSON.stringify(matterExtraPropertiesValues);
+                fd.append('DocumentExtraProperties', matterExtraPropertiesValues)
                 var nCount = 0;
                 angular.forEach(sourceFiles, function (file) {
                     fd.append('file', file);
@@ -575,7 +673,7 @@
                     timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
-                    
+
                     if (response.status == 200) {
                         if (response.data.length !== 0) {
                             var tempFile = [];
@@ -636,7 +734,6 @@
                     vm.isLoadingFromDesktopStarted = false;
                     console.error('Gists error', response.status, response.data);
                 })
-
             }
             vm.uploadedFiles = [];
             //#endregion
@@ -3263,6 +3360,147 @@
             vm.pageLoadCompleted = function () {
                 jQuery.a11yfy.assertiveAnnounce("Matters search page loaded successfully");
             }
+
+
+            //#region for additional matter properties
+             vm.addtionalPropertiesAvaialbleForMatter = false;
+            //#region function to get content type name from the term
+            function getAdditionalContentTypeName() {
+                vm.addtionalPropertiesAvaialbleForMatter = false;
+                vm.matterExtraPropertiesValues =null;
+                var getExtraMatterProp = false;
+                var levels = vm.taxonomyData.levels;
+                var termData = vm.taxonomyData.level1;
+                angular.forEach(termData, function (levelOneTerm) {
+                    if (levelOneTerm.termName == vm.currentRow.matterPracticeGroup) {
+                        angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
+                            if (levelTwoTerm.termName == vm.currentRow.matterAreaOfLaw) {
+                                angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
+                                    if (levels == 3) {
+                                        if (levelThreeTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                            getExtraMatterProp = IsCustomPropertyPresentInTerm(levelThreeTerm);
+                                        }
+
+                                    } else if (levels == 4) {
+                                        angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                            if (levelFourTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                                getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFourTerm);
+                                            }
+                                        });
+                                    }
+                                    else if (levels == 5) {
+                                        angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                            angular.forEach(levelFourTerm.level5, function (levelFiveTerm) {
+                                                if (levelFiveTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                                    getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFiveTerm);
+                                                }
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+                vm.addtionalPropertiesAvaialbleForMatter = getExtraMatterProp;
+                return getExtraMatterProp;
+            }
+            //function to get the contenttype name from the term customproperty
+            vm.matterProvisionExtraPropertiesContentTypeName = "";
+            function IsCustomPropertyPresentInTerm(data) {
+                var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
+                    vm.matterProvisionExtraPropertiesContentTypeName = data[additionalMatterPropSettingName];
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+
+
+            //API call to retrieve matter extra properties.
+            function getmatterprovisionextraproperties(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getmatterprovisionextraproperties',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            vm.matterExtraFields = [];
+            function getAdditionalMatterProperties() {            
+                var extraMatterPropertiesAvailableForMatter = getAdditionalContentTypeName();
+                if (extraMatterPropertiesAvailableForMatter) {
+                    var additionalMatterPropSettingName = vm.matterProvisionExtraPropertiesContentTypeName;
+                    var optionsForGetmatterprovisionextraproperties = {
+                        Client: {
+                            Url: vm.selectedRow.matterClientUrl
+                        },
+                        MatterExtraProperties: {
+                            ContentTypeName: additionalMatterPropSettingName
+                        }
+                    }
+                    getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
+                        console.log(result);
+                        vm.matterExtraFields = result.Fields;
+                        for (var i = 1; i <= vm.matterExtraFields.length; i++) {
+                            var order = (i % 2 == 0) ? 2 : 1;
+                            vm.matterExtraFields[i - 1].columnPosition = order;
+                            vm.matterExtraFields[i - 1].displayInUI = "true";
+                            vm.matterExtraFields[i - 1].required = "false";
+
+                        }
+                        console.log(vm.matterExtraFields);
+                    });
+                }
+            }
+
+
+            // To get extra field properties values set by user.
+            function getAdditionalMatterPropertiesFieldsData() {
+                var Fields = [];
+
+                angular.forEach(vm.matterExtraFields, function (input) {
+                    var field = { FieldDisplayName: "", FieldName: "", Type: "", FieldValue: "", IsDisplayInUI: "true" }
+                    field.FieldDisplayName = input.name;
+                    field.FieldName = input.fieldInternalName;
+                    field.Type = input.type;
+                    field.IsDisplayInUI = input.displayInUI.toString();
+                    if (input.type == "Dropdown") {
+                        if (input.value == undefined || input.value.choiceValue == null || input.value.choiceValue == undefined) {
+                            field.FieldValue = ""
+                        }
+                        else {
+                            field.FieldValue = input.value.choiceValue
+                        }
+                    } else if (input.type == "MultiChoice") {
+                        field.FieldValue = "";
+                        if (input.value != undefined) {
+                            angular.forEach(input.value, function (val) {
+                                if (val.choiceValue == null || val.choiceValue == undefined) {
+                                    val.choiceValue = "";
+                                }
+                                field.FieldValue += field.FieldValue == "" ? val.choiceValue : "," + val.choiceValue;
+                            });
+                        }
+                    } else {
+                        if (input.value == null || input.value == undefined) {
+                            input.value = "";
+                        }
+                        field.FieldValue = input.value;
+                    }
+                    if (-1 == Fields.indexOf(field)) {
+                        Fields.push(field);
+                    }
+                });
+                return Fields;
+            }
+
+            //#endregion
+
+            //#endregion
 
         }]);
 

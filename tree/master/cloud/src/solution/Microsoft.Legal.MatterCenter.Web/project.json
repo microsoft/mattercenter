@@ -1,7 +1,8 @@
 {
   "dependencies": {
-    "Swashbuckle.SwaggerUi": "6.0.0-beta901",
-    "Swashbuckle.SwaggerGen": "6.0.0-beta901",
+    "Swashbuckle.AspNetCore.SwaggerUI": "1.0.0-rc3",
+    "Swashbuckle.AspNetCore.SwaggerGen": "1.0.0-rc3",
+    "Swashbuckle.AspNetCore.Swagger": "1.0.0-rc3",
     "Microsoft.Exchange.WebServices": "2.2.0",
     "Microsoft.ApplicationInsights": "2.1.0",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",

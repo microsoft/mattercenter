@@ -30,13 +30,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         Task<dynamic> GetDocumentAndClientGUIDAsync(Client client);
-        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
+        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, 
+            string folderPath, Dictionary<string, string> mailProperties, MatterExtraProperties documentExtraProperties);
        
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
         DuplicateDocument DocumentExists(ClientContext clientContext, ContentCheckDetails contentCheck, string documentLibraryName, string folderPath, bool isMail);
-        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName);
+        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites);
         
         Stream DownloadAttachments(string attachmentUrl);
     }

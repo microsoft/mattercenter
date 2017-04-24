@@ -16,5 +16,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName);
         DuplicateDocument DocumentExists(string clientUrl, ContentCheckDetails contentCheck, string documentLibraryName, string folderName, bool isMail);
         GenericResponseVM PerformContentCheck(string clientUrl, string folderUrl, IFormFile uploadedFile, string fileName);
-    }
+        GenericResponseVM UploadAttachmentOfEmail(Client client, ServiceRequest serviceRequest,
+                 AttachmentDetails attachment, string folderPath,
+                ref string message);      
+        GenericResponseVM Upload(Client client, ServiceRequest serviceRequest, ref string message);
+        
+
+
+        }
 }

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-using Swashbuckle.SwaggerGen.Annotations;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
 using System.Reflection;
 using Microsoft.Legal.MatterCenter.Web.Common;
@@ -78,8 +78,8 @@ namespace Microsoft.Legal.MatterCenter.Web
        /// <returns></returns>
         [HttpPost("help")]
         [Produces(typeof(List<ContextHelpData>))]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains help information about a page", Type = typeof(List<ContextHelpData>))]
-        [SwaggerResponseRemoveDefaults]
+         [SwaggerResponse((int)HttpStatusCode.OK, Description = "Returns IActionResult which contains help information about a page", Type = typeof(List<ContextHelpData>))]
+         
         public async Task<IActionResult> Help([FromBody]HelpRequestModel helpRequestModel)
         {
             string selectedPage = helpRequestModel.SelectedPage;
@@ -89,7 +89,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             {                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-
+                
                 if (client == null && string.IsNullOrWhiteSpace(selectedPage))
                 {
                     errorResponse = new ErrorResponse()

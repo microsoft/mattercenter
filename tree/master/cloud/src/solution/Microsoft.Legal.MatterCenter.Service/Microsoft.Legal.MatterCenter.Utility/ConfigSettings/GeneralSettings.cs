@@ -37,6 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string GraphUrl { get; set; }
         public bool IsBackwardCompatible { get; set; }
         public bool IsClientMappedWithHierachy { get; set; }
+        public string ExchangeURL { get; set; }
 
     }
 }

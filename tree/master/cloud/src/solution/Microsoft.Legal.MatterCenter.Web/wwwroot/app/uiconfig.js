@@ -77,7 +77,7 @@
     "Tab1LabelPrimaryTypeText": "Please select primary matter type",
     "Tab1LabelPrimaryTypeBeforeSaveText": "Please select primary matter type before you save.",
     "Tab1ButtonSaveSelectiponText": "Save Selections",
-    "LabelSuccessEntityCreation": "Matter is successfully created. You can find recently created matter over",
+    "notify": "Matter is successfully created. You can find recently created matter over",
     "LabelEntityCreationSuccessMsgText3": "Step 3/3: Updating metadata of matter library and sharing matter with the users... ",
     "LabelEntityCreationSuccessMsgText2": "Step 2/3: Assigning permissions to matter library and OneNote library, associating Content Types, creating view and matter landing page...",
     "LabelEntityCreationSuccessMsgText1": "Step 1/3: Creating matter library and OneNote library...",
