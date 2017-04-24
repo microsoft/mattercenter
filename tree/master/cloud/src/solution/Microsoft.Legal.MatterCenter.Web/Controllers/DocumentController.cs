@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Net;
+using Newtonsoft.Json;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -462,6 +463,11 @@ namespace Microsoft.Legal.MatterCenter.Web
                 string folderUrl = Request.Form["folderUrl"];
                 string folderName = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
                 string documentLibraryName = Request.Form["documentLibraryName"];
+                MatterExtraProperties documentExtraProperites=null;
+                if (!string.IsNullOrWhiteSpace(Request.Form["DocumentExtraProperties"]))
+                {
+                     documentExtraProperites = JsonConvert.DeserializeObject<MatterExtraProperties>(Request.Form["DocumentExtraProperties"].ToString());
+                }
                 bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
                 
                 string originalName = string.Empty;
@@ -536,7 +542,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         if(genericResponse==null)
                         {
                             genericResponse = documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, folderUrl, fileName,
-                                clientUrl, folder, documentLibraryName);
+                                clientUrl, folder, documentLibraryName, documentExtraProperites);
                         }
                         if (genericResponse == null)
                         {

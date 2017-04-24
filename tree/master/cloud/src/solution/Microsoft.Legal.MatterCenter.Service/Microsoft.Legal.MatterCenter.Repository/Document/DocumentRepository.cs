@@ -75,9 +75,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         public GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, 
-            Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName)
+            Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites)
         {
-            return spList.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName);
+            return spList.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName, documentExtraProperites);
         }
 
         /// <summary>

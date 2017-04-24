@@ -208,7 +208,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return fileStream.Value;
         }
 
-        public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName)
+        public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName, MatterExtraProperties documentExtraProperites)
         {
             IList<string> listResponse = new List<string>();
             GenericResponseVM genericResponse = null;
@@ -231,7 +231,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (genericResponse==null)
                 {
-                    SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties, null);
+                    SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties, documentExtraProperites);
                 }
                 
             }

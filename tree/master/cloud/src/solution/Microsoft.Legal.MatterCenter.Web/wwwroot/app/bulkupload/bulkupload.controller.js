@@ -862,6 +862,7 @@
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
                 fd.append('clientUrl', vm.selectedRow.matterClientUrl);
                 fd.append('AllowContentCheck', vm.oUploadGlobal.bAllowContentCheck);
+                matterExtraPropertiesValues = JSON.stringify(matterExtraPropertiesValues);
                 fd.append('DocumentExtraProperties', matterExtraPropertiesValues)
                 var nCount = 0;
                 angular.forEach(sourceFiles, function (file) {

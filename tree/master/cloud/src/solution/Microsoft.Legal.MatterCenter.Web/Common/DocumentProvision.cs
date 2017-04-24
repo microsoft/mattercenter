@@ -708,7 +708,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
         public GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
-            string folderName, string fileName, string clientUrl, string folder, string documentLibraryName)
+            string folderName, string fileName, string clientUrl, string folder, string documentLibraryName,MatterExtraProperties documentExtraProperites)
         {
             GenericResponseVM genericResponse = null;
             try
@@ -720,7 +720,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] = originalName;
                 }
 
-                genericResponse = docRepository.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName);
+                genericResponse = docRepository.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName, documentExtraProperites);
             }
             catch(Exception ex)
             {

@@ -15,7 +15,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest);
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
-            string folderName, string fileName, string clientUrl, string folder, string documentLibraryName);
+            string folderName, string fileName, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites);
         Stream DownloadAttachments(MailAttachmentDetails mailAttachmentDetails);
         GenericResponseVM CheckDuplicateDocument(string clientUrl, string folderName, string documentLibraryName, string fileName, ContentCheckDetails contentCheck, bool allowContentCheck);
         GenericResponseVM PerformContentCheck(string clientUrl, string folderUrl, IFormFile uploadedFile, string fileName);

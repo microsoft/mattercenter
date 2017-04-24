@@ -37,7 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
         DuplicateDocument DocumentExists(ClientContext clientContext, ContentCheckDetails contentCheck, string documentLibraryName, string folderPath, bool isMail);
-        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName);
+        GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites);
         
         Stream DownloadAttachments(string attachmentUrl);
     }
