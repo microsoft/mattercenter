@@ -434,7 +434,10 @@
             vm.getFolderHierarchy = function (matterName, matterUrl, matterGUID) {
 
                 if ((matterName && matterName !== "") && (matterUrl && matterUrl !== "") && (matterGUID && matterGUID !== "")) {
-
+                    var row = $filter("filter")(vm.gridOptions.data, matterGUID);
+                    if (row.length > 0) {
+                        vm.currentRow = row[0];
+                    }
                     vm.selectedRow.matterName = matterName;
                     vm.selectedRow.matterClientUrl = matterUrl;
                     vm.selectedRow.matterGuid = matterGUID;
