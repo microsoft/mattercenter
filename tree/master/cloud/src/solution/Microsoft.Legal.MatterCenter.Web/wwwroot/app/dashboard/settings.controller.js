@@ -334,7 +334,8 @@
                         vm.configurations = JSON.parse(response.code);
                         vm.setClientData(vm.configurations);
                         vm.showrole = vm.configurations.ShowRole != null ? (vm.configurations.ShowRole == true ? "Yes" : "No") : "No";
-                        vm.showmatterid = vm.configurations.ShowMatterId != null ? (vm.configurations.ShowMatterId == true ? "Yes" : "No") : "No";;
+                        vm.showmatterid = vm.configurations.ShowMatterId != null ? (vm.configurations.ShowMatterId == true ? "Yes" : "No") : "No";
+                        vm.showAdditionalPropertiesDialogBox = vm.configurations.ShowAdditionalPropertiesDialogBox != null ? (vm.configurations.ShowAdditionalPropertiesDialogBox == true ? "Yes" : "No") : "No";
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.clientlist = false;
@@ -795,7 +796,8 @@
                     ShowRole: vm.getBoolValues(vm.showrole),
                     ShowMatterId: vm.getBoolValues(vm.showmatterid),
                     MatterIdType: vm.showmatterconfiguration,
-                    AdditionalFieldValues: additionalFieldValues
+                    AdditionalFieldValues: additionalFieldValues,
+                    ShowAdditionalPropertiesDialogBox: vm.getBoolValues(vm.showAdditionalPropertiesDialogBox)
                 }
                 saveConfigurations(settingsRequest, function (response) {
                     if (response != "") {
@@ -1291,8 +1293,8 @@
                 }
             }
             //To call web api to get matter extra properties for sepecific term or sub area of law.
-            vm.extraMatterFields = [];
-            function getAdditionalMatterProperties(data) {
+            vm.extraMatterFields = [];          
+            function getAdditionalMatterProperties(data) {                
                 vm.lazyloader = false;
                 var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
                 if (data[additionalMatterPropSettingName] !== null && data[additionalMatterPropSettingName] !== undefined && data[additionalMatterPropSettingName] != "") {
@@ -1306,7 +1308,8 @@
                     }
                     getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
                         console.log(result);
-                        $("#divExtraMatterProps").removeClass("ng-hide");
+                        $("#divExtraMatterProps").removeClass("ng-hide"); 
+                        $("#showDocumentAdditionalProp").removeClass("ng-hide");                        
 
                         vm.extraMatterFields = result.Fields;
                         angular.forEach(vm.extraMatterFields, function (field) {
@@ -1332,6 +1335,7 @@
                 else {
                     vm.lazyloader = true;
                     $("#divExtraMatterProps").addClass("ng-hide");
+                    $("#showDocumentAdditionalProp").addClass("ng-hide");
                     vm.extraMatterFields = [];
                 }
             }

@@ -557,6 +557,43 @@
                     <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.divExtraPropTitle}}</div>
                     <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.divExtraPropTitleDescription}}</div>
                 </div>
+
+                <!--start region Display additional matter properties dialog box during document upload -->
+                <div id="showDocumentAdditionalProp" class="col-xs-12 pad0 marginTop10" role="region" ng-hide="true">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                Display additional matter properties dialog box during document upload 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10">
+                            <input type="radio"
+                                   ng-model="vm.showAdditionalPropertiesDialogBox"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Display additional document properties dialog box during document upload  Yes"
+                                   name="showAdditionalPropertiesDialogBox" value="{{vm.settingsConfigs.Radio1Option1Text}}" />{{vm.settingsConfigs.Radio1Option1Text}}
+                        </span>
+                        <span>
+                            <input type="radio"
+                                   name="showAdditionalPropertiesDialogBox"
+                                   ng-model="vm.showAdditionalPropertiesDialogBox"
+                                   role="radio"
+                                   tabindex="0"
+                                   aria-live="assertive"
+                                   aria-atomic="true"
+                                   aria-label="Display additional document properties dialog box during document upload  No"
+                                   value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    
+                    </div>
+                </div>
+                <!--ends-->
+
                 <div role="region" extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
                 <div id="buttonSection col-xs-12 pad0" role="region" aria-live="assertive" aria-atomic="true">
                     <button class="button clear"
@@ -779,13 +816,13 @@
                         <div class="popUpCommonContent popDT">
                             <div class="popUpDTContent" style="padding:0px !important;" ng-repeat='documentTypeLawTerm in vm.documentTypeLawTerms'>
                                 <div ng-class='{popUpSelected : vm.activeDocumentTypeLawTerm === documentTypeLawTerm}'
-                                     ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
+                                     ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm):null"
                                      ng-click='vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
                                      tabindex="0" aria-live="assertive" aria-atomic="true"
                                      data-value='{{$index}}'>
                                     <a href="" class="visitedlink"
                                        ng-click='vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
-                                       ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)"
+                                       ng-keypress="$event.keyCode==13?vm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm):null"
                                        tabindex="0" aria-live="assertive" aria-atomic="true"
                                        aria-label="{{documentTypeLawTerm.termName}}"
                                        data-value='{{$index}}'>

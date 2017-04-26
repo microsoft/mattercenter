@@ -55,7 +55,7 @@
             vm.urlExists = false;
             vm.filternodata = false;
             vm.matterid = 2;
-
+            vm.matterExtraFields = [];
             vm.sortby = "desc";
             vm.sortexp = "matterModifiedDate";
             //#endregion
@@ -143,6 +143,7 @@
                     DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
+            // api call to get the complete taxonomy term store data
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -152,14 +153,7 @@
                 });
             }
             vm.taxonomyData = {};
-            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                if (!response.isError) {
-
-                    vm.taxonomyData = response;
-                }
-
-
-            });
+           
             //#end region
             //#region For setting dynamic height to the grid
             vm.getTableHeight = function () {
@@ -441,20 +435,48 @@
                     vm.selectedRow.matterName = matterName;
                     vm.selectedRow.matterClientUrl = matterUrl;
                     vm.selectedRow.matterGuid = matterGUID;
+                    vm.selectedRow = vm.currentRow;
                 }
-
-
                 vm.allAttachmentDetails = [];
+               
+                
+                ///function to get the default configurations of matter for select client
+                //check wheather contentCheck for the uploaded document is neccessary 
+                // also check if Additional matter Dialog box should be shown or not
+                //if yes get the taxonomoy api and check if custom property with name MatterProvisionExtraPropertiesContentType
+                //has been set or not. If that property has been set then get Additional Matter Properties and display the upload
+                //dialog box               
+                getContentCheckConfigurations(JSON.stringify(vm.selectedRow.matterClientUrl), function (response) {
+                    if (!response.isError) {
+                        var defaultMatterConfig = JSON.parse(response.code);
+                        vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+                        if (defaultMatterConfig.ShowAdditionalPropertiesDialogBox) {
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                if (!response.isError) {
+                                    vm.taxonomyData = response;
+                                    getAdditionalMatterProperties();
+                                }
+                            });
+                        }
+                        else {
+                            getFolderHierarchyApi();
+                        }
+                    }
+                    else {
+                        vm.oUploadGlobal.bAllowContentCheck = false;
+                    }
+                });               
+            }
+
+            // to get the matter document library folders
+            function getFolderHierarchyApi() {
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
                     MatterUrl: vm.selectedRow.matterClientUrl
                 };
-                vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
-                getAdditionalMatterProperties();
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
                     vm.uploadedFiles = [];
-
                     function getNestedChildren(arr, parent) {
                         var parentList = []
                         for (var i in arr) {
@@ -465,14 +487,11 @@
                                     arr[i].children = children;
                                     arr[i].active = parent == null ? true : false;
                                 }
-
                                 parentList.push(arr[i]);
-
                             }
                         }
                         return parentList
                     }
-
                     vm.foldersList = getNestedChildren(vm.foldersList, null);
                     if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
 
@@ -608,7 +627,7 @@
                 var matterExtraPropertiesValues = undefined;
                 //var attachmentRequestVM = vm.uploadedMailItemDetails.attachmentRequestVM;
                 if (vm.addtionalPropertiesAvaialbleForMatter) {
-                    documentProperties = getAdditionalMatterPropertiesFieldsData();
+                    documentProperties = setAdditionalMatterPropertiesFieldsData();
                     // var sourceFile = vm.uploadedMailItemDetails.sourceFile;
                     matterExtraPropertiesValues = {
                         ContentTypeName: vm.matterProvisionExtraPropertiesContentTypeName,
@@ -2895,10 +2914,20 @@
                     if (!response.isError) {
                         var defaultMatterConfig = JSON.parse(response.code);
                         vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+                        if (defaultMatterConfig.ShowAdditionalPropertiesDialogBox) {
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                if (!response.isError) {
+                                    vm.taxonomyData = response;
+                                }
+                            });
+                        }
+                        
 
                     } else {
                         vm.oUploadGlobal.bAllowContentCheck = false;
                     }
+
+
                 });
             }
             //#endregion
@@ -3432,8 +3461,10 @@
                 });
             }
 
-            vm.matterExtraFields = [];
-            function getAdditionalMatterProperties() {            
+           
+            // this function will get additional matter properties that needs to be displayed for the users to be override 
+            // when the document is getting uploaded.  
+            function getAdditionalMatterProperties() {
                 var extraMatterPropertiesAvailableForMatter = getAdditionalContentTypeName();
                 if (extraMatterPropertiesAvailableForMatter) {
                     var additionalMatterPropSettingName = vm.matterProvisionExtraPropertiesContentTypeName;
@@ -3450,21 +3481,18 @@
                         vm.matterExtraFields = result.Fields;
                         for (var i = 1; i <= vm.matterExtraFields.length; i++) {
                             var order = (i % 2 == 0) ? 2 : 1;
-                            vm.matterExtraFields[i - 1].columnPosition = order;
-                            vm.matterExtraFields[i - 1].displayInUI = "true";
-                            vm.matterExtraFields[i - 1].required = "false";
-
+                            vm.matterExtraFields[i - 1].columnPosition = order;                           
                         }
+                        getFolderHierarchyApi();
                         console.log(vm.matterExtraFields);
                     });
                 }
             }
 
 
-            // To get extra field properties values set by user.
-            function getAdditionalMatterPropertiesFieldsData() {
+            // To set additional matter properties to sent to the server for saving
+            function setAdditionalMatterPropertiesFieldsData() {
                 var Fields = [];
-
                 angular.forEach(vm.matterExtraFields, function (input) {
                     var field = { FieldDisplayName: "", FieldName: "", Type: "", FieldValue: "", IsDisplayInUI: "true" }
                     field.FieldDisplayName = input.name;

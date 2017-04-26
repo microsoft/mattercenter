@@ -47,6 +47,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string Level5Name { get; set; }
 
         public string MatterProvisionExtraPropertiesContentType { get; set; }
-        public string AdditionalMatterPropertiesContentTypeName { get; set; }
+   
     }
 }
