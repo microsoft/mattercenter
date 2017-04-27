@@ -906,12 +906,7 @@
                 </tr>
             </thead>
             <tbody>
-                >
 
-
-
-                tb
-                n
                 <tr ng-repeat="item in vm.exportDate">
                     <td>{{item.matterName}}</td>
                     <td>{{item.matterPracticeGroup}}</td>
@@ -920,36 +915,38 @@
                     <td>{{item.matterSubAreaOfLaw}}</td>
                     <td datefilter date={{item.matterCreatedDate}}></td>
                     <!--<td>{{item.matterID}}</td>-->
-       </tr>
-                    
-
                 </tr>
 
 
 
 
-                
-
-                >
-
-
-                </tr>
-
-
-
-                </
-
-                </
-                tr>
-                </tr>
-                >
-
-                <
-                /tbody>
 
             </tbody>
-            <
-        </table>
+</table>
     </div>
 </div>
 <div ng-init="vm.pageLoadCompleted()"></div>
+<div class="modal fade" id="UploadExtraMatterPropertiesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="height:500px;">
+    <div class="modal-dialog modal-lg" style="width:100%;margin:0px;font-size: 0.87em;">
+        <div class="modal-content" style="height: 314px;">
+            <div class="row modalClose">
+                <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+            </div>
+            <div class="modal-body modelbodyContainer" style="overflow:auto; height:300px;">
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row" matteradditionalfieldsdirective colorder=1 ng-repeat="input in vm.matterExtraFields"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row" matteradditionalfieldsdirective colorder=2 ng-repeat="input in vm.matterExtraFields"></div>
+                    </div>
+                </div>
+
+                <button ng-if="vm.matterExtraFields.length>0" class="buttonPrev pull-left marginTop10" ng-click='vm.SaveDocPropertiesAndUpload(vm.FilesFromDesktopOrMail)'>Submit</button>
+
+            </div>
+        </div>
+    </div>
+</div>

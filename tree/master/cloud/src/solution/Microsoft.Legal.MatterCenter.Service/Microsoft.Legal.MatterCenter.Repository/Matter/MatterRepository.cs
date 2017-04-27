@@ -1886,23 +1886,21 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         jw.WriteValue(field.InternalName);
 
                         jw.WritePropertyName("required");
-                        string isRequired= string.Empty;
-                        string required = string.Empty;
-                        string isDisplayInUI = string.Empty;
+                        string isRequired= "false";
+                        string required = "false";
+                        string isDisplayInUI = "false";
+                       
                         foreach (var item in addFields)
                         {
+                        
                             if(item.FieldName== field.InternalName)
                             {
                                  isRequired = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
                                  required = string.IsNullOrWhiteSpace(isRequired) ? false.ToString() : isRequired.ToLower();
-                                 isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
+                                 isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "false";
+                                break;
                             }
-                            else
-                            {
-                                isRequired = field.Required.ToString();
-                                required= isRequired.ToLower();
-                                isDisplayInUI = "true";
-                            }
+                           
                         }
                        
                         jw.WriteValue(required);

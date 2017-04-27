@@ -22,9 +22,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ICustomLogger customLogger;
         private LogTables logTables;
         private CamlQueries camlQueries;
-        private ISPList spList;
+        
         private IConfigurationRoot configuration;
-        public SPContentTypes(IOptions<ContentTypesConfig> contentTypesConfig, IOptions<CamlQueries> camlQueries, ISPList spList,
+        public SPContentTypes(IOptions<ContentTypesConfig> contentTypesConfig, IOptions<CamlQueries> camlQueries,
             ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<TaxonomySettings> taxonomySettings, IConfigurationRoot configuration
             )
         {
@@ -32,8 +32,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.taxonomySettings = taxonomySettings.Value;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
-            this.camlQueries = camlQueries.Value;
-            this.spList = spList;
+            this.camlQueries = camlQueries.Value;            
             this.configuration = configuration;
         }
 
@@ -72,6 +71,40 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return selectedContentTypeCollection;
         }
 
+        /// <summary>
+        /// This method will associate content type to the document library. If the content type is not associated
+        /// to the document libarary it will associate that content type to that document library
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="contentTypeName"></param>
+        /// <param name="matterDocumentLibrary"></param>
+        public void AssignContentType(ClientContext clientContext, string contentTypeName, List matterDocumentLibrary)
+        {
+            var contentTypes = matterDocumentLibrary.ContentTypes;
+            clientContext.Load(contentTypes);
+            clientContext.ExecuteQuery();
+            ContentType ct = contentTypes.Where(t => t.Name == contentTypeName).SingleOrDefault();
+            if (ct == null)
+            {
+                ct = clientContext.Web.ContentTypes.GetByName(contentTypeName);
+                ct.ReadOnly = false;
+                matterDocumentLibrary.ContentTypesEnabled = true;
+                matterDocumentLibrary.ContentTypes.AddExistingContentType(ct);
+                matterDocumentLibrary.Update();
+
+                clientContext.Load(matterDocumentLibrary,
+                    docLib => docLib.ContentTypes,
+                    docLib => docLib.RootFolder.UniqueContentTypeOrder);
+                clientContext.ExecuteQuery();
+                var contentTypeOrder = (from currentCt in matterDocumentLibrary.ContentTypes
+                                        where currentCt.Name != contentTypesConfig.HiddenContentType
+                                        select currentCt.Id).ToList();
+                matterDocumentLibrary.RootFolder.UniqueContentTypeOrder = contentTypeOrder;
+                matterDocumentLibrary.RootFolder.Update();
+                clientContext.ExecuteQuery();
+            }
+        }
+
 
         /// <summary>
         /// This method will assign content types to the matter that is getting created
@@ -94,7 +127,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 SetDefaultContentType(clientContext, matterList, client, matter);
                 string[] viewColumnList = contentTypesConfig.ViewColumnList.Split(new string[] { ServiceConstants.SEMICOLON }, StringSplitOptions.RemoveEmptyEntries).Select(listEntry => listEntry.Trim()).ToArray();
                 string strQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.ViewOrderByQuery, contentTypesConfig.ViewOrderByColumn);
-                bool isViewCreated = spList.AddView(clientContext, matterList, viewColumnList, contentTypesConfig.ViewName, strQuery);
+                bool isViewCreated = AddView(clientContext, matterList, viewColumnList, contentTypesConfig.ViewName, strQuery);
                 return ServiceUtility.GenericResponse(string.Empty, 
                     Convert.ToString(isViewCreated, CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
             }
@@ -106,7 +139,43 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-     // To get fileds in content type, passed as parameter
+
+        /// <summary>
+        ///  Creates a new view for the list
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="matterList">List name</param>
+        /// <param name="viewColumnList">Name of the columns in view</param>
+        /// <param name="viewName">View name</param>
+        /// <param name="strQuery">View query</param>
+        /// <returns>String stating success flag</returns>
+        public bool AddView(ClientContext clientContext, List matterList, string[] viewColumnList, string viewName, string strQuery)
+        {
+            bool result = true;
+            if (null != clientContext && null != matterList && null != viewColumnList && !string.IsNullOrWhiteSpace(viewName) && !string.IsNullOrWhiteSpace(strQuery))
+                try
+                {
+                    View outlookView = matterList.Views.Add(new ViewCreationInformation
+                    {
+                        Title = viewName,
+                        ViewTypeKind = ViewType.Html,
+                        ViewFields = viewColumnList,
+                        Paged = true
+                    });
+                    outlookView.ViewQuery = strQuery;
+                    outlookView.Update();
+                    clientContext.ExecuteQuery();
+                }
+                catch (Exception)
+                {
+                    result = false;
+                }
+            return result;
+        }
+
+
+
+        // To get fileds in content type, passed as parameter
         public FieldCollection GetFieldsInContentType(ClientContext clientContext, string conentTypeName)
         {
             try

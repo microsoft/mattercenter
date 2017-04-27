@@ -238,6 +238,11 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// List of fields to assign fields object while creating matter at assign content type step
         /// </summary>
         public IList<MatterExtraFields> AdditionalFieldValues { get; set; }
+
+        /// <summary>
+        /// Property to Display additional matter properties dialog box during document upload 
+        /// </summary>
+        public bool ShowAdditionalPropertiesDialogBox { get; set; }
     }
 
 
