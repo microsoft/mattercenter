@@ -1865,8 +1865,52 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         }
                     }
                 }
-              
-                //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+                //When the document is getting uploaded we have to send the default values of Additional Matter
+                //content type site columns so that the user can override/update those values for the document 
+                //that is getting uploaded.
+                //Get all site columns that are present in 'Additional Matter Properties' content type.
+                Web web = clientContext.Web;
+                Dictionary<string, string> matterExtraPropertiesDefaultValues = new Dictionary<string, string>();
+                ListCollection lists = web.Lists;
+                CamlQuery query = new CamlQuery();
+                if (client.Name != null)
+                {
+                    List selectedList = lists.GetByTitle(client.Name);
+                    spContentTypes.AssignContentType(clientContext, contentTypeName, selectedList);
+                    FieldCollection contentTypeFields = contentTypeName.GetFieldsInContentType(clientContext);
+                    FieldCollection fields = spList.GetMatterExtraDefaultSiteColumns(clientContext, selectedList);
+                    if (fields != null && contentTypeFields != null && contentTypeFields.Count > 0)
+                    {
+                        foreach (var field in fields)
+                        {
+                            foreach (var contentTypeField in contentTypeFields)
+                            {
+                                //If document library field name is part of content type field name 
+                                //then update default value of tht column name to the value 
+                                //of that column name.
+                                if (field.InternalName == contentTypeField.InternalName)
+                                {
+                                    if (field.Group == contentTypesSettings.OneDriveContentTypeGroup)
+                                    {
+                                        string fieldValue = string.Empty;
+                                        if (field.TypeAsString.ToLower() == "datetime")
+                                        {
+                                            if (!string.IsNullOrEmpty(field.DefaultValue))
+                                            {
+                                                fieldValue = DateTime.Parse(field.DefaultValue).ToString("MM/dd/yyyy");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            fieldValue = field.DefaultValue;
+                                        }
+                                        matterExtraPropertiesDefaultValues.Add(field.InternalName, fieldValue);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
                 StringBuilder sb = new StringBuilder();
                 JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
                 jw.Formatting = Formatting.Indented;
@@ -1913,7 +1957,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         jw.WritePropertyName("originalType");
                         jw.WriteValue(field.TypeAsString);
                         jw.WritePropertyName("defaultValue");
-                        jw.WriteValue(field.DefaultValue);
+                        if (client.Name!=null) {
+                            jw.WriteValue(matterExtraPropertiesDefaultValues[field.InternalName]);
+                        }
+                        else {
+                            jw.WriteValue(field.DefaultValue);
+                        }
                         jw.WritePropertyName("description");
                         jw.WriteValue(field.Description);
 

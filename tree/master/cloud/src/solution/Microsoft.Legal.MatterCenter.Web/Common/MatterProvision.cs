@@ -270,6 +270,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClientUrl").Key,
                                 searchResult[key].ToString());
                         }
+                        //Added MatterDefault Content type to part of Matter Search results.
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterDefaultContentType.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterDefaultContentType").Key,
+                                searchResult[key].ToString());
+                        }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToLower())
                         {

@@ -833,7 +833,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="clientContext"></param>
         /// <param name="selectedList"></param>
         /// <returns></returns>
-        private FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList)
+        public FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList)
         {
             try
             {
