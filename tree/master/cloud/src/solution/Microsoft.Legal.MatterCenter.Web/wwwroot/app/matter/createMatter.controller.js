@@ -1967,7 +1967,7 @@
                             },
                             Client: {
                                 Id: cm.clientId,
-                                Name: "Microsoft",
+                                Name: cm.selectedClientName,
                                 Url: cm.clientUrl
                             },
                             MatterConfigurations: {

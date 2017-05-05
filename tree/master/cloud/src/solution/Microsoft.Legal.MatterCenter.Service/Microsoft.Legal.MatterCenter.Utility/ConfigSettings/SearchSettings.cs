@@ -52,6 +52,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MatterConfigurationColumn { get; set; }
         public string ManagedPropertySubAreaOfLaw1 { get; set; }
         public string ManagedPropertySubAreaOfLaw2 { get; set; }
+        public string ManagedPropertyMatterDefaultContentType { get; set; }
         #endregion
 
         #region Document Search Related Properties

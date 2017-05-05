@@ -450,7 +450,7 @@
                     if (!response.isError) {
                         var defaultMatterConfig = JSON.parse(response.code);
                         vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
-                        if (defaultMatterConfig.ShowAdditionalPropertiesDialogBox) {
+                        if (defaultMatterConfig.ShowAdditionalPropertiesDialogBox && vm.currentRow.matterDefaultContentType) {
                             getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                                 if (!response.isError) {
                                     vm.taxonomyData = response;
@@ -3409,13 +3409,13 @@
                             if (levelTwoTerm.termName == vm.currentRow.matterAreaOfLaw) {
                                 angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
                                     if (levels == 3) {
-                                        if (levelThreeTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                        if (levelThreeTerm.termName == vm.currentRow.matterDefaultContentType) {
                                             getExtraMatterProp = IsCustomPropertyPresentInTerm(levelThreeTerm);
                                         }
 
                                     } else if (levels == 4) {
                                         angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
-                                            if (levelFourTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                            if (levelFourTerm.termName == vm.currentRow.matterDefaultContentType) {
                                                 getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFourTerm);
                                             }
                                         });
@@ -3423,7 +3423,7 @@
                                     else if (levels == 5) {
                                         angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
                                             angular.forEach(levelFourTerm.level5, function (levelFiveTerm) {
-                                                if (levelFiveTerm.termName == vm.currentRow.matterSubAreaOfLaw) {
+                                                if (levelFiveTerm.termName == vm.currentRow.matterDefaultContentType) {
                                                     getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFiveTerm);
                                                 }
                                             });
@@ -3470,7 +3470,8 @@
                     var additionalMatterPropSettingName = vm.matterProvisionExtraPropertiesContentTypeName;
                     var optionsForGetmatterprovisionextraproperties = {
                         Client: {
-                            Url: vm.selectedRow.matterClientUrl
+                            Url: vm.selectedRow.matterClientUrl,
+                            Name: vm.selectedRow.matterName
                         },
                         MatterExtraProperties: {
                             ContentTypeName: additionalMatterPropSettingName

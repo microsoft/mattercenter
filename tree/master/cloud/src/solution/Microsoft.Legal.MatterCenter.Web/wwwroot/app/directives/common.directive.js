@@ -550,7 +550,7 @@
     }
     //Directive to render matter extra properties with different data types and controls.
     'use strict';
-    function matteradditionalfieldsdirective($compile) {
+    function matteradditionalfieldsdirective($compile, $filter) {
 
         return {
             restrict: 'A',
@@ -574,7 +574,10 @@
 
                     switch (scope.input.type.toLowerCase()) {
                         case 'boolean':
-                            el.append('<div class="directiveMatterExtraBoolField"><input id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
+                                scope.input.value = scope.input.defaultValue;
+                            }
+                            el.append('<div class="directiveMatterExtraBoolField"><input  ng-checked="{{input.value}}" id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
                             break;
                         case 'text':
                             if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
@@ -610,6 +613,14 @@
                             el.append('<div class="directiveMatterExtraFields">' + radioButtontText + '</div>')
                             break;
                         case 'dropdown':
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
+                                var defaultValue = scope.input.defaultValue;
+                                angular.forEach(scope.input.values, function (option) {
+                                    if (option.choiceValue == defaultValue) {
+                                        scope.input.value = option;                                        
+                                    }                                   
+                                });                               
+                            }                           
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
                             }
@@ -618,6 +629,10 @@
                             }
                             break;
                         case 'datetime':
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {                              
+                                scope.input.value = $filter('date')(scope.input.defaultValue, 'MM/dd/yyyy');
+                                scope.input.value = new Date(scope.input.value);
+                            }
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
                             }
@@ -626,6 +641,17 @@
                             }
                             break;
                         case 'multichoice':
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {                                
+                                var defaultOptions = scope.input.defaultValue.split(',');
+                                scope.input.value = [];
+                                for (var aCount = 0; aCount < defaultOptions.length; aCount++) {
+                                    angular.forEach(scope.input.values, function (option) {
+                                        if (option.choiceValue == defaultOptions[aCount]) {
+                                            scope.input.value.push(option);
+                                        }
+                                    });
+                                }
+                            }
                             if (scope.input.required == "true") {
                                 el.append('<div class="directiveMatterExtraFields"><select  id="' + scope.input.fieldInternalName + '" class="multiSelectHeight directiveFormFields" required style="height:100px;" multiple ng-model="input.value" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select></div>')
                             }
@@ -880,7 +906,7 @@
     app.directive('dropdown', ['$rootScope', dropdown]);
     app.directive('assignteamkeydown', [assignTeamKeyDown]);
     app.directive('showupload', [showupload]);
-    app.directive('matteradditionalfieldsdirective', ['$compile', matteradditionalfieldsdirective]);
+    app.directive('matteradditionalfieldsdirective', ['$compile','$filter', matteradditionalfieldsdirective]);
     app.directive('extramatterpropertiefiledsinsettings', ['$compile', extramatterpropertiefiledsinsettings]);
     app.directive('uibTypeaheadPopup', [uibTypeaheadPopup]);
 })();

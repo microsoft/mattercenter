@@ -44,5 +44,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName, MatterExtraProperties documentExtraProperites);
         Stream DownloadAttachments(string attachmentUrl);
         string GetMatterAssignedUsersEmail(ClientContext clientContext, Matter matter);
+        FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList);
     }
 }

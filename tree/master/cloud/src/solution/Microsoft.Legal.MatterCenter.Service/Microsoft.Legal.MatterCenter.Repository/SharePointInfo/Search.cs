@@ -156,8 +156,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertyResponsibleAttorney);
                     managedProperties.Add(searchSettings.ManagedPropertyClientID);
                     managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
-                    //Filter on Result source to fetch only Matter Center specific results
-                    keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
+                    //Adding a new Managed property of defaultMatter content type to be part of search results.
+                    managedProperties.Add(searchSettings.ManagedPropertyMatterDefaultContentType);
+                  //Filter on Result source to fetch only Matter Center specific results
+                  keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                     keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
                     keywordQuery.BypassResultTypes = true;
                     searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, true, managedProperties);
