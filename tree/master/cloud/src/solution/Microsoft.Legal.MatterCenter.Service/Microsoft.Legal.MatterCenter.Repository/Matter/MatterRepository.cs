@@ -1844,7 +1844,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                 IList<MatterExtraFields> addFields = new List<MatterExtraFields>();
 
-                if (settingsItem != null)
+                if (settingsItem != null) 
                 {
                     Newtonsoft.Json.Linq.JObject settingConfig = (Newtonsoft.Json.Linq.JObject)
                         JsonConvert.DeserializeObject(WebUtility.HtmlDecode(Convert.ToString(
@@ -1869,12 +1869,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 //content type site columns so that the user can override/update those values for the document 
                 //that is getting uploaded.
                 //Get all site columns that are present in 'Additional Matter Properties' content type.
-                Web web = clientContext.Web;
-                Dictionary<string, string> matterExtraPropertiesDefaultValues = new Dictionary<string, string>();
-                ListCollection lists = web.Lists;
+               
+                Dictionary<string, string> matterExtraPropertiesDefaultValues = new Dictionary<string, string>();              
                 CamlQuery query = new CamlQuery();
                 if (client.Name != null)
                 {
+                    Web web = clientContext.Web;
+                    ListCollection lists = web.Lists;
                     List selectedList = lists.GetByTitle(client.Name);
                     spContentTypes.AssignContentType(clientContext, contentTypeName, selectedList);
                     FieldCollection contentTypeFields = contentTypeName.GetFieldsInContentType(clientContext);
@@ -1957,7 +1958,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         jw.WritePropertyName("originalType");
                         jw.WriteValue(field.TypeAsString);
                         jw.WritePropertyName("defaultValue");
-                        if (client.Name!=null) {
+                        if (client.Name!=null && matterExtraPropertiesDefaultValues!=null && matterExtraPropertiesDefaultValues.Count>0 && matterExtraPropertiesDefaultValues.ContainsKey(field.InternalName)) {
                             jw.WriteValue(matterExtraPropertiesDefaultValues[field.InternalName]);
                         }
                         else {
