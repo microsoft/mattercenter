@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.Common", "Microsoft.Legal.MatterCenter.Common\Microsoft.Legal.MatterCenter.Common.csproj", "{2E35130D-BE31-4368-AC4D-1E3216ADF13F}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateView", "Microsoft.Legal.MatterCenter.UpdateView\Microsoft.Legal.MatterCenter.UpdateView.csproj", "{4A74259B-DC46-4D9B-842B-ECC337717E19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UploadFile", "Microsoft.Legal.MatterCenter.UploadFile\Microsoft.Legal.MatterCenter.UploadFile.csproj", "{50CEB765-B476-45CE-9447-50526EEABBDA}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.ProjectCenter.UpdateProjectName", "Microsoft.Legal.ProjectCenter.UpdateProjectName\Microsoft.Legal.ProjectCenter.UpdateProjectName.xproj", "{BB14BAC7-CAA7-4F5C-91AD-4C9508435527}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,59 +101,12 @@ Global
 		{50CEB765-B476-45CE-9447-50526EEABBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50CEB765-B476-45CE-9447-50526EEABBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50CEB765-B476-45CE-9447-50526EEABBDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB14BAC7-CAA7-4F5C-91AD-4C9508435527}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB14BAC7-CAA7-4F5C-91AD-4C9508435527}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB14BAC7-CAA7-4F5C-91AD-4C9508435527}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB14BAC7-CAA7-4F5C-91AD-4C9508435527}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://mattercenter.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Microsoft.Legal.MatterCenter.Common\\Microsoft.Legal.MatterCenter.Common.csproj
-		SccProjectName1 = Microsoft.Legal.MatterCenter.Common
-		SccLocalPath1 = Microsoft.Legal.MatterCenter.Common
-		SccProjectUniqueName2 = Microsoft.Legal.MatterCenter.ConfigureLists\\Microsoft.Legal.MatterCenter.ConfigureLists.csproj
-		SccProjectName2 = Microsoft.Legal.MatterCenter.ConfigureLists
-		SccLocalPath2 = Microsoft.Legal.MatterCenter.ConfigureLists
-		SccProjectUniqueName3 = Microsoft.Legal.MatterCenter.CreateContentTypes\\Microsoft.Legal.MatterCenter.CreateContentTypes.csproj
-		SccProjectName3 = Microsoft.Legal.MatterCenter.CreateContentTypes
-		SccLocalPath3 = Microsoft.Legal.MatterCenter.CreateContentTypes
-		SccProjectUniqueName4 = Microsoft.Legal.MatterCenter.CreateGroups\\Microsoft.Legal.MatterCenter.CreateGroups.csproj
-		SccProjectName4 = Microsoft.Legal.MatterCenter.CreateGroups
-		SccLocalPath4 = Microsoft.Legal.MatterCenter.CreateGroups
-		SccProjectUniqueName5 = Microsoft.Legal.MatterCenter.CreateSampleData\\Microsoft.Legal.MatterCenter.CreateSampleData.csproj
-		SccProjectName5 = Microsoft.Legal.MatterCenter.CreateSampleData
-		SccLocalPath5 = Microsoft.Legal.MatterCenter.CreateSampleData
-		SccProjectUniqueName6 = Microsoft.Legal.MatterCenter.CreateSiteCollection\\Microsoft.Legal.MatterCenter.CreateSiteCollection.csproj
-		SccProjectName6 = Microsoft.Legal.MatterCenter.CreateSiteCollection
-		SccLocalPath6 = Microsoft.Legal.MatterCenter.CreateSiteCollection
-		SccProjectUniqueName7 = Microsoft.Legal.MatterCenter.CreateTerm\\Microsoft.Legal.MatterCenter.CreateTerm.csproj
-		SccProjectName7 = Microsoft.Legal.MatterCenter.CreateTerm
-		SccLocalPath7 = Microsoft.Legal.MatterCenter.CreateTerm
-		SccProjectUniqueName8 = Microsoft.Legal.MatterCenter.CreateSiteColumns\\Microsoft.Legal.MatterCenter.CreateSiteColumns.csproj
-		SccProjectName8 = Microsoft.Legal.MatterCenter.CreateSiteColumns
-		SccLocalPath8 = Microsoft.Legal.MatterCenter.CreateSiteColumns
-		SccProjectUniqueName9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard\\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.csproj
-		SccProjectName9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard
-		SccLocalPath9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard
-		SccProjectUniqueName10 = Microsoft.Legal.MatterCenter.UpdateAppConfig\\Microsoft.Legal.MatterCenter.UpdateAppConfig.csproj
-		SccProjectName10 = Microsoft.Legal.MatterCenter.UpdateAppConfig
-		SccLocalPath10 = Microsoft.Legal.MatterCenter.UpdateAppConfig
-		SccProjectUniqueName11 = Microsoft.Legal.MatterCenter.UpdateListPermissions\\Microsoft.Legal.MatterCenter.UpdateListPermissions.csproj
-		SccProjectName11 = Microsoft.Legal.MatterCenter.UpdateListPermissions
-		SccLocalPath11 = Microsoft.Legal.MatterCenter.UpdateListPermissions
-		SccProjectUniqueName12 = Microsoft.Legal.MatterCenter.UpdateLists\\Microsoft.Legal.MatterCenter.UpdateLists.csproj
-		SccProjectName12 = Microsoft.Legal.MatterCenter.UpdateLists
-		SccLocalPath12 = Microsoft.Legal.MatterCenter.UpdateLists
-		SccProjectUniqueName13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields\\Microsoft.Legal.MatterCenter.UpdateTaxonomyFields.csproj
-		SccProjectName13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields
-		SccLocalPath13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields
-		SccProjectUniqueName14 = Microsoft.Legal.MatterCenter.UpdateView\\Microsoft.Legal.MatterCenter.UpdateView.csproj
-		SccProjectName14 = Microsoft.Legal.MatterCenter.UpdateView
-		SccLocalPath14 = Microsoft.Legal.MatterCenter.UpdateView
-		SccProjectUniqueName15 = Microsoft.Legal.MatterCenter.UploadFile\\Microsoft.Legal.MatterCenter.UploadFile.csproj
-		SccProjectName15 = Microsoft.Legal.MatterCenter.UploadFile
-		SccLocalPath15 = Microsoft.Legal.MatterCenter.UploadFile
 	EndGlobalSection
 EndGlobal
