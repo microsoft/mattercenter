@@ -3,22 +3,20 @@
         position: absolute !important;
         width: 100%;
     }
+
     .ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
-    background-color: white;
-    z-index:1;
-}
+        background-color: white;
+        z-index: 1;
+    }
 
-[data-draggable="item"][aria-grabbed="true"]
-{
-	background:skyblue;
-	color:#fff;
-}
+    [data-draggable="item"][aria-grabbed="true"] {
+        background: skyblue;
+        color: #fff;
+    }
 
-.childNodeItemStyle{
-    border-bottom:1px solid #ccc;
-}
-
-
+    .childNodeItemStyle {
+        border-bottom: 1px solid #ccc;
+    }
 </style>
 <div ng-click="vm.closealldrops()">
     <!--ng-class="{'mainMatter':vm.lazyloader}"-->
@@ -79,24 +77,25 @@
     <div class="col-sm-6 attachmentSection" style="width:600px;">
         <div style="display: inline-block; width: 90%; margin-top:10px; padding:0;">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-1 pad0">
-                </div>
-                <div class="col-xs-2 col-sm-3 col-md-3 col-lg-3 pad0">
-                    User Inbox Emails
-                </div>
-                <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
-                    <div class="input-group col-xs-10 col-sm-12 zindex6" id="">
-                        <input type="text" ng-model="vm.emailSearchText" my-enter="vm.searchUserInboxEmails()" placeholder="" class="form-control">
-                        <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.searchUserInboxEmails()"><i class="glyphicon glyphicon-search"></i></span>
-                    </div>
+            </div>
+            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-3 pad0">
+                User Inbox Emails
+            </div>
+            <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+                <div class="input-group col-xs-10 col-sm-12 zindex6" id="">
+                    <input type="text" ng-model="vm.emailSearchText" my-enter="vm.searchUserInboxEmails()" placeholder="" class="form-control">
+                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.searchUserInboxEmails()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>
+        </div>
         <div style="margin-left:40px;">
             <a ng-click="vm.getNextSetOfEmails()"><span class="glyphicon glyphicon-plus"></span>Load more emails</a>
+            <img ng-if="vm.emailsloadingstarted" alt='Loading' class='' src='../images/loading_metro.gif' />           
         </div>
         <div style="width:600px; margin-top:10px; margin-bottom:10px; overflow-y:auto !important;height: 280px;">
             <script type="text/ng-template" id="EmailsTree">
                 <!--<input  type="checkbox" style="float:left;"ng-model="child.SELECTED"   data-item="{{child}}" id="chk{{child.id}}" ng-click="vm.emailItemsChecked(child)" />-->
-                <div  draggablemultipleemails id="div{{child.id}}" class="treeNodes emailsMutliple"  title="" 
+                <div draggablemultipleemails id="div{{child.id}}" class="treeNodes emailsMutliple" title=""
                      data-draggable="item" ng-show="child.active"
                      data-title="child.subject?{{child.subject}}:{{child.name}}"
                      data-subject="{{child.subject}}"
@@ -105,7 +104,7 @@
                      data-parentmailid="{{child.parentMessageId}}"
                      data-contenttype="{{child.contentType}}"
                      data-name="{{child.name}}"
-                     folder="child" style="" 
+                     folder="child" style=""
                      ng-click="vm.showSelectedFolderEmailTree(child,this)">
 
                     <!--<input type="checkbox" ng-model="child.selected" value={{child.id}} style="" />-->
@@ -122,18 +121,18 @@
                 </div>
                 <ul ng-if="child.hasAttachments" style="margin-left:5px; list-style-type:none !important">
                     <li id='li{{child.id}}' ng-repeat="child in child.attachments" data-foldername="{{child.id}}"
-                    data-draggable="item"   data-parentname="{{child.id}}" folder="child" class="childNode" ng-class='child.subject?"childNodeItemStyle":""' ng-include="'EmailsTree'" style="list-style-type:none !important;">
+                        data-draggable="item" data-parentname="{{child.id}}" folder="child" class="childNode" ng-class='child.subject?"childNodeItemStyle":""' ng-include="'EmailsTree'" style="list-style-type:none !important;">
                     </li>
                 </ul>
             </script>
-            <ul  style="list-style-type:none !important">
+            <ul style="list-style-type:none !important">
 
-                <li id='li{{child.id}}'  data-draggable="target"  ng-repeat="child in vm.userInboxUserEmails" ng-class='child.hasAttachments?"childNode":"childNode";child.subject?"childNodeItemStyle":""' data-foldername="{{child.id}}" folder="child" ng-include="'EmailsTree'" style="display: inline-block; width: 90%; padding:0;list-style-type:none !important">
+                <li id='li{{child.id}}' data-draggable="target" ng-repeat="child in vm.userInboxUserEmails" ng-class='child.hasAttachments?"childNode":"childNode";child.subject?"childNodeItemStyle":""' data-foldername="{{child.id}}" folder="child" ng-include="'EmailsTree'" style="display: inline-block; width: 90%; padding:0;list-style-type:none !important">
                 </li>
             </ul>
         </div>
         <!--<div ng-click="vm.getNextSetOfEmails()">Load More Emails</div>-->
-       
+
 
     </div>
 
@@ -165,7 +164,7 @@
             <div id="currentFolder" class="breadcrumbItem"></div>
         </div>
         <div class="folderStructureContent" showbreadcrumb ng-hide="$root.foldercontent">
-           
+
             <script type="text/ng-template" id="folderTree">
                 <div id="div{{child.name}}" ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
                     <img class="folderIcon" ng-src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
@@ -276,14 +275,14 @@
                         </div>
                     </div>
 
-                    <button ng-if="vm.matterExtraFields.length>0"   class="buttonPrev pull-left marginTop10" ng-click='vm.SaveDocPropertiesAndUpload(vm.FilesFromDesktopOrMail)'>Submit</button>
+                    <button ng-if="vm.matterExtraFields.length>0" class="buttonPrev pull-left marginTop10" ng-click='vm.SaveDocPropertiesAndUpload(vm.FilesFromDesktopOrMail)'>Submit</button>
 
                 </div>
             </div>
         </div>
     </div>
 
-    
+
 
 
     <div id="loadingImageContainer">
@@ -295,10 +294,10 @@
     <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
         <div class='input-group'>
             <input class='form-control' my-Enter='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
-            
+
             <div class='input-group-btn'>
                 <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-               
+
             </div>
         </div>
         <hr />
@@ -314,12 +313,12 @@
             </div>
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-repeat='matter in vm.details' ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)' title={{matter.matterName}}>{{matter.matterName}}</div>
-                
+
                 <div title="{{vm.matterConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.matterConfigContent.NoFilterMatchMsgText}}</span></div>
             </div>
 
         </div>
     </div>
 
-    
+
 </div>

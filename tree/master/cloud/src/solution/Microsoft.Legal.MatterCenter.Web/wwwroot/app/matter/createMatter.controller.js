@@ -47,6 +47,7 @@
             cm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
             cm.createContent.TabNumber = 3;
+            cm.inputs = [];
             cm.matterAdditionalFieldsContentTypeName = "";
             if (cm.taxonomyHierarchyLevels >= 2) {
                 cm.parentLevelOneList = [];
@@ -92,6 +93,7 @@
                 AssignPermissionTeams: [],
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*",
                 isBackwardCompatible: false,
+                ConfigurableSection: false,
                 oSiteUsers: [],
                 oSiteUserNames: [],
                 isClientMappedWithHierachy: false,
@@ -110,6 +112,12 @@
                 AssignPermissionTeams: [],
                 oSiteUsers: [],
                 oSiteUserNames: [],
+            }
+
+            var oPageAdditionalData = {
+                ConfigurableSection: false,
+                MatterAdditionalFieldsContentTypeName: "",
+                MatterExtraFields:null,
             }
 
             cm.clientId = "";
@@ -478,6 +486,7 @@
                         else {
                             localStorage.removeItem("oPageOneData");
                             localStorage.removeItem("oPageTwoData");
+                            localStorage.removeItem("oPageAdditionalData");
                             cm.chkConfilctCheck = false;
                             cm.matterDescription = "";
                             cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
@@ -910,22 +919,22 @@
                     }
                     }
                 }
-                else if (sectionName == "snConfigSection" && cm.iCurrentPage !== 3 && cm.inputs.length > 0) {
+                else if (sectionName == "snConfigSection" && cm.iCurrentPage !== 4 && cm.inputs.length > 0) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
-                        cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
-                        localStorage.iLivePage = 3;
+                        cm.iCurrentPage = 4;$timeout(function(){angular.element('#divTab4').focus();},500);
+                        localStorage.iLivePage = 4;
                         makePrevOrNextButton();
                     }
                 }
-                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 4 && cm.inputs.length > 0) {
+                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3 && cm.inputs.length > 0) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
-                        if (cm.iCurrentPage == 3) {
+                        if (cm.iCurrentPage == 4) {
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
                             cm.sectionName = sectionName;
-                            cm.iCurrentPage = 4;$timeout(function(){angular.element('#divTab4').focus();},500);
-                            localStorage.iLivePage = 4;
+                            cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
+                            localStorage.iLivePage = 3;
                             makePrevOrNextButton();
                         }
                     }
@@ -935,11 +944,7 @@
                     localStorage.iLivePage = 1;
                     makePrevOrNextButton();
                 }
-                else {
-                    cm.iCurrentPage = cm.inputs.length > 0 ? 4 : 3;
-                    cm.sectionName = sectionName;
-                    makePrevOrNextButton();
-                }
+               
             }
 
             function makePrevOrNextButton() {
@@ -954,7 +959,7 @@
                         break;
                     case 3:
                         cm.prevButtonDisabled = false;
-                        cm.nextButtonDisabled = true; cm.nextButtonDisabled = false;
+                        cm.nextButtonDisabled = true; 
                         if (cm.inputs.length == 0) {
                             cm.nextButtonDisabled = true;
                         }
@@ -962,7 +967,7 @@
                     case 4:
                         if (cm.inputs.length > 0) {
                             cm.prevButtonDisabled = false;
-                            cm.nextButtonDisabled = true;
+                            cm.nextButtonDisabled = false;
                         }
                         break;
                     default:
@@ -1375,7 +1380,7 @@
             }
 
             var callCheckSecurityGroupExists = function (sectionName) {
-                getArrAssignedUserNamesAndEmails();                
+                getArrAssignedUserNamesAndEmails();
                 var optionsForSecurityGroupCheck = {
                     Client: {
                         Url: cm.clientUrl
@@ -1391,7 +1396,7 @@
                     },
                     UserIds: cm.userIDs
                 }
-
+                cm.popupContainerBackground = "Show";
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
                     var rowNumber = undefined;
                     if (response.isError) {
@@ -1415,8 +1420,11 @@
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     } else {
-                        cm.iCurrentPage = cm.inputs.length > 0 ? 4 : 3; cm.popupContainerBackground = "hide";
+                        cm.iCurrentPage = 3;
+                        cm.popupContainerBackground = "hide";
+                        $timeout(function () { angular.element('#divTab3').focus(); }, 500);
                         cm.sectionName = sectionName;
+                        localStorage.iLivePage = 3;
                         makePrevOrNextButton();
                     }
                 });
@@ -1498,7 +1506,7 @@
             };
 
             if (localStorage.getItem("iLivePage")) {
-                if (localStorage.getItem("iLivePage") == 2 || localStorage.getItem("iLivePage") == 3) {
+                if (localStorage.getItem("iLivePage") >= 2 ) {
                     var oPageData = JSON.parse(localStorage.getItem("oPageOneData"));
                     cm.clientId = oPageData.ClientId;
                     cm.clientUrl = oPageData.Client.url;
@@ -1511,6 +1519,8 @@
                     cm.oSiteUsers = oPageData.oSiteUsers;
                     cm.oSiteUserNames = oPageData.oSiteUserNames;
                     cm.clientNameList = [];
+                    cm.configurableSection = oPageData.ConfigurableSection ? oPageData.ConfigurableSection : false;
+                    cm.createContent.TabNumber = cm.configurableSection?4:3;
                     cm.showRoles = oPageData.showRoles;
                     cm.showMatterId = oPageData.showMatterId;
                     cm.matterIdType = oPageData.matterIdType;
@@ -1538,8 +1548,26 @@
                     }
                     oPageOneState.oValidMatterName = oPageData.oValidMatterName;
                     cm.nextButtonDisabled = false; cm.prevButtonDisabled = false;
+                    if (cm.configurableSection) {
+                        var oPageAdditionalData = JSON.parse(localStorage.getItem("oPageAdditionalData"));                       
+                        if (oPageAdditionalData && oPageAdditionalData !== null) {
+                            cm.configurableSection = oPageAdditionalData.ConfigurableSection;
+                            cm.createContent.TabNumber = 4;
+                            cm.inputs = [];                            
+                           
+                            angular.forEach(oPageAdditionalData.MatterExtraFields, function (input) {
+                                if (input.type.toLowerCase() == "datetime") { 
+                                    var selectedDate = $filter('date')(input.value, 'MM/dd/yyyy');
+                                    input.value = new Date(selectedDate);
+                                }
+                            });
+                            cm.inputs = oPageAdditionalData.MatterExtraFields;
+                            cm.matterAdditionalFieldsContentTypeName = oPageAdditionalData.MatterAdditionalFieldsContentTypeName;
+                        }
+                    }
+
                 }
-                if (localStorage.getItem("iLivePage") == 3) {
+                if (localStorage.getItem("iLivePage") >= 3) {
                     cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
                     if (oPageData && oPageData !== null) {
@@ -1565,6 +1593,10 @@
                     }
 
                     cm.sectionName = "snCreateAndShare";
+                    if (localStorage.getItem("iLivePage") == 4) {
+                        cm.iCurrentPage = 4; $timeout(function () { angular.element('#divTab4').focus(); }, 500);
+                        cm.sectionName = "snConfigSection";
+                    }
                 }
             }
 
@@ -2663,6 +2695,7 @@
                 cm.createButton = "Create";
                 localStorage.removeItem("oPageOneData");
                 localStorage.removeItem("oPageTwoData");
+                localStorage.removeItem("oPageAdditionalData");
                 getMatterGUID();
                 getTaxonomyData();
             }
@@ -2681,6 +2714,7 @@
                 oPageOneState.showRoles = cm.showRoles;
                 oPageOneState.showMatterId = cm.showMatterId;
                 oPageOneState.matterIdType = cm.matterIdType;
+                oPageOneState.ConfigurableSection = cm.configurableSection;
                 oPageOneState.conflictRadioCheck = cm.conflictRadioCheck;
                 oPageOneState.AssignPermissionTeams = cm.assignPermissionTeams;
                 localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
@@ -2709,18 +2743,26 @@
                 localStorage.iLivePage = 3;
             }
 
+            function storeMatterDataToLocalStorageAddtionalPage() {
+                oPageAdditionalData.ConfigurableSection = cm.configurableSection;
+                oPageAdditionalData.MatterAdditionalFieldsContentTypeName = cm.matterAdditionalFieldsContentTypeName;
+                oPageAdditionalData.MatterExtraFields = cm.inputs;
+                localStorage.setItem('oPageAdditionalData', JSON.stringify(oPageAdditionalData));
+                localStorage.iLivePage = 4;
+            }
+
             // To show proper section on click of next button
             cm.NextClick = function ($event) {
                 if (cm.iCurrentPage == 1) {
                     cm.navigateToSecondSection("snConflictCheck");
                     $event.stopPropagation();
                 }
-                if (cm.inputs.length > 0) {
+                else if (cm.inputs.length > 0 && cm.iCurrentPage != 1) {
                     if (cm.iCurrentPage == 2) {
                         cm.navigateToSecondSection("snConfigSection");
                         $event.stopPropagation();
                     }
-                    else if (cm.iCurrentPage == 3) {
+                    else if (cm.iCurrentPage == 4) {
                         cm.navigateToSecondSection("snCreateAndShare");
                         $event.stopPropagation();
                     }
@@ -2739,11 +2781,15 @@
                     $event.stopPropagation();
                 }
                 else if (cm.iCurrentPage == 3) {
-                    cm.navigateToSecondSection("snConflictCheck");
+                    if (cm.configurableSection) {
+                        cm.navigateToSecondSection("snConfigSection");
+                    } else {
+                        cm.navigateToSecondSection("snConflictCheck");
+                    }                   
                     $event.stopPropagation();
                 }
-                else if (cm.iCurrentPage == 4) {
-                    cm.navigateToSecondSection("snConfigSection");
+                else if (cm.iCurrentPage == 4) {                   
+                    cm.navigateToSecondSection("snConflictCheck");
                     $event.stopPropagation();
                 }
             }
@@ -2937,18 +2983,19 @@
                         }
                     }
                 }
-                else if (iCurrPage == 3 && cm.inputs.length > 0) {
-
+                else if (iCurrPage == 4 && cm.inputs.length > 0) {
+                    cm.popupContainerBackground = "Show";
                     cm.addFieldReq = false;
                     angular.forEach(cm.inputs, function (val) {
                         if (val.type.toLowerCase() != 'boolean' && val.displayInUI == "true" && val.required == "true" && (val.value == null || val.value == undefined)) {
                             cm.addFieldReq = true;
                         }
                     });
-
+                    cm.popupContainerBackground = "hide";
                     if (cm.addFieldReq) {
                         return false;
                     }
+                    storeMatterDataToLocalStorageAddtionalPage();
                     return true;
                 }
                 else if (iCurrPage == 3 && cm.inputs.length == 0) {
@@ -2984,114 +3031,117 @@
                 }
             }
 
+
+
             function showErrorNotification(errorCase) {
-                if (errorCase && errorCase != "") {
-                    var matterErrorEle = document.getElementById("errorBlock");
-                    var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
-                    var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
-                    var matterErrorTextEle = document.getElementById("errText");
-                    matterErrorEle.className = ""; matterErrorTrinageleBlockEle.className = ""; matterErrorTrinagleBorderEle.className = ""; matterErrorTextEle.className = "";
-                    matterErrorEle.classList.add("errorPopUp");
-                    matterErrorTrinageleBlockEle.classList.add("errTriangle");
-                    matterErrorTrinageleBlockEle.classList.add("popUpFloatLeft");
-                    matterErrorTrinagleBorderEle.classList.add("errTriangleBorder");
-                    matterErrorTrinagleBorderEle.classList.add("popUpFloatLeft");
-                    matterErrorTextEle.classList.add("errText");
-                    matterErrorTextEle.classList.add("popUpFloatRight");
-                    switch (errorCase) {
-                        case "mattername":
-                            if (cm.showMatterId) {
-                                matterErrorEle.classList.add("errPopUpMatterName");
-                            }
-                            else {
-                                matterErrorEle.classList.add("errPopUpMatterNameWithOutMatterID");
-                            }
-                            if (cm.errTextMsg == cm.createContent.ErrorMessageEntityNameSpecialCharacters) {
-                                matterErrorTextEle.classList.add("errTextMatterNameWidth");
-                            }
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterName");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterName");
-                            matterErrorTextEle.classList.add("errTextMatterName");
-                            break;
+                var ele = null; var errorBlockWidth = "264px";
+                var topWidth="11px";                
+                switch (errorCase) {
+                    case "mattername":                      
+                        ele = "txtMatterName";
+                        if (cm.errTextMsg == cm.createContent.ErrorMessageEntityNameSpecialCharacters) {
+                            topWidth = "2px";
+                        }
+                        errorBlockWidth = "400px !important";                        
+                        break;
+                    case "client":
+                        ele = "selectClientCom";                        
+                        break;                  
 
-                        case "client":
-                            matterErrorEle.classList.add("errPopUpMatterClient");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterClient");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterClient");
-                            matterErrorTextEle.classList.add("errTextMatterClient");
-                            break;
-
-                        case "matterdescription":
-                            if (cm.showMatterId) {
-                                matterErrorEle.classList.add("errPopUpMatterDescr");
-                            }
-                            else {
-                                matterErrorEle.classList.add("errPopUpMatterDescrWithOutMatterID");
-                            }
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterDescr");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterDescr");
-                            matterErrorTextEle.classList.add("errTextMatterDescr");
-                            break;
-
-                        case "matterid":
-                            matterErrorEle.classList.add("errPopUpMatterId");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterId");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterId");
-                            matterErrorTextEle.classList.add("errTextMatterId");
-                            break;
-                        case "selecttemp":
-
-                            if (cm.showMatterId) {
-                                matterErrorEle.classList.add("errPopUpMatterSelectTemp");
-                            }
-                            else {
-                                matterErrorEle.classList.add("errPopUpMatterSelectTempWithOutMatterID");
-                            }
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterSelectTemp");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockSelectTemp");
-                            matterErrorTextEle.classList.add("errTextMatterSelectTemp");
-                            break;
-                        case "conflictcheck":
-                            matterErrorEle.classList.add("errPopUpCCheck");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCCheck");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCCheck");
-                            matterErrorTextEle.classList.add("errTextMatterCCheck");
-                            break;
-                        case "cdate":
-                            matterErrorEle.classList.add("errPopUpCDate");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCDate");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCDate");
-                            matterErrorTextEle.classList.add("errTextMatterCDate");
-                            break;
-
-                        case "attorny":
-                            matterErrorEle.classList.add("errPopUpCAttorny");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
-                            matterErrorTextEle.classList.add("errTextMatterCAttorny");
-                            break;
-                        case "ccheckuser":
-                            matterErrorEle.classList.add("errPopUpCCheckUser");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCCheckUser");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCCheckUser");
-                            matterErrorTextEle.classList.add("errTextMatterCCheckUser");
-                            break;
-                        case "cblockuser":
-                            matterErrorEle.classList.add("errPopUpCBlockUser");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCBlockUser");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCBlockUser");
-                            matterErrorTextEle.classList.add("errTextMatterCBlockUser");
-                            break;
-
-                        case "mcreate":
-                            matterErrorEle.classList.add("errPopUpCreate");
-                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCreate");
-                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCreate");
-                            matterErrorTextEle.classList.add("errTextMatterCreate");
-                            break;
-                    }
+                    case "matterdescription":
+                        ele = "txtMatterDesc";                      
+                        break;
+                    case "matterid":
+                        ele = "txtMatterId";                     
+                        break;
+                    case "selecttemp":
+                        ele = "mattertype";                      
+                        break;
+                    case "conflictcheck":                    
+                        ele = "chkConflictCheckParent";
+                        break;
+                    case "cdate":
+                        ele = "cdate";                      
+                        break;                  
+                    case "ccheckuser":                    
+                        ele = "txtConflictCheckBy";
+                        break;
+                    case "cblockuser":                       
+                        ele = "txtBlockUser";
+                        break;
+                    case "mcreate":                        
+                        ele = "btnCreateMatter";
+                        break;
                 }
-            }
+
+                var temp = document.getElementById(ele);
+                var matterErrorEle = document.getElementById("errorBlock");
+                var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
+                var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
+                var matterErrorTextEle = document.getElementById("errText");
+                var styleForErrorTxtMat = ".errTextMatterCAttorny{top:" + topWidth + " !important; width:" + errorBlockWidth + "}"
+                matterErrorEle.className = ""; matterErrorTrinageleBlockEle.className = ""; matterErrorTrinagleBorderEle.className = ""; matterErrorTextEle.className = "";
+                matterErrorEle.classList.add("errorPopUp");
+                matterErrorTrinageleBlockEle.classList.add("errTriangle");
+                matterErrorTrinageleBlockEle.classList.add("popUpFloatLeft");
+                matterErrorTrinagleBorderEle.classList.add("errTriangleBorder");
+                matterErrorTrinagleBorderEle.classList.add("popUpFloatLeft");
+                matterErrorTextEle.classList.add("errText");
+                matterErrorTextEle.classList.add("popUpFloatRight");
+                var errPopUpCAttorny = document.createElement('style'),
+                    errTringleBlockCAttorny = document.createElement('style'),
+                    errTringleBorderCAttorny = document.createElement('style'),
+                    errTextMatterCAttorny = document.createElement('style'),
+                    errTxtMatterMsgText = document.createElement('style');
+                errPopUpCAttorny.type = 'text/css';
+                errTringleBlockCAttorny.type = 'text/css';
+                errTringleBorderCAttorny.type = 'text/css';
+                errTextMatterCAttorny.type = 'text/css';
+                errTxtMatterMsgText.type = 'text/css';
+
+                var width = GetWidth();
+                var x = 0, y = 0;
+                var topVal = -26;
+                topVal = cm.configurableSection ? 16 : -26;
+                if (width >= 861 && width<=991) {
+                    y = temp.offsetTop + topVal, x = temp.offsetLeft + 45;
+                    y = errorCase == "conflictcheck" ? y + 8 : y;
+                }
+                else if (width >= 992 && width <= 1105) {
+                    topVal = topVal == 16 ? topVal + 20 : topVal;
+                    y = temp.offsetTop + topVal, x = temp.offsetLeft + 45;
+                    y = errorCase == "conflictcheck" ? y + 8 : y;
+                }
+                else if (width >= 1106 && width <= 1292) {
+                    y = temp.offsetTop + topVal, x = temp.offsetLeft + 45;
+                    y = errorCase == "conflictcheck" ? y + 8 : y;
+                }
+                else if (width >= 1293) {
+                    y = temp.offsetTop -26, x = temp.offsetLeft + 45;
+                    y = errorCase == "conflictcheck" ? y + 8 : y;
+                }
+                else {
+                    y = temp.offsetTop + 57, x = temp.offsetLeft + 10;
+                    y = cm.configurableSection ? y + 40 : y;
+                }
+                
+                errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" + x + "px; width:"+errorBlockWidth+"}";
+                errTringleBlockCAttorny.innerHTML = "{min-height: 40px;top: 17px !important;left: 24px;width:100%}";
+                errTringleBorderCAttorny.innerHTML = "{min-height: 40px,top: 17px !important;left: 24px;width:100%}";
+                errTextMatterCAttorny.innerHTML = styleForErrorTxtMat;
+                errTxtMatterMsgText.innerHTML = ".errTxtMatterMsgText{width:335px !important;left: 24px;top: 6px;position: absolute; z-index: -1;}";
+                document.getElementsByTagName('head')[0].appendChild(errPopUpCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTringleBlockCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);                
+                cm.errorPopUpBlock = true; $timeout(function () { angular.element('#errorBlock').focus(); }, 500);
+                matterErrorEle.classList.add("errPopUpCAttorny");
+                matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
+                matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
+                matterErrorTextEle.classList.add("errTextMatterCAttorny");
+
+            }          
+
 
             function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type) {
                 var fieldType = "";
@@ -3513,13 +3563,13 @@
                 cm.popupContainerBackground = "hide";               
             });
             //To get matter extra field properties for specific term or area of law. 
-            cm.inputs = [];
+           
             function getAdditionalMatterProperties(data) {
                 var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
                 if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
                     cm.configurableSection = true;
                     if (cm.configurableSection) {
-                        cm.matterAdditionalFieldsContentTypeName = "";
+                        cm.matterAdditionalFieldsContentTypeName = data[additionalMatterPropSettingName];
                         cm.createContent.TabNumber = 4;
                         if (cm.clientUrl == "") {
                             cm.clientUrl = configs.global.repositoryUrl;
@@ -3533,15 +3583,14 @@
                             }
                         }
                         getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
-                            console.log(result);
+                           
                             cm.inputs = result.Fields;
                             var z = 0;
                             for (var i = 1; i <= cm.inputs.length; i++) {
                                 var order = (i % 2 == 0) ? 2 : 1;
                                 cm.inputs[z].columnPosition = order;
                                 z++;
-                            }
-                            console.log(cm.inputs);
+                            }                           
                         });
                     }
 
