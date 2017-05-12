@@ -1040,22 +1040,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             { 
+               List<string> existingLists = new List<string>();
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    List<string> existingLists = new List<string>();
-                    if (null != clientContext && null != listsNames)
+                    foreach (string listName in listsNames)
                     {
-                        //ToDo: Chec
-                        ListCollection lists = clientContext.Web.Lists;
-                        clientContext.Load(lists);
+                        ListCollection listCollection = clientContext.Web.Lists;
+                        clientContext.Load(listCollection, lists => lists.Include(list => list.Title).Where(list => list.Title == listName));
                         clientContext.ExecuteQuery();
-                        existingLists = (from listName in listsNames
-                                         join item in lists
-                                         on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
-                                         select listName).ToList();
+                        if (listCollection.Count > 0)
+                        {
+                            existingLists.Add(listName);
+                            break;
+                        }                        
                     }
-                    return existingLists;
                 }
+                return existingLists;
+
             }
             catch (Exception ex)
             {

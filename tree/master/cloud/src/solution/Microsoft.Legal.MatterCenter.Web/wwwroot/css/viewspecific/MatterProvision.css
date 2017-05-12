@@ -1363,6 +1363,25 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
         max-width: 295px;
     min-width: 295px;
 }
+ .divBlockAdj{
+            margin-top: 7px;
+    }
+
+@media (min-width: 861px)  and (max-width: 991px) {
+      .divBlockAdj{
+            margin-top: 30px !important;
+    }
+}
+@media (min-width: 992px)  and (max-width: 1105px) {
+      .divBlockAdj{
+            margin-top: 50px !important;
+    }
+}
+@media (min-width: 1106px)  and (max-width: 1292px) {
+      .divBlockAdj{
+            margin-top: 30px !important;
+    }
+}
 
 @media (max-width: 860px) {
     .container {
@@ -1377,7 +1396,10 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
 
     .sectionStep {
         max-width: 327px;
-         min-width:290px
+         min-width:290px;            
+    }
+    .divBlockAdj{
+            margin-top: 30px !important;
     }
 
     .ddlRoleAssignList {

@@ -31,7 +31,8 @@
             vm.previousResponsibleAttorneyValue = '';
             vm.previousSubAreaOfLawValue = '';
             vm.previousAreaOfLawValue = '';
-            vm.previousMatterIdValue = '';          
+            vm.previousMatterIdValue = '';
+            vm.emailsloadingstarted = false;
 
             //#region Setting the dynamic width to grid
             var screenHeight = 0;
@@ -150,6 +151,10 @@
                         displayColumn[0] = vm.matterConfigContent.GridColumn1Header;
                         displayColumn[1] = vm.matterConfigContent.GridColumn1HeaderTitle;
                         break;
+                    case "GridColumn3Header":
+                        displayColumn[0] = vm.matterConfigContent.GridColumn3Header;
+                        displayColumn[1] = vm.matterConfigContent.GridColumn3HeaderTitle;
+                        break;
                    
                     default:
                         displayColumn = '';                       
@@ -169,13 +174,14 @@
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
                 if (value.displayInUI == true && value.position != -1) {
                     var displaycolVal = vm.switchFuction(value.displayName);
-                    if (displaycolVal[0] == vm.matterConfigContent.GridColumn1Header) {
+                    if (displaycolVal[0] == vm.matterConfigContent.GridColumn1Header || displaycolVal[0] == vm.matterConfigContent.GridColumn3Header) {
+                        var cellTemplateName = displaycolVal[0] == vm.matterConfigContent.GridColumn1Header ? "../app/bulkupload/BulkuploadMatterCellTemplate/MatterCellTemplate.html" : value.cellTemplate;
                         columnDefs1.push({
                             field: value.keyName,
                             displayName: displaycolVal[0],
                             width: value.width,
                             enableHiding: value.enableHiding,
-                            cellTemplate: "../app/bulkupload/BulkuploadMatterCellTemplate/MatterCellTemplate.html",
+                            cellTemplate:  cellTemplateName,
                             headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', displaycolVal[1]) : value.headerCellTemplate,
                             position: value.position,
                             cellClass: value.cellClass,
@@ -183,7 +189,7 @@
                             visible: value.defaultVisibleInGrid,
                             suppressRemoveSort: true
                         });
-                    }
+                    } 
 
                 }
             });
@@ -218,6 +224,7 @@
                         $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                     });
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                        $(".popcontent1").css("display", 'none');
                         vm.selectedRow.matterName = row.entity.matterName
                         vm.selectedRow.matterClientUrl = row.entity.matterClientUrl
                         vm.selectedRow.matterGuid = row.entity.matterGuid;
@@ -354,7 +361,9 @@
                     MessageToSearch: vm.emailSearchText,
                     IncludeAttachments: true
                 }
+                vm.emailsloadingstarted = true;
                 getUserInboxEmails(mailRequest, function (response) {
+                    vm.emailsloadingstarted = false;
                     if (vm.userInboxUserEmails.length == 0) {
                         var mailItems = response.value;
                         angular.forEach(mailItems, function (singleMailItem) {
@@ -397,7 +406,7 @@
             vm.searchUserInboxEmails = function () {
                 vm.userInboxUserEmails = [];
                 vm.getUserInboxEmails();
-            }
+            }           
 
             //#region Functionality to check does URL exist in system.
             vm.checkUrlExists = function (data) {
