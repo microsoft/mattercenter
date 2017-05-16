@@ -181,13 +181,13 @@ this.ScenarioSetup(scenarioInfo);
 #line 35
 this.ScenarioSetup(scenarioInfo);
 #line 36
- testRunner.When("user clicks on column filter to filter the documents using keyword \'Test\' on My D" +
-                    "ocuments", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("user clicks on column filter to filter the documents using keyword \'url\' on My Do" +
+                    "cuments", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 37
  testRunner.Then("it should filter the document based on filtered keyword", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 38
- testRunner.When("user clicks on column filter to filter the documents using keyword \'Test\' on All " +
-                    "Documents", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("user clicks on column filter to filter the documents using keyword \'url\' on All D" +
+                    "ocuments", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 39
  testRunner.Then("it should filter the document based on filtered keyword", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
