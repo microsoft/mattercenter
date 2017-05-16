@@ -31,6 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void WhenUserEntersCredentialsOnHomepage()
         {
             common.GetLogin(webDriver, URL);
+            Thread.Sleep(4000);
         }
 
         [Then(@"home page should be loaded with element '(.*)'")]
@@ -176,7 +177,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"it should open draft mail with recipient '(.*)' and subject as '(.*)'")]
         public void ThenItShouldOpenDraftMailWithRecipientAndSubjectAs(string emailId, string emailSubject)
         {
-            string supportLink = (string)scriptExecutor.ExecuteScript("var links = $('.emailLink').attr('href'); return links");
+            string supportLink = (string)scriptExecutor.ExecuteScript("var links = $('.emailLink')[1].href; return links");
             Assert.IsTrue(supportLink.Contains("mailto:" + emailId + "?subject=" + emailSubject));
         }
         #endregion

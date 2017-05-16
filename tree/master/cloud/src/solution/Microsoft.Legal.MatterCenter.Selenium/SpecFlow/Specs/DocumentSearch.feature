@@ -33,9 +33,9 @@ Scenario:04. Verify the document sort
 
 @E2E
 Scenario:08. Verify the document filter search
-	When user clicks on column filter to filter the documents using keyword 'Test' on My Documents
+	When user clicks on column filter to filter the documents using keyword 'url' on My Documents
 	Then it should filter the document based on filtered keyword
-	When user clicks on column filter to filter the documents using keyword 'Test' on All Documents
+	When user clicks on column filter to filter the documents using keyword 'url' on All Documents
 	Then it should filter the document based on filtered keyword 
 	    
 @E2E

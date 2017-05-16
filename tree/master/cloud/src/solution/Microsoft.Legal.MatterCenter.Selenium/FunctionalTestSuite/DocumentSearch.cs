@@ -34,12 +34,15 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user enters credentials on document search page")]
         public void WhenUserEntersCredentialsOnDocumentSearchPage()
         {
+            Thread.Sleep(4000);
             common.GetLogin(webDriver, URL);
+            Thread.Sleep(4000);
         }
 
         [Then(@"document search page should be loaded with element '(.*)'")]
         public void ThenDocumentSearchPageShouldBeLoadedWithElement(string checkId)
         {
+            Thread.Sleep(4000);
             Assert.IsTrue(common.ElementPresent(webDriver, checkId, Selector.Id));
         }
         #endregion
@@ -173,7 +176,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void WhenUserSearchesWithKeyword(string searchText)
         {
             // search 
-            scriptExecutor.ExecuteScript("document.getElementsByClassName('form-control')[0].value='" + searchText + "'");
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(2000);
+            scriptExecutor.ExecuteScript("$('.form-control')[0].value='" + searchText + "'");
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('#basic-addon1').click();");
             Thread.Sleep(3000);
@@ -190,7 +195,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 if (!String.IsNullOrWhiteSpace(searchText) && gridData.ToLower(CultureInfo.CurrentCulture).Contains(searchText.ToLower(CultureInfo.CurrentCulture)))
                     searchCount++;
             }
-            Assert.IsTrue(searchCount > 1);
+            Assert.IsTrue(searchCount >=1);
             scriptExecutor.ExecuteScript("$('.form-control')[0].value=''");
             scriptExecutor.ExecuteScript("$('#basic-addon1').click();");
             Thread.Sleep(3000);
@@ -203,7 +208,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             common.GetLogin(webDriver, URL);
             Thread.Sleep(3000);
-            webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
+            webDriver.FindElement(By.CssSelector("span.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(7000);
         }
 
@@ -253,7 +258,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 }
                 documentCount++;
             }
-            webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
+            webDriver.FindElement(By.CssSelector("span.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(2000);
             Assert.IsTrue(toalElement >= 0);
         }
@@ -270,13 +275,15 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             keyword = filterKeyword;
             scriptExecutor.ExecuteScript("$('.searchPanelDropdown')[1].click();");
             Thread.Sleep(4000);
-            webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
+            webDriver.FindElement(By.CssSelector("span.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(3000);
-            webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            // webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            scriptExecutor.ExecuteScript("$('a.prisma-header-dropdown-anchor')[0].click()");
             Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("$('.form-control')[2].value = '" + filterKeyword + "'");
             Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
+           // webDriver.FindElement(By.XPath("(//button[@type='button'])[0]")).Click();
+            scriptExecutor.ExecuteScript("$('#btnDocumentNameFilter').click()");
             Thread.Sleep(2000);
             webDriver.FindElement(By.XPath("//div[@id='filterResultsContainer']/div")).Click();
             Thread.Sleep(2000);
@@ -305,13 +312,15 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             keyword = filterKeyword;
             scriptExecutor.ExecuteScript("$('.searchPanelDropdown')[0].click();");
             Thread.Sleep(4000);
-            webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
+            webDriver.FindElement(By.CssSelector("span.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(3000);
-            webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            //  webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            scriptExecutor.ExecuteScript("$('a.prisma-header-dropdown-anchor')[0].click()");
             Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("$('.form-control')[2].value = '" + filterKeyword + "'");
             Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
+            // webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
+            scriptExecutor.ExecuteScript("$('#btnDocumentNameFilter').click()");
             Thread.Sleep(2000);
             webDriver.FindElement(By.XPath("//div[@id='filterResultsContainer']/div")).Click();
             Thread.Sleep(2000);
@@ -322,7 +331,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on ECB menu in document search page")]
         public void WhenUserClicksOnECBMenuInDocumentSearchPage()
         {
-            Thread.Sleep(5000);
+            common.GetLogin(webDriver, URL);            
+            Thread.Sleep(10000);
             scriptExecutor.ExecuteScript("$('.dropdown a')[0].click()");
         }
 
@@ -406,14 +416,15 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void WhenUserClicksOnDocumentOnDocumentSearchPage()
         {
             common.GetLogin(webDriver, URL);
-            Thread.Sleep(5000);
+            Thread.Sleep(10000);
             scriptExecutor.ExecuteScript(" $('.col-xs-8 a')[0].click()");
-            Thread.Sleep(1000);
+            
         }
 
         [Then(@"a document fly out should open")]
         public void ThenADocumentFlyOutShouldOpen()
         {
+            Thread.Sleep(20000);
             string headingMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
                    matterName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[0].innerText ;return links"),
                    clientName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[2].innerText ;return links"),
@@ -508,15 +519,17 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             string searchBox = ConfigurationManager.AppSettings["Gibberish"];
             scriptExecutor.ExecuteScript("$('.searchPanelDropdown')[0].click();");
             Thread.Sleep(4000);
-            webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
+            webDriver.FindElement(By.CssSelector("span.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(3000);
-            webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            // webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
+            scriptExecutor.ExecuteScript("$('a.prisma-header-dropdown-anchor')[0].click()");
             Thread.Sleep(3000);
             webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).Clear();
             webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).Click();
             webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).SendKeys(searchBox);
             Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
+            scriptExecutor.ExecuteScript("$('#btnDocumentNameFilter').click()");
+            //  webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
             Thread.Sleep(2000);
         }
 
