@@ -233,24 +233,6 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify the footer on matter center home")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _10_VerifyTheFooterOnMatterCenterHome()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify the footer on matter center home", new string[] {
-                        "E2E"});
-#line 56
-this.ScenarioSetup(scenarioInfo);
-#line 57
- testRunner.When("user navigates to the footer", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 58
- testRunner.Then("footer should have all the links", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the search feature using managed properties on matter center home page" +
             "")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
@@ -260,11 +242,11 @@ this.ScenarioSetup(scenarioInfo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the search feature using managed properties on matter center home page" +
                     "", new string[] {
                         "E2E"});
-#line 61
+#line 58
 this.ScenarioSetup(scenarioInfo);
-#line 62
+#line 59
  testRunner.When("user types \'MCMatterName:Test\' in search box on Matter Center Homepage", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 63
+#line 60
  testRunner.Then("all results having \'Test\' keyword should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -278,11 +260,11 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("12. Verify enterprise search feature on matter center home page", new string[] {
                         "E2E"});
-#line 66
+#line 63
 this.ScenarioSetup(scenarioInfo);
-#line 67
+#line 64
  testRunner.When("user types \'Test\' in enterprise search box on Matter Center Home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 68
+#line 65
  testRunner.Then("user should redirect to enterprise page with search results for \'Test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -296,11 +278,11 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on invalid search", new string[] {
                         "E2E"});
-#line 71
+#line 68
 this.ScenarioSetup(scenarioInfo);
-#line 72
+#line 69
  testRunner.When("user types gibberish in search box on Matter Center dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 73
+#line 70
  testRunner.Then("no results should be displayed on Matter Center dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

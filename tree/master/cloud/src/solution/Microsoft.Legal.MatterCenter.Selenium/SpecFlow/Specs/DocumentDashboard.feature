@@ -3,7 +3,7 @@
 @E2E
 Scenario: 01. Open the browser and load document dashboard page
 	When user enters credentials on document dashboard page
-	Then document dashboard page should be loaded with element 'allDocuments'
+	Then document dashboard page should be loaded with element 'myDocuments'
 
 @E2E
 Scenario: 02. Verify the document fly out on document dashboard 
@@ -49,8 +49,8 @@ Scenario: 04. Verify the mail cart functionality
 	
 @E2E    
 Scenario: 08. Verify the search feature with managed properties on document dashboard
-	When user types 'DocTitle:test' in search box on document dashboard
-	Then all documents having 'test' keyword should be displayed		  
+	When user types 'DocTitle:1' in search box on document dashboard
+	Then all documents having '1' keyword should be displayed		  
 
 @E2E
 Scenario: 06. Verify invalid text search on document dashboard
