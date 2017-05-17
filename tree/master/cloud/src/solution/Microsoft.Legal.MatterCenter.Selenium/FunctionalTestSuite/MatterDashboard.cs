@@ -149,10 +149,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             string searchBoxValue = ConfigurationManager.AppSettings["Gibberish"];
             common.GetLogin(webDriver, URL);
-            Thread.Sleep(5000);
-            webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).Clear();
-            Thread.Sleep(1000);
-            webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).SendKeys(searchBoxValue);
+            Thread.Sleep(6000);           
+           // webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).Clear();
+           //  Thread.Sleep(1000);
+           webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).SendKeys(searchBoxValue);
             Thread.Sleep(5000);
             scriptExecutor.ExecuteScript("$('#basic-addon1').click()");
             Thread.Sleep(5000);

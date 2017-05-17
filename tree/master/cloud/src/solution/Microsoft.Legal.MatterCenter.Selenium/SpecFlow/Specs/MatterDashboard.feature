@@ -52,10 +52,7 @@ Scenario: 08. Verify the sort functionality in matter center home
 	When user sorts data for My matters in ascending order of created date
 	Then all records should be sorted in ascending order of created date
 
-@E2E
-Scenario: 10. Verify the footer on matter center home
-	When user navigates to the footer
-	Then footer should have all the links
+
 
 @E2E
 Scenario: 07. Verify the search feature using managed properties on matter center home page

@@ -81,7 +81,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 5
  testRunner.When("user enters credentials on document dashboard page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
- testRunner.Then("document dashboard page should be loaded with element \'allDocuments\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("document dashboard page should be loaded with element \'myDocuments\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -228,9 +228,9 @@ this.ScenarioSetup(scenarioInfo);
 #line 51
 this.ScenarioSetup(scenarioInfo);
 #line 52
- testRunner.When("user types \'DocTitle:test\' in search box on document dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("user types \'DocTitle:1\' in search box on document dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 53
- testRunner.Then("all documents having \'test\' keyword should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("all documents having \'1\' keyword should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
