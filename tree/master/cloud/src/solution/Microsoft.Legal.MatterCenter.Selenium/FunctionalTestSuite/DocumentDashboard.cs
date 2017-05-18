@@ -61,6 +61,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"a document fly out should be seen")]
         public void ThenADocumentFlyOutShouldBeSeen()
         {
+            Thread.Sleep(15000);
             string headingMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
                    matterName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[0].innerText ;return links"),
                    clientName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[2].innerText ;return links"),
@@ -332,7 +333,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[1].click()");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.docSortbyText').click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-sm-4 ul li')[3].click()");
             Thread.Sleep(4000);
@@ -344,8 +345,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             common.GetLogin(webDriver, URL);
             Thread.Sleep(1000);
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[2].click()");
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img')[0].click()");
+            Thread.Sleep(8000);
+            scriptExecutor.ExecuteScript("$('.docSortbyText').click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-sm-4 ul li')[1].click()");
             Thread.Sleep(4000);
@@ -354,9 +355,12 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data in ascending order of created date")]
         public void WhenUserSortsDataInAscendingOrderOfCreatedDate()
         {
+           
+            webDriver.Navigate().Refresh();
+            Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[2].click()");
             Thread.Sleep(8000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img')[0].click()");
+            scriptExecutor.ExecuteScript("$('.docSortbyText').click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-sm-4 ul li')[3].click()");
             Thread.Sleep(4000);
@@ -365,9 +369,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data for Pinned document in ascending order")]
         public void WhenUserSortsDataForPinnedDocumentInAscendingOrder()
         {
-            scriptExecutor.ExecuteScript("$('.nav-tabs a')[3].click()");
+            webDriver.Navigate().Refresh();
+            Thread.Sleep(4000);
+            scriptExecutor.ExecuteScript("$('.nav-tabs a')[6].click()");
             Thread.Sleep(8000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img')[0].click()");
+            scriptExecutor.ExecuteScript("$('.docSortbyText').click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-sm-4 ul li')[1].click()");
             Thread.Sleep(4000);
@@ -376,9 +382,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data for Pinned document in ascending order of created date")]
         public void WhenUserSortsDataForPinnedDocumentInAscendingOrderOfCreatedDate()
         {
-            scriptExecutor.ExecuteScript("$('.nav-tabs a')[3].click()");
+            webDriver.Navigate().Refresh();
+            Thread.Sleep(4000);
+            scriptExecutor.ExecuteScript("$('.nav-tabs a')[6].click()");
             Thread.Sleep(8000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img')[0].click()");
+            scriptExecutor.ExecuteScript("$('.docSortbyText').click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-sm-4 ul li')[3].click()");
             Thread.Sleep(4000);

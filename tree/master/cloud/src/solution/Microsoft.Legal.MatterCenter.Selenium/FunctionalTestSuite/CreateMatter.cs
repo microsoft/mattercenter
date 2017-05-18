@@ -67,7 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
             Thread.Sleep(7000);
-            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterName')[0].innerText; return text;");
+            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('.errText ')[0].innerText; return text;");
             if (repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("matter is already created") || repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("your matter name includes a character that is not allowed"))
             {
                 Assert.IsTrue(true);
@@ -99,6 +99,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user selects basic matter information")]
         public void WhenUserSelectsBasicMatterInformation()
         {
+            common.GetLogin(webDriver, URL);
             Thread.Sleep(4000);
             webDriver.FindElement(By.XPath("//main/div/div/div")).Click();
             Thread.Sleep(2000);
@@ -106,7 +107,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(3000);
             new SelectElement(webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select"))).SelectByText(ConfigurationManager.AppSettings["DropDownKeyword"]);
             Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("option[value=\"100002\"]")).Click();
+            webDriver.FindElement(By.CssSelector("option[value=\"Amazon\"]")).Click();
             Thread.Sleep(2000);
             webDriver.FindElement(By.Id("txtMatterName")).Click();
             webDriver.FindElement(By.Id("txtMatterName")).Clear();
@@ -135,6 +136,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user submits blank forms on assign permissions")]
         public void WhenUserSubmitsBlankFormsOnAssignPermissions()
         {
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(4000);
             bool present;
             try
             {
@@ -155,7 +158,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 Thread.Sleep(2000);
                 scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
                 Thread.Sleep(2000);
-                conflictError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterCCheck')[0].innerText; return text;");
+                conflictError = (string)scriptExecutor.ExecuteScript("var text = $('.errText')[0].innerText; return text;");
                 Assert.IsTrue(conflictError.ToLower(CultureInfo.CurrentCulture).Contains("a confilct check must be completed"));
                 errorCount++;
                 webDriver.FindElement(By.Id("chkConflictCheck")).Click();
@@ -194,7 +197,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                     scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
                     Thread.Sleep(2000);
                     attorneyError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-                    Assert.IsTrue(attorneyError.ToLower(CultureInfo.CurrentCulture).Contains("attorney cannot be empty"));
+                    Assert.IsTrue(attorneyError.ToLower(CultureInfo.CurrentCulture).Contains("team member cannot be empty"));
                     errorCount++;
                     webDriver.FindElement(By.Id("chkConflictCheck")).Click();
                 }
@@ -250,6 +253,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user selects permission for current matter")]
         public void WhenUserSelectsPermissionForCurrentMatter()
         {
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(4000);
             bool present;
             try
             {
@@ -264,6 +269,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             if (present)
             {
                 Thread.Sleep(2000);
+                bool conflictChecked = (bool)scriptExecutor.ExecuteScript("var text = $('#chkConflictCheck')[0].checked; return text;");
+                if (!conflictChecked)
+                {
+                    webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                }               
                 webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
                 Thread.Sleep(2000);
                 webDriver.FindElement(By.Id("txtConflictCheckBy")).Click();
@@ -272,18 +282,23 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 Thread.Sleep(1000);
                 webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-10')]")).Click();
                 Thread.Sleep(3000);
-                webDriver.FindElement(By.Id("txtUser1")).Click();
-                webDriver.FindElement(By.Id("txtUser1")).Clear();
-                webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
-                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.ArrowDown);
+                webDriver.FindElement(By.Id("txtUser2")).Click();
+                webDriver.FindElement(By.Id("txtUser2")).Clear();
+                webDriver.FindElement(By.Id("txtUser2")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
+                webDriver.FindElement(By.Id("txtUser2")).SendKeys(Keys.ArrowDown);
                 Thread.Sleep(1000);
-                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.Enter);
+                webDriver.FindElement(By.Id("txtUser2")).SendKeys(Keys.Enter);
                 Thread.Sleep(2000);
                 scriptExecutor.ExecuteScript("$('.calendar').val('09/14/2016').trigger('change')");
                 Thread.Sleep(2000);
                 webDriver.FindElement(By.Id("roleUser1")).Click();
                 new SelectElement(webDriver.FindElement(By.Id("roleUser1"))).SelectByText(ConfigurationManager.AppSettings["Role"]);
-                webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                conflictChecked = (bool)scriptExecutor.ExecuteScript("var text = $('#chkConflictCheck')[0].checked; return text;");
+                if (!conflictChecked)
+                {
+                    webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                }
+
                 webDriver.FindElement(By.Id("txtBlockUser")).Click();
                 webDriver.FindElement(By.Id("txtBlockUser")).Clear();
                 webDriver.FindElement(By.Id("txtBlockUser")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
@@ -321,7 +336,16 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void ThenItShouldNavigateToThirdStep()
         {
             string nextStep = (string)scriptExecutor.ExecuteScript("var step = $('.menuTextSelected')[0].innerText;return step");
+            Thread.Sleep(3000);
+            if (nextStep.Contains("Provide More Inputs"))
+            {
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev').click();");
+            }
+            Thread.Sleep(5000);
+            nextStep = (string)scriptExecutor.ExecuteScript("var step = $('.menuTextSelected')[0].innerText;return step");
+           
             Assert.IsTrue(nextStep.Contains("Create and Notify"));
+           
         }
 
         #endregion
@@ -331,8 +355,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user checks all check boxes")]
         public void WhenUserCheckesAllCheckBoxes()
         {
+            common.GetLogin(webDriver, URL);            
             Thread.Sleep(4000);
-            webDriver.FindElement(By.XPath("//main/div/div/div[3]")).Click();
+            webDriver.FindElement(By.XPath("//main/div/div/div[4]")).Click();
             Thread.Sleep(2000);
             bool checkTrueOrFalse = (bool)scriptExecutor.ExecuteScript("var step = $('#demo-checkbox-unselected2').prop('checked');return step;");
             if (checkTrueOrFalse == false)

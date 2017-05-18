@@ -2726,6 +2726,11 @@
                 localStorage.setItem('IsConflictCheck', cm.defaultConfilctCheck);
                 localStorage.setItem('IsMatterDescriptionMandatory', cm.isMatterDescriptionMandatory);
                 localStorage.setItem('IsTaskSelected', cm.includeTasks);
+
+                oPageAdditionalData.ConfigurableSection = cm.configurableSection;
+                oPageAdditionalData.MatterAdditionalFieldsContentTypeName = cm.matterAdditionalFieldsContentTypeName;
+                oPageAdditionalData.MatterExtraFields = cm.inputs;
+                localStorage.setItem('oPageAdditionalData', JSON.stringify(oPageAdditionalData));
                 localStorage.iLivePage = 2;
             }
 
@@ -2740,6 +2745,11 @@
                 oPageTwoState.oSiteUsers = cm.oSiteUsers;
                 oPageTwoState.oSiteUserNames = cm.oSiteUserNames;
                 localStorage.setItem('oPageTwoData', JSON.stringify(oPageTwoState));
+                localStorage.setItem('oPageAdditionalData', "");
+                oPageAdditionalData.ConfigurableSection = cm.configurableSection;
+                oPageAdditionalData.MatterAdditionalFieldsContentTypeName = cm.matterAdditionalFieldsContentTypeName;
+                oPageAdditionalData.MatterExtraFields = cm.inputs;
+                localStorage.setItem('oPageAdditionalData', JSON.stringify(oPageAdditionalData));
                 localStorage.iLivePage = 3;
             }
 
