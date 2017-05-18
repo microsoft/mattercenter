@@ -1,4 +1,7 @@
-﻿(function () {
+﻿
+/// <reference path="../../lib/jquery/dist/jquery.js" />
+///
+(function () {
     'use strict;'
     var app = angular.module("matterMain");
     app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions', '$window', '$filter',
@@ -1763,7 +1766,7 @@
             //Binding click event to div
             angular.element('#mainDivContainer').bind('click', function (event) {
                 // Check if we have not clicked on the search box
-                if (!($(event.target).parents().andSelf().is('.dropdown-menu'))) {
+                if (!($(event.target).parents().addBack().is('.dropdown-menu'))) {
                     // Hide/collapse your search box, autocomplete or whatever you need to do
                     angular.element('.dropdown-menu').hide('');
                 }
