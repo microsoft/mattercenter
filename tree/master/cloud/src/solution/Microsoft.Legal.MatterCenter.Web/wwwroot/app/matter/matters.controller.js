@@ -399,6 +399,10 @@
                 OneNoteUrlExists(matterInformatiuonVM, function (response) {
                     if (data.hideUpload.toLowerCase().indexOf(loginUser) > -1) {
                         vm.hideUpload = false;
+                        
+                    }
+                    else {
+                        $timeout(function () { angular.element('.ECBItem.ms-ContextualMenu-link.upload.canUpload').focus() }, 1000);
                     }
                     vm.urlExists = response.oneNoteUrlExists
                     vm.dropDownMenuLoader = true;
