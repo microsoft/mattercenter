@@ -15,22 +15,24 @@
     <div class="LinkContainer">      
         <div class="LeftLinkContainer">          
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
-                <a ui-sref='mc.matters()' 
-                            aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image1Title}}">
+                
                     <figure>
-                        <img aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
+                        <img ui-sref='mc.matters()'  tabindex="0"  role="link"
+                            aria-live="assertive" aria-atomic="true" aria-label="{{vm.navigationContent.Image1Title}}" 
+                             src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
-                </a>
+                
             </div>           
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
-                <a ui-sref='mc.documents()'
-                            aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image2Title}}">
+                
                     <figure>
-                        <img aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
+                        <img ui-sref='mc.documents()'  role="link"
+                            aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image2Title}}" 
+                             src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
-                </a>
+               
             </div>           
         </div>
         <!--   <div class="col-xs-12 col-md-6"> -->
