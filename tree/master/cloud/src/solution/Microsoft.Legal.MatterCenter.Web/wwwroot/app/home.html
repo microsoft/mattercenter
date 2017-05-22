@@ -5,22 +5,71 @@
 <div ng-class="{'dashboardXOverFlow':$root.displayOverflow!=''}">
     <div class="row {{$root.profileClass}} topheader">
         <div tabindex="-1" class="col-xs-10 AppHeader">
-            <div tabindex="-1" class="AppSwitcherContainer" ng-click="vm.menuClick()" ng-keydown="$event.keyCode==27?vm.menuClick():null">
-                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelOpenMenu}}" ng-keydown="$event.keyCode==27?vm.menuClick():null" class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
-                <img tabindex="0" role="button" aria-label="{{vm.header.AriaLabelCloseMenu}}" ng-keydown="$event.keyCode==27?vm.menuClick():null" class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
+            <div tabindex="-1" class="AppSwitcherContainer" ng-click="vm.menuClick()" 
+                 ng-keydown="$event.keyCode==27?vm.menuClick():null">
+                <img tabindex="0" role="button"
+                     ng-keydown="$event.keyCode==27?vm.menuClick():null"
+                     class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png"
+                     title="{{vm.header.MenuImage1Title}}" />
+                <img tabindex="0" role="button"
+                     ng-keydown="$event.keyCode==27?vm.menuClick():null" class="AppSwitcher CloseSwitcher hide"
+                     src="Images/MC_Navigation_Close.png" title="{{vm.header.CloseTitle}}" />
                 <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
             </div>
-            <div role="menu" class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
-                <div tabindex="0" class="AppMenuFlyoutPriLinks" role="menu">
-                    <a aria-label="{{vm.header.Menu1Option1Title}} use tab to move to next item" tabindex="0" role="menuitem" ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
-                    <a aria-label="{{vm.header.Menu1Option2Title}} use tab to move to next item or shift + tab to move to previous item" tabindex="0" role="menuitem" ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
-                    <a aria-label="{{vm.header.Menu1Option3Title}} use tab to move to next item or shift + tab to move to previous item" tabindex="0" role="menuitem" ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
-                    <a aria-label="{{vm.header.Menu1Option4Title}} use shift + tab to move to previous item" tabindex="0" role="menuitem" ng-keydown="$event.keyCode==9?vm.menuClick():null" ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
+            <div role="menu" class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut"
+                 ng-class="{'height222':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}"
+                 aria-label="{{$root.menuShowHideText}}">
+                <div tabindex="0" class="AppMenuFlyoutPriLinks" >
+                    <ul class='dropdown-menu-home' role="menu">
+                        <li class='ms-ContextualMenu-item' role="menuitem" ng-click="vm.navigate('mc.navigation')"
+                            aria-label="{{vm.header.Menu1Option1Title}} use tab to move to next item"
+                            ng-keydown="$event.keyCode==13?vm.navigate('mc.navigation'):null"  tabindex="0" >
+                            <a tabindex="-1" aria-hidden="true" 
+                               aria-label="{{vm.header.Menu1Option1Title}} use tab to move to next item" role="menuitem"
+                               ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}">
+                                <span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span>
+                            </a>
+                        </li>
+                        <li class='ms-ContextualMenu-item'  role="menuitem"   tabindex="0"
+                            aria-label="{{vm.header.Menu1Option2Title}} use tab to move to next item or shift + tab to move to previous item"
+                            ng-click="vm.navigate('mc.matters')" ng-keydown="$event.keyCode==13?vm.navigate('mc.matters'):null">
+                            <a tabindex="-1" aria-hidden="true" 
+                               aria-label="{{vm.header.Menu1Option2Title}} use tab to move to next item or shift + tab to move to previous item" 
+                               ui-sref='mc.matters()'
+                               class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}">
+                                <span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span>
+                            </a>
+                        </li>
+                        <li class='ms-ContextualMenu-item'  role="menuitem"   tabindex="0"
+                            aria-label="{{vm.header.Menu1Option3Title}} use tab to move to next item or shift + tab to move to previous item"
+                            ng-click="vm.navigate('mc.documents')" 
+                            ng-keydown="$event.keyCode==13?vm.navigate('mc.documents'):$event.keyCode==9 && !vm.canLoginUserCreateMatter?vm.closeMenu():null">
+                            <a tabindex="-1"  aria-hidden="true" 
+                               aria-label="{{vm.header.Menu1Option3Title}} use tab to move to next item or shift + tab to move to previous item" 
+                               ui-sref='mc.documents()'
+                               class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}">
+                                <span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span>
+                            </a>
+                        </li>
+                        <li class='ms-ContextualMenu-item'  role="menuitem"  tabindex="0"
+                            aria-label="{{vm.header.Menu1Option4Title}} use shift + tab to move to previous item"
+                            ng-click="vm.navigate('mc.createMatter')" 
+                            ng-keydown="$event.keyCode==13?vm.navigate('mc.createMatter'):$event.keyCode==9?vm.closeMenu():null">
+                            <a tabindex="-1" aria-hidden="true" 
+                               aria-label="{{vm.header.Menu1Option4Title}} use shift + tab to move to previous item"
+                               ng-keydown="$event.keyCode==9?vm.menuClick():null" ui-sref='mc.createMatter()'
+                               class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter"
+                               title="{{vm.header.Menu1Option4Title}}">
+                                <span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
                 <span tabindex="-1" class="AppLogoContainer">
-                    <img tabindex="0" ng-show="!vm.globalSettings.isBackwardCompatible" class="AppLogo" aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                    <img tabindex="-1" ng-show="!vm.globalSettings.isBackwardCompatible" class="AppLogo" 
+                         aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png" title="{{vm.header.LogoImageTitle}}" alt="{{vm.header.LogoImageTitle}}">
                     <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoFirstPart">CELA </span>
                     <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoSecondPart">Project Center</span>
                 </span>

@@ -30,34 +30,34 @@
                 <div ng-if="grid.appScope.vm.dropDownMenu">
                     <li class='ms-ContextualMenu-item' 
                         ng-keydown=grid.appScope.vm.keydownFunction($event,'upload',row.entity) role="menuitem">
-                        <a tabindex="0" ng-if="!grid.appScope.vm.hideUpload"
+                        <a tabindex="0" ng-if="!grid.appScope.vm.hideUpload" 
                            class="ECBItem ms-ContextualMenu-link upload is-disabled"
                            aria-label="Upload to this matter"
                            aria-live="assertive" aria-atomic="true"
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}" disabled="disabled">
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}
                         </a>
-                        <a tabindex="0" ng-if="grid.appScope.vm.hideUpload"
+                        <a tabindex="0" ng-if="grid.appScope.vm.hideUpload" id="matterUploadBtn"
                            aria-live="assertive" aria-atomic="true"
                            aria-label="View matter details"
                            ng-click='grid.appScope.vm.Openuploadmodal()'
-                           class='ECBItem ms-ContextualMenu-link upload'
+                           class='ECBItem ms-ContextualMenu-link upload canUpload'
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}">
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}
                         </a>
                     </li>
                     <li role="menuitem" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'viewmatterdetails',row.entity)">
-                        <a tabindex="0" aria-live="assertive" aria-atomic="true"
+                        <a tabindex="0" aria-live="assertive" aria-atomic="true"  id="matterViewBtn"
                            aria-label="View matter details"
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu2Title}}" href="" class='ECBItem ms-ContextualMenu-link upload' ng-click="grid.appScope.vm.viewMatterDetails(row.entity.matterClientUrl,row.entity.matterGuid)">{{grid.appScope.vm.matterConfigContent.EllipsisLink2Text}}</a>
                     </li>
                     <li role="menuitem" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'matteronenoteurl',row.entity)">
-                        <a tabindex="0" ng-if="!grid.appScope.vm.urlExists"
+                        <a tabindex="-1" ng-if="!grid.appScope.vm.urlExists"
                            aria-live="assertive" aria-atomic="true"
                            aria-label="Go to matter one note"
                            class="ECBItem ms-ContextualMenu-link gotoOneNote is-disabled" 
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu3Title}}" disabled="disabled">{{grid.appScope.vm.matterConfigContent.EllipsisLink3Text}}</a>
-                        <a tabindex="0" ng-if="grid.appScope.vm.urlExists"
+                        <a tabindex="0" ng-if="grid.appScope.vm.urlExists" id="matterOneNoteBtn"
                            aria-live="assertive" aria-atomic="true"
                            aria-label="Go to matter one note"
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu3Title}}" class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.matterClientUrl}}/_layouts/WopiFrame.aspx?sourcedoc={{row.entity.matterClientUrl}}/{{row.entity.matterGuid}}_OneNote/{{row.entity.matterName}}/{{row.entity.matterGuid}}.onetoc2' target='_blank'>
@@ -66,7 +66,7 @@
                     </li>
                     <li role="menuitem" tabindex="0" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'pinorunpin',row)"
                         ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinMatter(row)'>
-                        <a aria-live="assertive" aria-atomic="true"
+                        <a aria-live="assertive" aria-atomic="true" id="matterPinBtn"
                            aria-label="Pin or  unpin this matter"
                            title="{{row.entity.MatterInfo===undefined?grid.appScope.vm.matterConfigContent.ECBMenu4Title:grid.appScope.vm.matterConfigContent.ECBMenu5Title}}" 
                            href="" class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?grid.appScope.vm.matterConfigContent.EllipsisLink4Text:grid.appScope.vm.matterConfigContent.EllipsisLink5Text}}</a>
