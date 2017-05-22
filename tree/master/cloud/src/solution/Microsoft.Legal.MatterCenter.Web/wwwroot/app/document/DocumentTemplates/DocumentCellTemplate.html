@@ -4,9 +4,11 @@
         <a documentflyout tabindex="0" type="button"  role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' 
            style='text-align: left;padding-left:0' details={{row.entity}}
           ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess" aria-live="assertive" aria-atomic="true">
-            <img class="docTypeIconHeader"   role="img" id="docTypeIcon"
+            <img class="docTypeIconHeader"   role="presentation" id="docTypeIcon"
                  
-                 src="{{row.entity.documentIconUrl}}"  ng-attr-title="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> 
+                 alt="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}"                 
+                 src="{{row.entity.documentIconUrl}}"  
+                 ng-attr-title="{{grid.appScope.vm.getDocumentName(row.entity.documentExtension)}}" /> 
             {{row.entity.documentName}}
         </a>
         <a documentflyout tabindex="0" type="button" role="button" class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'

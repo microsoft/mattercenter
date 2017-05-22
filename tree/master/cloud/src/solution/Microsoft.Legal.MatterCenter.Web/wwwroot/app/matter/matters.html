@@ -25,7 +25,7 @@
                         </div>
                         <ul role="menu" tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
                             <li>
-                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item1}}" 
+                                <a aria-label="{{vm.matterConfigContent.Dropdown1Item1}}"
                                    class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}"
                                    href="" tabindex="0" aria-live="assertive" aria-atomic="true" role="menuitem"
                                    ng-click="vm.SetMatters(1,vm.matterConfigContent.Dropdown1Item1)">
@@ -86,14 +86,14 @@
     </div>
     <div class="row" id="mattergrid" role="region">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter 
+            <div ui-grid="vm.gridOptions" ui-grid-exporter
                  aria-labelledby="gridViewPageHeaderContainer"
                  ui-grid-selection
                  data-ui-grid-infinite-scroll
                  class="grid"
                  aria-label="The grid will display matters based on the matter type that has been selected and grid is having sorting, filtering and pagination functionality"
                  ng-style="vm.getTableHeight()"
-                  role="grid" aria-readonly="true">
+                 role="grid" aria-readonly="true">
                 <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText"
                      aria-live="assertive"
                      aria-atomic="true"
@@ -183,7 +183,9 @@
                     </div>
                     <div class="row margin0">
                         <div class="col-sm-10 pad0">
-                            <div class="attachmentHeader marginBottom15 fontSize875em">{{vm.matterConfigContent.AttachmentPopupHeaderText}}</div>
+                            <div class="attachmentHeader marginBottom15 fontSize875em">
+                                <h2 style="font-size:12px">{{vm.matterConfigContent.AttachmentPopupHeaderText}}</h2>
+                            </div>
                         </div>
 
                     </div>

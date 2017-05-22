@@ -3309,7 +3309,9 @@
                     case 'upload': {
                         if (vm.hideUpload) {
                             if (event.keyCode === 13) {
+                                jQuery.a11yfy.assertiveAnnounce("upload to matter modal is getting openend");
                                 vm.Openuploadmodal(currentRow.matterName, currentRow.matterClientUrl, currentRow.matterGuid);
+                                jQuery.a11yfy.assertiveAnnounce("upload to matter modal is openend");
                             }
                         }
                         break;

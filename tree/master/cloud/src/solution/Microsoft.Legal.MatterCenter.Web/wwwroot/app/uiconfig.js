@@ -135,7 +135,8 @@
     "AriaLabelInfoTypeButton": "Info before saving matter type",
     "AriaLabelAddMoreUser": "Add more user in assign team for this matter",
     "LinkAddMoreUserTitle": "Add More Name",
-    "AriaLabelConflictCheckBox": "Select check box for conflict identified. Checkbox required"
+    "AriaLabelConflictCheckBox": "Select check box for conflict identified. Checkbox required",
+    "LabelSuccessEntityCreation": "Matter is successfully created. You can find recently created matter over"
   },
   "DocumentDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -465,7 +466,7 @@
     "MenuImageCloseTitle": "Close App Switcher",
     "HeaderBarLink1Text": "Learn More",
     "HomeMenuText": "Home",
-    "Image1Title": "Search projects",
+    "Image1Title": "Search matters",
     "Image2Title": "Search documents",
     "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
     "FooterLabel": "Questions? Contact",
@@ -576,7 +577,7 @@
   },
   "Home": {
     "MatterCenterSupportLinkText": "Matter Center Aisling Support",
-    "MatterCenterSupportLink": "mailto:support@supportsite.com",
+    "MatterCenterSupportLink": "mailto:lcaweb2@microsoft.com",
     "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
     "ContextualHelpHeader": "Matter Center For Outlook",
     "ContextualHelpBottomText": "Questions? Contact ",
