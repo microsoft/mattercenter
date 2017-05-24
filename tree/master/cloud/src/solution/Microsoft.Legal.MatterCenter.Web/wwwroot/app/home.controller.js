@@ -157,7 +157,13 @@
             vm.navigate = function(path)
             {
                 $state.go(path);
-                vm.closeMenu();
+                $rootScope.appMenuFlyOut = false;
+                $rootScope.flagAppMenuFlyOut = true;
+                jQuery.a11yfy.assertiveAnnounce("Collapsed matter center main menu");               
+                $(".topheader").css("z-index", "4");
+                $(".CloseSwitcher").addClass("hide");
+                $(".OpenSwitcher").removeClass("hide");
+                $(".MenuCaption").removeClass("hideMenuCaption");
             }
 
             vm.getUserProfilePicture();
@@ -231,16 +237,6 @@
                         $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/" + data + ".aspx";
                     }
                 }
-            }
-
-            vm.closeMenu = function () {
-                $rootScope.appMenuFlyOut = false;
-                $rootScope.flagAppMenuFlyOut = true;
-                jQuery.a11yfy.assertiveAnnounce("Collapsed matter center main menu");
-                $(".topheader").css("z-index", "4");
-                $(".CloseSwitcher").addClass("hide");
-                $(".OpenSwitcher").removeClass("hide");
-                $(".MenuCaption").removeClass("hideMenuCaption");
             }
 
             //#endregion

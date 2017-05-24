@@ -52,11 +52,13 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             common.GetLogin(webDriver, URL);
             Thread.Sleep(2000);
-            int noOfMembers = Convert.ToInt32(scriptExecutor.ExecuteScript("var length = $('.assignNewPerm').length; return length;"));
+            scriptExecutor.ExecuteScript("$('.clientNames')[3].click()");
+            Thread.Sleep(15000);
+            int noOfMembers = Convert.ToInt32(scriptExecutor.ExecuteScript("var length = $('.mediumPermissions').length; return length;"));
 
             for (int index = 0; index < noOfMembers; index++)
             {
-                scriptExecutor.ExecuteScript("$('.close')[0].click()");
+                scriptExecutor.ExecuteScript("$('.close img')[0].click()");
                 Thread.Sleep(1000);
             }
         }
@@ -64,8 +66,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"last team member should not be deleted")]
         public void ThenLastTeamMemberShouldNotBeDeleted()
         {
-            int noOfMembers = Convert.ToInt32(scriptExecutor.ExecuteScript("var length = $('.assignNewPerm').length; return length;"));
+            int noOfMembers = Convert.ToInt32(scriptExecutor.ExecuteScript("var length = $('.mediumPermissions').length; return length;"));
             Assert.IsTrue(noOfMembers > 0);
+            Thread.Sleep(6000);
         }
 
         #endregion
@@ -76,114 +79,76 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void WhenUserAddsNon_ExistingAttorneyToTheTeam()
         {
             common.GetLogin(webDriver, URL);
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).Click();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).Clear();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).SendKeys(ConfigurationManager.AppSettings["MatterName"]);
             Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).Click();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).Clear();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).SendKeys(ConfigurationManager.AppSettings["MatterDescription"]);
+            //scriptExecutor.ExecuteScript("$('.clientNames')[3].click()");
+            Thread.Sleep(5000);
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).Click();           
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).SendKeys(ConfigurationManager.AppSettings["MatterName"]);
             Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.popUpPGDiv').click()");
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).SendKeys(ConfigurationManager.AppSettings["MatterDescription"]);           
             Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.popUpOptions')[0].click()");
+            scriptExecutor.ExecuteScript("$('.addmatterType a').click()");
             Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("img.iconForward.iconPosition")).Click();
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.popUpDTContent')[0].click()");
+            scriptExecutor.ExecuteScript("$('.iconForward').click()");
+            Thread.Sleep(2000); 
+            scriptExecutor.ExecuteScript("$('.popUpDTContent div')[0].click()");
+            scriptExecutor.ExecuteScript("$('.saveDocButtonLevel3')[0].click()");           
             Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("div.popUpDTContent.popUpSelected")).Click();
+         
+            webDriver.FindElement(By.Id("txtUser1")).Click();
+            webDriver.FindElement(By.Id("txtUser1")).Clear();
+            webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["Gibberish"]);
+           
             Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('#assignTeamTrue')[0].click()");
-            scriptExecutor.ExecuteScript("$('#assignTeamFalse')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("txtAssign1")).Click();
-            webDriver.FindElement(By.Id("txtAssign1")).Clear();
-            webDriver.FindElement(By.Id("txtAssign1")).SendKeys(ConfigurationManager.AppSettings["Gibberish"]);
-            scriptExecutor.ExecuteScript("$('.ui-menu-item')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("ddlRoleAssignIcon1")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//div[@id='ddlRoleAssignList1']/div[4]")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("ddlPermAssignIcon1")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//div[@id='ddlPermAssignList1']/div[2]")).Click();
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('#includeRSSTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeEmailTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeCalendarTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeTasksTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#matterRequiredTrue').click()");
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('#saveButton').click()");
-            Thread.Sleep(3000);
+           
         }
 
         [Then(@"error should be thrown on saving")]
         public void ThenErrorShouldBeThrownOnSaving()
         {
-            string errorMsg = (string)scriptExecutor.ExecuteScript("var error = $('.errText')[0].innerText; return error;");
-            Assert.IsTrue(errorMsg.ToLower(CultureInfo.CurrentCulture).Contains("please enter valid team members"));
+            int noOfMembers = Convert.ToInt32(scriptExecutor.ExecuteScript("var length = $('.mediumPermissions').length; return length;"));
+            Assert.IsTrue(noOfMembers > 0);
+            Thread.Sleep(6000);
         }
 
         #endregion
 
-        #region  02. Set the value on settings page 
+        #region  04. Set the value on settings page 
         [When(@"settings page is configured and save button is clicked")]
         public void WhenSettingsPageIsConfiguredAndSaveButtonIsClicked()
         {
-            common.GetLogin(webDriver, URL);
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).Click();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).Clear();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterName")).SendKeys(ConfigurationManager.AppSettings["MatterName"]);
+            webDriver.Navigate().Refresh();
+            Thread.Sleep(8000);
+            scriptExecutor.ExecuteScript("$('.clientNames')[3].click()");
+            Thread.Sleep(8000);
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[4]/div/div[2]/input")).SendKeys(ConfigurationManager.AppSettings["MatterName"]);
+            Thread.Sleep(6000);
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='contentDiv']/div/div/div[5]/div/div[2]/input")).SendKeys(ConfigurationManager.AppSettings["MatterDescription"]);
+            Thread.Sleep(6000);
+            scriptExecutor.ExecuteScript("$('.addmatterType a').click()");
+            Thread.Sleep(6000);
+            scriptExecutor.ExecuteScript("$('.iconForward').click()");
             Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).Click();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).Clear();
-            webDriver.FindElement(By.CssSelector("input.ms-TextField-field.inputMatterId")).SendKeys(ConfigurationManager.AppSettings["MatterDescription"]);
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.popUpPGDiv').click()");
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.popUpOptions')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("img.iconForward.iconPosition")).Click();
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.popUpDTContent')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.CssSelector("div.popUpDTContent.popUpSelected")).Click();
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('#assignTeamTrue')[0].click()");
-            scriptExecutor.ExecuteScript("$('#assignTeamFalse')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("txtAssign1")).Click();
-            webDriver.FindElement(By.Id("txtAssign1")).Clear();
-            webDriver.FindElement(By.Id("txtAssign1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
-            scriptExecutor.ExecuteScript("$('.ui-menu-item')[0].click()");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("ddlRoleAssignIcon1")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//div[@id='ddlRoleAssignList1']/div[4]")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("ddlPermAssignIcon1")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//div[@id='ddlPermAssignList1']/div[2]")).Click();
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('#includeRSSTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeEmailTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeCalendarTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#includeTasksTrue').click()");
-            Thread.Sleep(1000);
-            scriptExecutor.ExecuteScript("$('#matterRequiredTrue').click()");
-            Thread.Sleep(2000);
+            scriptExecutor.ExecuteScript("$('.popUpDTContent div')[0].click()");
+            scriptExecutor.ExecuteScript("$('.saveDocButtonLevel3')[0].click()");
+            Thread.Sleep(6000);
+
+            webDriver.FindElement(By.Id("txtUser1")).Click();
+            webDriver.FindElement(By.Id("txtUser1")).Clear();
+            webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
+           scriptExecutor.ExecuteScript("$('.uib-typeahead-match')[0].click()");
+            Thread.Sleep(6000);         
+           
+          
             scriptExecutor.ExecuteScript("$('#saveButton').click()");
-            Thread.Sleep(3000);
+            Thread.Sleep(6000);
         }
 
         [Then(@"settings should be saved and confirmation message should be displayed")]
@@ -193,12 +158,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                    clientLink = (string)scriptExecutor.ExecuteScript("var links = $('.clientLinks').attr('href');return links"),
                    pageDescription = (string)scriptExecutor.ExecuteScript("var links = $('.pageDescription')[0].innerText;return links");
             Assert.IsTrue(successMessage.ToLower(CultureInfo.CurrentCulture).Contains("your changes have been saved. go back to clients"));
-            Assert.IsTrue(clientLink.ToLower(CultureInfo.CurrentCulture).Contains("https://msmatter.sharepoint.com/sitepages/settings.aspx"));
-            Assert.IsTrue(pageDescription.ToLower(CultureInfo.CurrentCulture).Contains("this page shows the current settings for this client’s new matters. the first section allows you to set new matter default selections, which can be changed when a matter is created. the second section defines settings that can not be changed when a new matter is created. no changes are required, and any changes made will not affect existing matters"));
+          
         }
         #endregion     
 
-        #region 03. Verify values on matter provision page 
+        #region 05. Verify values on matter provision page 
 
         [When(@"user goes to matter provision page")]
         public void WhenUserGoesToMatterProvisionPage()
@@ -209,8 +173,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(2000);
             webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select")).Click();
             Thread.Sleep(3000);
-            new SelectElement(webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select"))).SelectByText(ConfigurationManager.AppSettings["DropDownKeyword"]);
             new SelectElement(webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select"))).SelectByText(ConfigurationManager.AppSettings["DropDownClient"]);
+          //  new SelectElement(webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select"))).SelectByText(ConfigurationManager.AppSettings["DropDownClient"]);
             Thread.Sleep(2000);
             webDriver.FindElement(By.Id("txtMatterDesc")).Clear();
             webDriver.FindElement(By.Id("txtMatterDesc")).SendKeys(ConfigurationManager.AppSettings["MatterDescription"]);
@@ -226,7 +190,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Assert.IsTrue(matterName.ToLower(CultureInfo.CurrentCulture).Contains(ConfigurationManager.AppSettings["MatterName"].ToLower(CultureInfo.CurrentCulture)));
             scriptExecutor.ExecuteScript("$('.buttonPrev')[1].click()");
             Thread.Sleep(3000);
-            assignedTo = (string)scriptExecutor.ExecuteScript("var aName = $('.inputAssignPerm')[0].value; return aName;");
+            assignedTo = (string)scriptExecutor.ExecuteScript("var aName = $('.inputAssignPerm')[1].value; return aName;");
             Assert.IsTrue(assignedTo.ToLower(CultureInfo.CurrentCulture).Contains(ConfigurationManager.AppSettings["AttorneyName"].ToLower(CultureInfo.CurrentCulture)));
             webDriver.Quit();
         }

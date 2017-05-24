@@ -9,14 +9,14 @@
         <!--<a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>-->
         <a  matterflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis'
            style='text-align:left;text-decoration: none;' 
-           href=""  aria-label="{{row.entity.matterName}} flyout"
+           href=""  aria-label="Matter {{row.entity.matterName}} link. On clicking of this link will open a flyout where user can take more action on that matter."
            title="{{row.entity.matterName}}"
            aria-live="assertive" aria-atomic="true"
            details={{row.entity}}>{{row.entity.matterName}}</a>
         <div class='popcontent' style="display:none;"></div>
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 '
-          role="region" 
+          role="region"  style="width:64px;"
          ng-keydown="grid.appScope.vm.openContextMenu($event, row.entity)"
          tabindex="0" id="matcoltemp" aria-live="polite" >
 
@@ -32,17 +32,17 @@
                         ng-keydown=grid.appScope.vm.keydownFunction($event,'upload',row.entity) role="menuitem">
                         <a tabindex="0" ng-if="!grid.appScope.vm.hideUpload" 
                            class="ECBItem ms-ContextualMenu-link upload is-disabled"
-                           aria-label="Upload to this matter"
+                           aria-label="Upload to this matter disabled"
                            aria-live="assertive" aria-atomic="true"
-                           title="{{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}" disabled="disabled">
+                           title="Upload to this matter disabled" disabled="disabled">
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}
                         </a>
                         <a tabindex="0" ng-if="grid.appScope.vm.hideUpload" id="matterUploadBtn"
                            aria-live="assertive" aria-atomic="true"
-                           aria-label="View matter details"
+                           aria-label="Upload to this matter"
                            ng-click='grid.appScope.vm.Openuploadmodal()'
                            class='ECBItem ms-ContextualMenu-link upload canUpload'
-                           title="{{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}">
+                           title="Upload to this matter ">
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}
                         </a>
                     </li>

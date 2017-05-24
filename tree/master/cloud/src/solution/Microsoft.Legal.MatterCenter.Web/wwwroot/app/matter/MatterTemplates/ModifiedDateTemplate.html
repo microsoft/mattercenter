@@ -16,18 +16,14 @@
             <span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10' >↓</span>
         </span>
 
-        <span class='sorticon keep-open' tabindex="0"  role="button"  
+        <span class='sorticon keep-open' tabindex="0" 
               ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header)"
               ng-show='grid.appScope.vm.modifieddateDropDowm'>
-            <a href='javascript:;' class='prisma-header-dropdown-anchor' id='acombo' type='button'
-               tabindex="0"
-               role="button"
-               aria-label="filter by modified date"
-               aria-live="assertive" aria-atomic="true"
+            <a href='javascript:;' class='prisma-header-dropdown-anchor' id='acombo' tabindex="-1"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header)">
-                <img src='../images/icon-combobox.png' />
+                <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png' />
             </a>
         </span>
 

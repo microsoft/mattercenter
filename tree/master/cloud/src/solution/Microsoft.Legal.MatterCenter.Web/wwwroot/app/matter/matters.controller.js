@@ -208,7 +208,7 @@
             };
             //#endregion
 
-            $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+            $templateCache.put('coldefheadertemplate.html', "<div><div  aria-label='{{ col.colDef.displayName }}'  class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' tabindex='0'  title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
             //#region To get the column schema and populate in column collection for grid with sorting of column display
             //Declaring column collection object.
@@ -399,11 +399,12 @@
                 OneNoteUrlExists(matterInformatiuonVM, function (response) {
                     if (data.hideUpload.toLowerCase().indexOf(loginUser) > -1) {
                         vm.hideUpload = false;
-                        
+
                     }
-                    else {
+                     else {
                         $timeout(function () { angular.element('.ECBItem.ms-ContextualMenu-link.upload.canUpload').focus() }, 1000);
                     }
+                    jQuery.a11yfy.assertiveAnnounce("Expanded matter search results context menu");
                     vm.urlExists = response.oneNoteUrlExists
                     vm.dropDownMenuLoader = true;
                     vm.dropDownMenu = true;
@@ -3304,9 +3305,9 @@
             }
 
             vm.keydownFunction = function (event, funcName, currentRow) {
-                if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
+                if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {                    
                     angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
-
+                    jQuery.a11yfy.assertiveAnnounce("Collapsing matter search results context menu ");
                 }
                 switch (funcName.toLowerCase()) {
                     //If the user clicks on upload link with in the ECB menu  and presses Enter key
@@ -3340,15 +3341,16 @@
                         if (event.keyCode === 13) {
                             currentRow.entity.MatterInfo === undefined ? vm.PinMatter(currentRow) : vm.UnpinMatter(currentRow);
 
-                        } else if (event.keyCode === 9) {
+                        } else if (event.keyCode === 9 ) {                           
                             angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
+                            jQuery.a11yfy.assertiveAnnounce("Collapsing matter search results context menu ");
                         }
                         break;
                     }
 
                 }
 
-
+                
             }
             //#endregion
 

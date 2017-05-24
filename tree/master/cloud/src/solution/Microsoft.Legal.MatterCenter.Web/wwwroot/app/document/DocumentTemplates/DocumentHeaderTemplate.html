@@ -17,7 +17,7 @@
           ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header):null;$event.stopPropagation();"
           ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header)"
           tabindex="0">
-        <a href='javascript:;' tabindex="0"
+        <a href='javascript:;' 
            role="button"
            aria-label="filter by matter name"
            aria-live="assertive" aria-atomic="true"
@@ -25,7 +25,7 @@
            ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header):null;$event.stopPropagation();"
            class='prisma-header-dropdown-anchor'
            type='button'>
-            <img src='/../../images/icon-combobox.png' tabindex="0" />
+            <img src='/../../images/icon-combobox.png'  />
         </a>
     </span>
 
