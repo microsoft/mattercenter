@@ -3,7 +3,7 @@
      ng-mouseleave='grid.appScope.vm.matterDropDowm = false' role="columnheader">   
         <span aria-live="assertive" aria-atomic="true"
               sortby="{{col.colDef.field}}"
-              tabindex="0" role='button'
+              tabindex="0" 
               style='padding-left: 11px;'              
               class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' 
               ng-focus='grid.appScope.vm.matterDropDowm = true'>
@@ -13,20 +13,16 @@
             <span tabindex="0" id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span>
             <span tabindex="0" id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
-        <span tabindex="0" class='keep-open sorticon' ng-show='grid.appScope.vm.matterDropDowm'
-             aria-label="filter by matter name"
-             aria-live="assertive" aria-atomic="true"
+        <span tabindex="0" class='keep-open sorticon' ng-show='grid.appScope.vm.matterDropDowm'           
+           
              aria-hidden="false"
               ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn1Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn1Header)"
              >
-            <a tabindex="0" href='javascript:;'
-               
-               aria-label="filter by matter name"
-               aria-live="assertive" aria-atomic="true"
+            <a tabindex="-1" href='javascript:;' 
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn1Header):null"
-               ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn1Header)" class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" type='button'>
-                <img tabindex="0" src='../images/icon-combobox.png' />
+               ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn1Header)" class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" >
+                <img alt="filter dropdown image" title="filter dropdown image" tabindex="-1" src='../images/icon-combobox.png' />
             </a>
         </span>
         <div tabindex="0" class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' 

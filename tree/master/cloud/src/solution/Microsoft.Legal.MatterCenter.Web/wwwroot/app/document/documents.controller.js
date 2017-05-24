@@ -2330,7 +2330,7 @@
         //keycode 38 up arrow and 40 for down arrow
         //keycode 27 for esc key
         //to handle enter key press event on the ECB menu for accessibility issue fix
-        vm.openContextMenu = function (event, currentRow) {
+        vm.openContextMenu = function (event, currentRow) {           
             if (event.keyCode === 13) {
                 $('.popcontent').css('display', 'none');
                 angular.element($(event.currentTarget.children[0])).addClass('open');
@@ -2339,6 +2339,7 @@
             else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
                 angular.element($(event.currentTarget.children[0])).removeClass('open');
             }
+            jQuery.a11yfy.assertiveAnnounce("Expanded document search results context menu");
         }
 
         //to handle enter key press event to display matter flyout menu for accessibility issue fix
@@ -2357,6 +2358,7 @@
             if (event.keyCode === 9) {
                 angular.element($(event.currentTarget.parentElement.parentElement)).removeClass('open');
             }
+            jQuery.a11yfy.assertiveAnnounce("Collapsing document search results context menu");
         }
         //To handle check all functionality when the user presses checkbox at the 
         //in the header column

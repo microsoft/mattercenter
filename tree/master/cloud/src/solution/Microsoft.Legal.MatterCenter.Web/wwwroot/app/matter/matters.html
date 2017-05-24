@@ -53,7 +53,7 @@
             <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
                     <input type="text" tabindex="0" role="textbox" aria-label="{{vm.matterConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
-                    <span class="input-group-addon cursor" tabindex="0" role="button" aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <span class="input-group-addon cursor" tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
                 </div>
@@ -62,7 +62,7 @@
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button tabindex="0" role="button" aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" class="btn btn-default" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)">
                             <span class="caret"></span>
                         </div>
@@ -121,23 +121,23 @@
                         <div class="notificationResult hide"></div>
                         <div class="askForOverwrite">
                             <input ng-show="duplicatefile.contentCheck=='True'"
-                                   type="button" role="button"
+                                   type="button" 
                                    title="{{vm.matterConfigContent.Button1DuplicateContentTitle}}"
                                    value="{{vm.matterConfigContent.Button1DuplicateContentText}}"
                                    data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
                             <input ng-show="duplicatefile.saveLatestVersion=='True'"
                                    title="{{vm.matterConfigContent.Button2SaveLatestVersionTitle}}"
-                                   id="overWriteYes" role="button"
+                                   id="overWriteYes"
                                    ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');"
                                    type="button" value="{{vm.matterConfigContent.Button2SaveLatestVersionText}}"
                                    data-operation="overwrite">
                             <input ng-show="duplicatefile.append==true"
-                                   type='button' data-operation='append' role="button"
+                                   type='button' data-operation='append' 
                                    title='{{vm.matterConfigContent.Button3AppendDateTitle}}'
                                    value="{{vm.matterConfigContent.Button3AppendDateText}}" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
                             <input ng-show="duplicatefile.cancel=='True'"
                                    title="{{vm.matterConfigContent.Button4CancelUploadTitle}}"
-                                   id="overWriteNo" role="button"
+                                   id="overWriteNo" 
                                    ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');"
                                    type="button"
                                    value="{{vm.matterConfigContent.Button4CancelUploadText}}"
@@ -145,7 +145,7 @@
 
                             <input ng-show="duplicatefile.ok=='True'"
                                    title="{{vm.matterConfigContent.Button5OkTitle}}"
-                                   id="ok" role="button"
+                                   id="ok"
                                    ng-click="vm.localOverWriteDocument(duplicatefile,'ok');"
                                    type="button" value="{{vm.matterConfigContent.Button5OkText}}"
                                    data-operation="ignore">
@@ -363,19 +363,19 @@
             <div class='input-group-btn'>
                 <button type='button' id="btnMatterFilter"
                         aria-label="filter by matter name"
-                        role="button"
+                        
                         ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header"
                         ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)'
                         class='btn btn-default'>
                     <img src='../images/search-15x15-666.png' />
                 </button>
-                <button aria-label="filter by clients" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn3Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by practice groups" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":" + vm.practiceGroupSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by responsible attorney" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+":" + vm.attorneySearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by sub area of law" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.areaSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by area of law" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyAreaOfLaw+":" + vm.areaOfLawSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by sub area of law" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.subAreaOfLawSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button aria-label="filter by matter id" type='button' role="button" ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterId+":" + vm.projectIDSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by clients" type='button'  ng-if="vm.filtername==vm.matterConfigContent.GridColumn3Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by practice groups" type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":" + vm.practiceGroupSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by responsible attorney" type='button'  ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+":" + vm.attorneySearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by sub area of law" type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header && !vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.areaSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by area of law" type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyAreaOfLaw+":" + vm.areaOfLawSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by sub area of law" type='button'  ng-if="vm.filtername==vm.matterConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.subAreaOfLawSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button aria-label="filter by matter id" type='button'  ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterId+":" + vm.projectIDSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />

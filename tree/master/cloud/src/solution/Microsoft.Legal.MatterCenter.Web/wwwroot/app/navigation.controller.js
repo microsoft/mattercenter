@@ -52,10 +52,5 @@
             vm.pageLoadCompleted = function () {
                 jQuery.a11yfy.assertiveAnnounce("Home page loaded successfully");
             }
-
-            vm.navigate = function (path) {
-                $state.go(path);               
-            }
-
         }]);
 })();

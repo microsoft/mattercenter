@@ -14,15 +14,15 @@
           ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn7Header):null"
           ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)"
           ng-show='grid.appScope.vm.opendateDropDown'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' type='button'
+        <a tabindex="-1" href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' 
            ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn7Header):null"
            ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)">
-            <img src='../images/icon-combobox.png' tabindex="0" />
+            <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png'  />
         </a>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' type='button'
+        <a tabindex="-1" href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' 
            ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn5Header):null"
            ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)">
-            <img src='../images/icon-combobox.png' tabindex="0" />
+            <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png'  />
         </a>
     </span>
 

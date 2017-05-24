@@ -1497,8 +1497,10 @@
             cm.removeAssignPermissionsRow = function (index) {
                 var remainingRows = cm.assignPermissionTeams.length;
                 if (1 < remainingRows) {
+                    var userAboutToDelete = getUserName(cm.assignPermissionTeams[index].assignedUser, true);
+                    userAboutToDelete = userAboutToDelete == undefined || userAboutToDelete.length == 0 ? "" : userAboutToDelete[0];
                     cm.assignPermissionTeams.splice(index, 1);
-                    jQuery.a11yfy.assertiveAnnounce('permission row removed successfully');
+                    jQuery.a11yfy.assertiveAnnounce(userAboutToDelete+'permission row removed successfully');
                 }
                 cm.notificationPopUpBlock = false;
                 cm.notificationBorder = "";

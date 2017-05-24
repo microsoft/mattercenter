@@ -42,8 +42,7 @@
                         </li>
                         <li class='ms-ContextualMenu-item'  role="menuitem"   tabindex="0"
                             aria-label="{{vm.header.Menu1Option3Title}} use tab to move to next item or shift + tab to move to previous item"
-                            ng-click="vm.navigate('mc.documents')" 
-                            ng-keydown="$event.keyCode==13?vm.navigate('mc.documents'):$event.keyCode==9 && !vm.canLoginUserCreateMatter?vm.closeMenu():null">
+                            ng-click="vm.navigate('mc.documents')" ng-keydown="$event.keyCode==13?vm.navigate('mc.documents'):null">
                             <a tabindex="-1"  aria-hidden="true" 
                                aria-label="{{vm.header.Menu1Option3Title}} use tab to move to next item or shift + tab to move to previous item" 
                                ui-sref='mc.documents()'
@@ -53,8 +52,7 @@
                         </li>
                         <li class='ms-ContextualMenu-item'  role="menuitem"  tabindex="0"
                             aria-label="{{vm.header.Menu1Option4Title}} use shift + tab to move to previous item"
-                            ng-click="vm.navigate('mc.createMatter')" 
-                            ng-keydown="$event.keyCode==13?vm.navigate('mc.createMatter'):$event.keyCode==9?vm.closeMenu():null">
+                            ng-click="vm.navigate('mc.createMatter')" ng-keydown="$event.keyCode==13?vm.navigate('mc.createMatter'):null">
                             <a tabindex="-1" aria-hidden="true" 
                                aria-label="{{vm.header.Menu1Option4Title}} use shift + tab to move to previous item"
                                ng-keydown="$event.keyCode==9?vm.menuClick():null" ui-sref='mc.createMatter()'
@@ -68,8 +66,7 @@
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
                 <span tabindex="-1" class="AppLogoContainer">
-                    <img tabindex="-1" ng-show="!vm.globalSettings.isBackwardCompatible" class="AppLogo" 
-                         aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png" title="{{vm.header.LogoImageTitle}}" alt="{{vm.header.LogoImageTitle}}">
+                    <img tabindex="0" ng-show="!vm.globalSettings.isBackwardCompatible" class="AppLogo" aria-label="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
                     <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoFirstPart">CELA </span>
                     <span ng-if="vm.globalSettings.isBackwardCompatible" class="ApplogoSecondPart">Project Center</span>
                 </span>
@@ -116,8 +113,8 @@
                     </div>
                 </div>
             </div>
-            <div tabindex="0" id="ProfileSwitcher" tabindex="0" ng-keydown="$event.keyCode==27?$root.dispPersonal($event):null" ng-click="$root.dispPersonal($event)">
-                <img tabindex="0" class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
+            <div tabindex="0" id="ProfileSwitcher"  ng-keydown="$event.keyCode==27?$root.dispPersonal($event):null" ng-click="$root.dispPersonal($event)">
+                <img  class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
             </div>
             <div tabindex="0" class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();" role="region">
                 <div class="PersonaContainer">

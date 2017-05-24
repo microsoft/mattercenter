@@ -17,7 +17,7 @@
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
                 
                     <figure>
-                        <img ng-click="vm.navigate('mc.matters')" ng-keydown="$event.keyCode==13?vm.navigate('mc.matters'):null"  tabindex="0"  role="link"
+                        <img ui-sref='mc.matters()'  tabindex="0"  role="link"
                             aria-live="assertive" aria-atomic="true" aria-label="{{vm.navigationContent.Image1Title}}" 
                              src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
@@ -27,7 +27,7 @@
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
                 
                     <figure>
-                        <img ng-click="vm.navigate('mc.documents')" ng-keydown="$event.keyCode==13?vm.navigate('mc.documents'):null"  role="link"
+                        <img ui-sref='mc.documents()'  role="link"
                             aria-live="assertive" aria-atomic="true" tabindex="0" aria-label="{{vm.navigationContent.Image2Title}}" 
                              src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
