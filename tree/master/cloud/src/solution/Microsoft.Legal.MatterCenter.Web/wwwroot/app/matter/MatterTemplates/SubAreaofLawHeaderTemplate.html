@@ -1,14 +1,15 @@
-﻿<div ng-mouseenter='grid.appScope.vm.subArealawDropDowm = true' ng-mouseleave='grid.appScope.vm.subArealawDropDowm = false' col-index='renderIndex' role="columnheader">
+﻿<div col-index='renderIndex' role="columnheader">
 
     
         <span style='padding-left: 4px;' role='button' sortby="{{col.colDef.field}}"  
               class='ui-grid-cell-contents ui-grid-header-cell-primary-focus  ui-grid-header-cell-label ng-binding' 
-              tabindex="0" ng-focus="grid.appScope.vm.subArealawDropDowm = true">
+              tabindex="0"  ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'>
             {{ col.colDef.displayName }}
             <span class="headerfilter"
                   ng-if="grid.appScope.vm.subareafilter"><i class="ms-Icon ms-Icon--filter"></i></span><span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
-        <span tabindex="0" class='sorticon keep-open' ng-show='grid.appScope.vm.subArealawDropDowm'
+        <span tabindex="0" class='sorticon keep-open'
+               ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn6Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn6Header)"
               >
@@ -20,7 +21,7 @@
             <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn4Header)" >
-                <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png' tabindex="-1" />
+                <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='../images/icon-combobox.png' tabindex="-1" />
             </a>
         </span>
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>

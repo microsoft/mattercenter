@@ -1,7 +1,8 @@
-﻿<div ng-mouseenter='grid.appScope.vm.modifieddateDropDown = true' 
-     ng-mouseleave='grid.appScope.vm.modifieddateDropDown = false' role="columnheader">
+﻿<div  role="columnheader" style="height: 27px;margin-top: 4px;">
     
-        <span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex="0" ng-focus='grid.appScope.vm.modifieddateDropDown = true' title='Click to sort by last modified date'>
+        <span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex="0"
+               ng-keydown="$event.keyCode==13?grid.appScope.sortChangedDocument(grid,[col]):null"
+               ng-focus='grid.appScope.vm.ariaMessage("click this column to sort search results based on "+col.colDef.field+" column ")' >
             {{ col.colDef.displayName }}
             <span class="headerfilter" ng-if="grid.appScope.vm.moddatefilter"><i class="ms-Icon ms-Icon--filter"></i></span>
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
@@ -10,14 +11,14 @@
               ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header):null"
                ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header)" 
                
-              ng-show='grid.appScope.vm.modifieddateDropDown'>
+              ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'>
 
             <a href='javascript:;' class='prisma-header-dropdown-anchor'
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header):null"
                ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header)" 
                type='button'>
 
-                <img src='/../../images/icon-combobox.png'  />
+                <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
             </a>
         </span>
 

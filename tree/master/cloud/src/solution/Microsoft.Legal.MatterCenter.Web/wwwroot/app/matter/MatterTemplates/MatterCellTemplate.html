@@ -7,7 +7,7 @@
            details={{row.entity}} 
          title='{{row.entity.matterName}}'>
         <!--<a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>-->
-        <a  matterflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis'
+        <a  matterflyout  class='btn btn-link col-xs-12 col-sm-12 txtellipsis'
            style='text-align:left;text-decoration: none;' 
            href=""  aria-label="Matter {{row.entity.matterName}} link. On clicking of this link will open a flyout where user can take more action on that matter."
            title="{{row.entity.matterName}}"
@@ -25,11 +25,11 @@
                 href=''  aria-label="Context Menu" 
            title="{{row.entity.matterName}} Context Menu"
           aria-live="assertive"     aria-atomic="true"       
-                type='button' ng-click="grid.appScope.vm.checkUrlExists(row.entity)" dropdown data-toggle='dropdown'></a>
-            <ul class='dropdown-menu' role="menu">
+                ng-click="grid.appScope.vm.checkUrlExists(row.entity)" dropdown data-toggle='dropdown'></a>
+            <ul class='dropdown-menu' >
                 <div ng-if="grid.appScope.vm.dropDownMenu">
                     <li class='ms-ContextualMenu-item' 
-                        ng-keydown=grid.appScope.vm.keydownFunction($event,'upload',row.entity) role="menuitem">
+                        ng-keydown=grid.appScope.vm.keydownFunction($event,'upload',row.entity)>
                         <a tabindex="0" ng-if="!grid.appScope.vm.hideUpload" 
                            class="ECBItem ms-ContextualMenu-link upload is-disabled"
                            aria-label="Upload to this matter disabled"
@@ -46,12 +46,12 @@
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}
                         </a>
                     </li>
-                    <li role="menuitem" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'viewmatterdetails',row.entity)">
+                    <li  class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'viewmatterdetails',row.entity)">
                         <a tabindex="0" aria-live="assertive" aria-atomic="true"  id="matterViewBtn"
                            aria-label="View matter details"
                            title="{{grid.appScope.vm.matterConfigContent.ECBMenu2Title}}" href="" class='ECBItem ms-ContextualMenu-link upload' ng-click="grid.appScope.vm.viewMatterDetails(row.entity.matterClientUrl,row.entity.matterGuid)">{{grid.appScope.vm.matterConfigContent.EllipsisLink2Text}}</a>
                     </li>
-                    <li role="menuitem" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'matteronenoteurl',row.entity)">
+                    <li  class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'matteronenoteurl',row.entity)">
                         <a tabindex="-1" ng-if="!grid.appScope.vm.urlExists"
                            aria-live="assertive" aria-atomic="true"
                            aria-label="Go to matter one note"
@@ -64,7 +64,7 @@
                             {{grid.appScope.vm.matterConfigContent.EllipsisLink3Text}}
                         </a>
                     </li>
-                    <li role="menuitem" tabindex="0" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'pinorunpin',row)"
+                    <li  tabindex="0" class='ms-ContextualMenu-item' ng-keydown="grid.appScope.vm.keydownFunction($event,'pinorunpin',row)"
                         ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinMatter(row)'>
                         <a aria-live="assertive" aria-atomic="true" id="matterPinBtn"
                            aria-label="Pin or  unpin this matter"

@@ -189,7 +189,10 @@
             }
         };
         //#endregion
-
+        //#region function to annouce text in Jaws for screen reader.
+        vm.ariaMessage = function (message) {
+            jQuery.a11yfy.assertiveAnnounce(message);
+        }
         //#region To get the column header name
         vm.switchFuction = function (columnName) {
             var displayColumn = [];
@@ -236,7 +239,7 @@
         //#endregion
 
         //#region To get the column schema and populate in column collection for grid with sorting of column display
-        $templateCache.put('coldefheadertemplate.html', "<div style='overflow: hidden; -ms-text-overflow: ellipsis; max-width: 160px;' role='columnheader' col-index='renderIndex'><span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div>");
+        $templateCache.put('coldefheadertemplate.html', "<div style='overflow: hidden; -ms-text-overflow: ellipsis; max-width: 160px;' role='columnheader' style='height: 30px; padding-top:3px;margin-top: 4px;' col-index='renderIndex'><span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex='0' ng-focus='grid.appScope.vm.ariaMessage(\"Click to sort by \" ) '   title='Column name'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div>");
 
         //Declaring column collection object.
         // Collection requires as columns defination will be read through appsettings files and - 
@@ -261,7 +264,7 @@
                     width: value.width,
                     enableHiding: value.enableHiding,
                     cellTemplate: value.cellTemplate,
-                    headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', displaycolVal[1]) : value.headerCellTemplate,
+                    headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Column name', displaycolVal[1]) : value.headerCellTemplate,
                     position: value.position,
                     cellClass: value.cellClass,
                     headerCellClass: value.headerCellClass,
@@ -309,6 +312,7 @@
                         vm.checker = false;
                         row.entity.checker = false;
                     }
+                    vm.currentRow = row.entity;
                     isOpenedInOutlook();
                 });
                 $animate.enabled(gridApi.grid.element, false);
@@ -1746,6 +1750,7 @@
 
         //#region Functionality to do filter on option selected for my and pinned or all documnets
         vm.FilterByType = function () {
+            vm.beforeSortingAccessibilityMessage(searchRequest);
             if (vm.documentid == 3) {
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
@@ -1753,13 +1758,14 @@
                 searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                 vm.gridOptions.data = [];
                 getPinnedDocuments(searchRequest, function (response) {
-
+                   
                     if (response == "" || response.errorCode == "500") {
                         vm.gridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = true;
                         $scope.errorMessage = response.message;
                     } else {
+                        vm.afterSortingAccessibilityMessage(searchRequest);
                         vm.divuigrid = true;
                         vm.nodata = false;
                         angular.forEach(response, function (res) {
@@ -1775,6 +1781,7 @@
                 });
             }
             else {
+               
                 get(searchRequest, function (response) {
                     if (response.errorCode == "404") {
                         vm.divuigrid = false;
@@ -1796,6 +1803,7 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+                                vm.afterSortingAccessibilityMessage(searchRequest);
                                 vm.divuigrid = true;
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
@@ -1833,7 +1841,7 @@
         //#endregion
 
         //#region for sorting in direction selected by user
-        vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {
+        vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {           
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
@@ -1895,7 +1903,7 @@
                     vm.lazyloader = false;
                     vm.divuigrid = false;
                     if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined   ) {
                             if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
                                 vm.FileNameSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1909,7 +1917,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClient.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
                                 vm.DocumentClientSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1923,7 +1931,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClientId.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
                                 vm.DocumentClientIDSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1936,7 +1944,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentModifiedDate.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
                                 vm.ModiFiedDateSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1949,7 +1957,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentOwner.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
                                 vm.AuthorSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1962,7 +1970,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentPracticeGroup.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.DocumentPracticeGroupSort == undefined || vm.DocumentPracticeGroupSort == "asc") {
                                 vm.DocumentPracticeGroupSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyPracticeGroup, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1976,7 +1984,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentVersion.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
                                 vm.VersionSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -1989,7 +1997,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCheckoutUser.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
                                 vm.CheckoutSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -2002,7 +2010,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCreatedDate.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                                 vm.CreatedSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -2015,7 +2023,7 @@
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentMatterName.keyName.trim().toLowerCase()) {
-                        if (sortColumns[0].sort != undefined) {
+                        if (sortColumns[0].sort != undefined  ) {
                             if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                                 vm.CreatedSort = "desc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
@@ -2114,14 +2122,17 @@
                 }
                 if (checked) {
                     $scope.gridApi.selection.selectAllRows();
+                    jQuery.a11yfy.assertiveAnnounce("all document rows in page are selected");
                 }
                 else {
                     $scope.gridApi.selection.clearSelectedRows();
                     vm.selectedRows = [];
                     vm.showErrorAttachmentInfo = false;
+                    jQuery.a11yfy.assertiveAnnounce("all selected document rows in page are unselected");
 
                 }
             }
+            
             isOpenedInOutlook();
             if (!$scope.$$phase) {
                 $scope.$apply();
@@ -2132,27 +2143,33 @@
 
         //#region Functionality to get document assets.
         vm.getDocumentAssets = function (row) {
+           
+        }
+        //#endregion
+
+        //#region Functionality to get document URL.
+        vm.gotoDocumentUrl = function (documentInfo) {
+            var row = vm.currentRow && vm.currentRow != "" ? vm.currentRow : documentInfo;
+            vm.lazyloader = false;
             vm.assetsuccess = false;
+            var url = row.documentClientUrl;
             var Client = {
-                Id: (row.entity.documentParentUrl.replace("/Forms/AllItems.aspx", "") + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
-                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx", "").replace("/sitepages/", "/"),
-                Url: row.entity.documentClientUrl
+                Id: (row.documentParentUrl.replace("/Forms/AllItems.aspx", "") + "/" + row.documentName + "." + row.documentExtension).replace(configs.uri.SPOsiteURL, ""),
+                Name: row.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx", "").replace("/sitepages/", "/"),
+                Url: row.documentClientUrl
             }
             GetAssets(Client, function (response) {
                 vm.listguid = response.listInternalName;
                 vm.docguid = response.documentGuid;
                 vm.assetsuccess = true;
+                vm.lazyloader = true;
+                if (vm.assetsuccess) {
+                    $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500');
+                } else {
+                    $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
+                }
             });
-        }
-        //#endregion
-
-        //#region Functionality to get document URL.
-        vm.gotoDocumentUrl = function (url) {
-            if (vm.assetsuccess) {
-                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500');
-            } else {
-                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
-            }
+            
         }
         //#endregion
 
@@ -2338,6 +2355,7 @@
             }
             else if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {
                 angular.element($(event.currentTarget.children[0])).removeClass('open');
+                $scope.gridApi.selection.unSelectRow(vm.currentRow);
             }
             jQuery.a11yfy.assertiveAnnounce("Expanded document search results context menu");
         }
@@ -2364,7 +2382,11 @@
         //in the header column
         vm.toggleCheckerForKeyDown = function (temp, currentRow, event) {
             temp = temp ? false : true;
+            var checkedMessage = temp ? "checked" : "unchecked";
             currentRow.checker = temp;
+            console.log(checkedMessage);
+            jQuery.a11yfy.assertiveAnnounce("checkbox " + checkedMessage);
+
         }
         //To handle keyboard navigation to open document menu option
         vm.documentsCombobox = function (event, id) {
@@ -2385,6 +2407,23 @@
         vm.pageLoadCompleted = function () {
             jQuery.a11yfy.assertiveAnnounce("Documents search page loaded successfully");
         }
+
+        //#region 
+        vm.beforeSortingAccessibilityMessage = function (searchRequest) {
+            if (searchRequest.SearchObject.Sort.Direction == 0) {
+                jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+            } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+            }
+        }
+        vm.afterSortingAccessibilityMessage = function (searchRequest) {
+            if (searchRequest.SearchObject.Sort.Direction == 0) {
+                jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+            } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+            }
+        }
+        //#endregion
     }]);
 
     //#region For adding custom filter 

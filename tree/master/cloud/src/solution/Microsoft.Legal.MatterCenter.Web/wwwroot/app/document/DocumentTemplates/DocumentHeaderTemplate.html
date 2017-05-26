@@ -1,16 +1,16 @@
-﻿<div ng-mouseenter='grid.appScope.vm.documentDropDown = true'
-     ng-mouseleave='grid.appScope.vm.documentDropDown = false' role="columnheader">
-    <span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex="0" role='button'
+﻿<div  role="columnheader" style="height: 27px;margin-top: 4px;">
+    <span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex="0" 
           title='{{grid.appScope.vm.documentConfigContent.GridColumn1HeaderTitle}}'
-          ng-focus='grid.appScope.vm.documentDropDown = true' col-index='renderIndex'>
-        <img class="docTypeIconHeader" id="docTypeIcon"
-             src="/../../Images/generaldocument.png"
-             alt="Document type icon" />{{ col.colDef.displayName }}
+          ng-keydown="$event.keyCode==13?grid.appScope.sortChangedDocument(grid,[col]):null"
+              col-index='renderIndex' >
+        <img  class="docTypeIconHeader" id="docTypeIcon"
+            tabindex="-1" src="/../../Images/generaldocument.png"
+             alt="Document type icon" style="margin-top:-7px;" />{{ col.colDef.displayName }}
         <span class="headerfilter" ng-if="grid.appScope.vm.documentfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
         <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
     </span>
     <span class='sorticon keep-open'
-          ng-show='grid.appScope.vm.documentDropDown'
+          ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
           aria-label="filter by document name"
           aria-live="assertive" aria-atomic="true"
           aria-hidden="false"
@@ -25,7 +25,7 @@
            ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header):null;$event.stopPropagation();"
            class='prisma-header-dropdown-anchor'
            type='button'>
-            <img src='/../../images/icon-combobox.png'  />
+            <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
         </a>
     </span>
 

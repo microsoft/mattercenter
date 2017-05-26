@@ -3,6 +3,6 @@
         <input type="checkbox" role="checkbox" ui-grid-editor id="doc{{row.entity.documentID}}" 
                aria-label="For document {{row.entity.documentName}}" 
                 ng-input="MODEL_COL_FIELD" ng-model="MODEL_COL_FIELD" 
-               ng-keydown="$event.keyCode==13?grid.appScope.vm.toggleCheckerForKeyDown(MODEL_COL_FIELD,row.entity):null" ng-change="grid.appScope.vm.toggleChecker(MODEL_COL_FIELD,{{row.entity}})"> 
+               ng-keydown="$event.keyCode==32?grid.appScope.vm.toggleCheckerForKeyDown(MODEL_COL_FIELD,row.entity):null" ng-change="grid.appScope.vm.toggleChecker(MODEL_COL_FIELD,{{row.entity}})"> 
     </div>
 </div>

@@ -163,6 +163,10 @@
             };
             //#endregion
 
+            vm.ariaMessage = function(message){
+                jQuery.a11yfy.assertiveAnnounce(message);
+            }
+
             //#region To get the column header name
             vm.switchFuction = function (columnName) {
                 var displayColumn = [];
@@ -208,7 +212,7 @@
             };
             //#endregion
 
-            $templateCache.put('coldefheadertemplate.html', "<div><div  aria-label='{{ col.colDef.displayName }}'  class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' tabindex='0'  title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+            $templateCache.put('coldefheadertemplate.html', "<div><div  aria-label='{{ col.colDef.displayName }}'  class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' tabindex='0' ng-focus='grid.appScope.vm.ariaMessage(\"Click to sort by \" ) '  title='Column name'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
             //#region To get the column schema and populate in column collection for grid with sorting of column display
             //Declaring column collection object.
@@ -224,7 +228,7 @@
                         width: value.width,
                         enableHiding: value.enableHiding,
                         cellTemplate: value.cellTemplate,
-                        headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', displaycolVal[1]) : value.headerCellTemplate,
+                        headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', displaycolVal[1]).replace('Column name', displaycolVal[1]) : value.headerCellTemplate,
                         position: value.position,
                         cellClass: value.cellClass,
                         headerCellClass: value.headerCellClass,
@@ -269,6 +273,9 @@
                         vm.selectedRow.matterGuid = row.entity.matterGuid;
                         vm.currentRow = row.entity;
                     });
+                    //$scope.gridApi.cellNav.on.navigate($scope, function (newRowCol, oldRowCol) {
+                    //    $scope.gridApi.selection.selectRow(newRowCol.row.entity);
+                    //})
                     $animate.enabled(gridApi.grid.element, false);
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
@@ -3307,6 +3314,7 @@
             vm.keydownFunction = function (event, funcName, currentRow) {
                 if (event.keyCode != 38 && event.keyCode != 40 && event.keyCode != 9) {                    
                     angular.element($(event.currentTarget.parentElement.parentElement.parentElement)).removeClass('open');
+                    $scope.gridApi.selection.unSelectRow(vm.currentRow);
                     jQuery.a11yfy.assertiveAnnounce("Collapsing matter search results context menu ");
                 }
                 switch (funcName.toLowerCase()) {
