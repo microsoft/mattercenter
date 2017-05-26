@@ -80,20 +80,20 @@
         </div>
     </div>
     <div class="row title">
-        <h1 tabindex="0" class="col-sm-12" id="gridViewPageHeaderContainer" role="heading">
+        <h1  class="col-sm-12" id="gridViewPageHeaderContainer" role="heading">
             <span aria-label="The below gird will display {{vm.mattername}}" role="heading" class="add-margin-bottom">{{vm.mattername}}</span>
         </h1>
     </div>
     <div class="row" id="mattergrid" role="region">
-        <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter
+        <div class="col-sm-12" ng-if="vm.divuigrid" role="grid" aria-readonly="true">
+            <div ui-grid="vm.gridOptions"  ui-grid-exporter 
                  aria-labelledby="gridViewPageHeaderContainer"
                  ui-grid-selection
                  data-ui-grid-infinite-scroll
                  class="grid"
                  aria-label="The grid will display matters based on the matter type that has been selected and grid is having sorting, filtering and pagination functionality"
                  ng-style="vm.getTableHeight()"
-                 role="grid" aria-readonly="true">
+                 role="presentation" >
                 <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText"
                      aria-live="assertive"
                      aria-atomic="true"
@@ -350,7 +350,7 @@
         </div>
     </div>
     <div class="popupContainerBackground" ng-hide="vm.lazyloader"></div>
-    <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
+    <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-keydown="$event.keyCode==27?vm.matterheader=true:null" ng-hide="vm.matterheader">
         <div class='input-group'>
             <input aria-label="enter search criteria to filter by matter name" id="matMatterName" tabindex="0" role="textbox" class='form-control' my-Enter='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <input aria-label="enter search criteria to filter by client name" id="matMatterClientName" role="textbox" tabindex="0" class='form-control' my-Enter='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn3Header   && !vm.globalSettings.isBackwardCompatible" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
@@ -470,7 +470,7 @@
             </div>
         </div>
     </div>
-    <div class="matterheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterdateheader">
+    <div class="matterheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-keydown="$event.keyCode==27?vm.matterdateheader=true:null" ng-hide="vm.matterdateheader">
         <div ng-show="vm.filtername=='Open Date' || vm.filtername=='Created Date'">
             <div class='input-group'>
                 <input type='text' id="matOpenCreatedDate"

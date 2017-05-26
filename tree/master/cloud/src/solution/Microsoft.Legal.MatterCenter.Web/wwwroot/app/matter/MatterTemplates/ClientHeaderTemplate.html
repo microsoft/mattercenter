@@ -1,11 +1,10 @@
-﻿<div ng-mouseenter='grid.appScope.vm.clientDropDowm = true' 
-     tabindex="0" role="columnheader"
-     ng-mouseleave='grid.appScope.vm.clientDropDowm = false'>
+﻿<div 
+      role="columnheader"  >
 
     
         <span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus  ui-grid-header-cell-label ng-binding' 
               tabindex="0" style="padding-left: 4px;" sortby="{{col.colDef.field}}"
-              ng-focus='grid.appScope.vm.clientDropDowm = true'>
+               ng-focus='grid.appScope.vm.ariaMessage("click this column to sort search results based on "+col.colDef.field+"  column")'>
             {{ col.colDef.displayName }}
             <span class="headerfilter" ng-if="grid.appScope.vm.clientfilter">
                 <i class="ms-Icon ms-Icon--filter"></i>
@@ -15,8 +14,7 @@
         </span>
         <span class='sorticon keep-open' 
               tabindex="0"
-              
-              ng-show='grid.appScope.vm.clientDropDowm'
+              ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
               ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn3Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn3Header):null"
               >

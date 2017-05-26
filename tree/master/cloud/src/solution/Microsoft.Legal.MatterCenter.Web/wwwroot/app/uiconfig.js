@@ -453,7 +453,7 @@
     "AriaLabelDropdown1Item1": "Combobox list item 1 - All Matters",
     "AriaLabelDropdown1Item2": "Combobox list item 2 - My Matters",
     "AriaLabelDropdown1Item3": "Combobox list item 3 - Pinned Matters",
-    "AriaLabelSearchMatterButton": "Click button to search matter"
+    "AriaLabelSearchMatterButton": "Activate button to search matter"
   },
   "Navigation": {
     "MenuItem1LinkTitle": "Home",

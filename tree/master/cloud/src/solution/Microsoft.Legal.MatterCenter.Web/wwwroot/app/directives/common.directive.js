@@ -187,9 +187,9 @@
                             $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '220px');
                         }
                     }
-                   // if (scope.$$phase && !scope.$$phase) {
+                  // if (scope.$$phase && !scope.$$phase) {
                         scope.$apply();
-                    //}
+                   //}
                 });
             },
             controller: function ($scope) {
@@ -229,7 +229,7 @@
     function documentflyout($http, $compile, $templateCache, $rootScope) {
         return {
             restrict: 'A',
-            scope: { loader: '=' },
+           
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
                     $rootScope.dispcontextualhelpinner = true;
@@ -244,6 +244,12 @@
                     $(".MenuCaption").removeClass("hideMenuCaption");
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
+                    scope.documentInfo = {};
+                    scope.documentInfo.documentParentUrl = obj.documentParentUrl;
+                    scope.documentInfo.documentMatterUrl = obj.documentMatterUrl;
+                    scope.documentInfo.documentClientUrl = obj.documentClientUrl;
+                    scope.documentInfo.documentExtension = obj.documentExtension;
+                    scope.documentInfo.documentName = obj.documentName;
                     if (obj.documentMatter == "") {
                         obj.documentMatter = "NA";
                     }
@@ -265,10 +271,9 @@
 
                     var actualcontent = "";
                     actualcontent = '<div class="" ng-click="stopEvent($event)">\
-                                     <img id="FlyoutPopupLoading" ng-show="!loader" title="Loading" src="../Images/WindowsLoadingFast.GIF" alt="Loading">\
                                    <div class="FlyoutBoxContent flyoutwidth" style="height:270px">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
-                                           <div ng-if="loader" >\
+                                           <div  >\
                                        <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
                                       <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText" title="' + obj.documentName + '">  ' + obj.documentName + ' </div>\
@@ -306,7 +311,7 @@
                                           <div class="ms-font-m FlyoutContent" datefilter title="' + obj.documentCreatedDate + '" date=' + obj.documentCreatedDate + '>' + obj.documentCreatedDate + '</div>\
                                        </div>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" href="" style="width:190px" ng-keydown="gotoUrl(\'' + obj.documentClientUrl + '\',$event)" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
+                                      <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  href="" style="width:190px" ng-keydown="gotoUrl(\'' + obj.documentClientUrl + '\',$event)" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
@@ -338,12 +343,12 @@
                     //To handle Accessability Fixes for KeyBoard Navigation
                     $('.popcontent').css('display', 'none');
                     if (event==undefined) {
-                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl(url);
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl($scope.documentInfo);
                     }
                     if (event && event.keyCode == 9) {
 
                     } else if (event && event.keyCode == 13) {
-                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl(url);
+                        $scope.$parent.$parent.$parent.grid.appScope.vm.gotoDocumentUrl($scope.documentInfo);
                     }
                 }
                 $scope.stopEvent = function ($event) {

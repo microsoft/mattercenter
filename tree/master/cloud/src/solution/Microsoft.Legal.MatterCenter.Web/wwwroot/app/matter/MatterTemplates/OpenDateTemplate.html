@@ -1,8 +1,7 @@
-﻿<div ng-mouseenter='grid.appScope.vm.opendateDropDown = true'
-     ng-mouseleave='grid.appScope.vm.opendateDropDown = false' role="columnheader">
+﻿<div  role="columnheader">
     <span style='padding-left: 4px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding'
           tabindex="0"
-          ng-focus='grid.appScope.vm.opendateDropDown = true'
+          ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
           title='{{grid.appScope.vm.globalSettings.isBackwardCompatible ? grid.appScope.vm.matterConfigContent.GridColumn5HeaderTitle : grid.appScope.vm.matterConfigContent.GridColumn7HeaderTitle }}'>
         {{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.opendatefilter">
             <i class="ms-Icon ms-Icon--filter"></i>
@@ -13,7 +12,7 @@
           tabindex="0"
           ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn7Header):null"
           ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)"
-          ng-show='grid.appScope.vm.opendateDropDown'>
+          ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'>
         <a tabindex="-1" href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' 
            ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn7Header):null"
            ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)">
@@ -22,7 +21,7 @@
         <a tabindex="-1" href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" id='acombo' 
            ng-keydown="$event.keyCode==13?grid.appScope.vm.matterConfigContent($event,grid.appScope.vm.matterConfigContent.GridColumn5Header):null"
            ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)">
-            <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png'  />
+            <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='../images/icon-combobox.png'  />
         </a>
     </span>
 

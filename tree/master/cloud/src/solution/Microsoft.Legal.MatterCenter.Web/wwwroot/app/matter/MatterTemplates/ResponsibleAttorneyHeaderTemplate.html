@@ -1,4 +1,4 @@
-﻿<div ng-mouseenter='grid.appScope.vm.attorneyDropDowm = true' ng-mouseleave='grid.appScope.vm.attorneyDropDowm = false' sortby="{{col.colDef.field}}" col-index='renderIndex' role="columnheader">
+﻿<div   sortby="{{col.colDef.field}}" col-index='renderIndex' role="columnheader">
 
     
         <span style='padding-left: 4px;'  class='ui-grid-cell-contents ui-grid-header-cell-primary-focus  ui-grid-header-cell-label ng-binding'
@@ -12,13 +12,14 @@
         </span>
 
         <span class='sorticon keep-open' tabindex="0"
+               ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
               ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)"
-              ng-show='grid.appScope.vm.attorneyDropDowm'>
+             >
             <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" type='button' role="button"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header):null"
                ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)" data-toggle='dropdown'>
-                <img alt="filter dropdown image" title="filter dropdown image" src='../images/icon-combobox.png' tabindex="-1" />
+                <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='../images/icon-combobox.png' tabindex="-1" />
             </a>
         </span>
     
