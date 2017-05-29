@@ -53,7 +53,7 @@
             <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
                     <input type="text" tabindex="0" role="textbox" aria-label="{{vm.matterConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
-                    <span class="input-group-addon cursor" tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <span class="input-group-addon cursor" tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" alt="searchmatter"  id="basic-addon1" ng-click="vm.search()"><i alt="searchmatter"  class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
                 </div>
@@ -62,7 +62,7 @@
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" class="btn btn-default" alt="searchmatter"  ng-click="vm.search()"><i alt="searchmatter"  class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" class="btn btn-default" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)">
                             <span class="caret"></span>
                         </div>

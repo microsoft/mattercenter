@@ -113,8 +113,8 @@
                        href="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}"
                        ng-click="cm.selectMatterType()"
                        data-toggle="modal"
-                       data-target="#myModal">
-                        <span class="glyphicon glyphicon-plus"></span>
+                       data-target="#myModal" alt="selectMatterType">
+                        <span  alt="selectMatterType" class="glyphicon glyphicon-plus"></span>
                         {{cm.createContent.LabelAddOrRemoveTypes}}
                     </a>
 
@@ -469,7 +469,7 @@
 
     <!--Start region for taxonomy level 3-->
     <div role="dialog" aria-labelledby="matterTypeDialog"
-         aria-describedby="instructions" aria-hidden="true"
+        id="mattertypepopup" aria-describedby="instructions" aria-hidden="true"
          title="{{cm.createContent.TitleAddRemoveType}} popup open in overlay"
          class="popUpContainer popUpContainerLevel3" ng-class="cm.popupContainer"
          ng-show="cm.taxonomyHierarchyLevels==3||cm.taxonomyHierarchyLevels==2"
@@ -481,7 +481,7 @@
              tabindex="0"
              ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="alignCenter" id="instructions">
-            <h2 tabindex="0" id="matterTypeDialog" class="popUpFloatLeft"
+            <h2 alt="Select a {{cm.createContent.ColumnName1}}" tabindex="0" id="matterTypeDialog" class="popUpFloatLeft"
                 style="font-size:13px">
                 Select a {{cm.createContent.ColumnName1}}
             </h2>
@@ -643,7 +643,7 @@
                 </div>
 
                 <button ng-click="cm.saveDocumentTemplates()"
-                        tabindex="0"
+                        tabindex="0" alt="saveMatterType"
                         role="button"
                         title="{{cm.createContent.Tab1ButtonSaveSelectiponText}}"
                         class="SavePopUpEntries saveDocButtonLevel3"
