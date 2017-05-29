@@ -1,7 +1,7 @@
 ﻿<style>
     .commonContent {
         display: block !important;
-    } 
+    }    
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
@@ -145,7 +145,7 @@
                                typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)'
                                typeahead-no-results="noResults" class="form-control">
                         <span class="input-group-addon cursor"
-                              id="basic-addon1" ng-click="vm.search()" role="button"
+                              id="basic-addon1" ng-click="vm.search()" role="button"  alt="searchDocuments" 
                               title="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}"
                               aria-label="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}">
                             <i class="glyphicon glyphicon-search"></i>
@@ -298,7 +298,7 @@
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
-                            <div ng-show="vm.AuthornoResults" aria-live="assertive" aria-atomic="true" aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}">
+                            <div ng-show="vm.AuthornoResults" aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}">
                                 <i class="glyphicon glyphicon-remove"></i> {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
                             </div>
                         </div>
@@ -384,14 +384,31 @@
                 <ul class="nav nav-tabs" toggletab>
                     <li id="showDocuments" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
                     <li ng-click="vm.hideTabs($event)" id="myDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText}" class="hideDocTabs">
-                        <a class="noCursor" href=""
-                           ng-show="!vm.lazyloaderdashboard">
+                        <a class="noCursor" href="" role="link" tabindex="0"
+                           ng-show="!vm.lazyloaderdashboard" 
+                           ng-focus='vm.ariaMessage("The data under this tab shows my documents which are uploaded by current login user")'>
                             {{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})
                         </a>
-                        <a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a>
+                        <a  href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" tabindex="0"
+                           ng-focus='vm.ariaMessage("The data under this tab shows my documents which are uploaded by current login user")'
+                           ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a>
                     </li>
-                    <li ng-click="vm.hideTabs($event)" id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs"><a class="noCursor" href="" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
-                    <li ng-click="vm.hideTabs($event)" id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a class="noCursor" href="" ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a><a href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
+                    <li ng-click="vm.hideTabs($event)" id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs">
+                        <a  role="link" class="noCursor" href="" tabindex="0"
+                           ng-focus='vm.ariaMessage("The data under this tab shows all documents which are uploaded by all other user also")'
+                           ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a>
+                        <a  href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" tabindex="0"
+                           ng-focus='vm.ariaMessage("The data under this tab shows all documents which are uploaded by all other user also")'
+                           ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a>
+                    </li>
+                    <li ng-click="vm.hideTabs($event)" id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs">
+                        <a role="link" class="noCursor" href="" tabindex="0"
+                           ng-focus='vm.ariaMessage("The data under this tab shows all documents which are pinned by the current login user")'
+                           ng-show="!vm.lazyloaderdashboard">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a>
+                        <a  href="#Documents" ng-show="vm.lazyloaderdashboard" data-toggle="tab" tabindex="0"
+                           ng-focus='vm.ariaMessage("The data under this tab shows all documents which are pinned by the current login user")'
+                           ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a>
+                    </li>
                 </ul>
                 <span class="showDocDashboard displayDocTabs" ng-click="vm.showDocTabs($event)">...</span>
                 <div class="switchHideTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
@@ -465,15 +482,23 @@
                 <div class="col-xs-offset-8 col-xs-4 docsortby">
                     <div class="pad0 docSortbyText" ng-click="vm.showsortby($event)">
                         <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
-                        <span>{{vm.sortbytext}}</span>
-                        <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
+                        <span tabindex="0" aria-label="the current sort is based on {{vm.sortbytext}}">{{vm.sortbytext}}</span>
+                        <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class=""
+                             tabindex="0" 
+                             title="click this image to open content menu" 
+                             src="../Images/icon-combobox.png" />
                     </div>
                     <div class="docExportIcon" ng-if="vm.center!='mattercenter'">
-                        <span class="img-xls" ng-click="vm.export()" ng-show="vm.lazyloaderdashboard">
+                        <span class="img-xls" 
+                              tabindex="0"
+                              aria-label="click this export button to export the grid data in excel format"
+                              ng-click="vm.export()" 
+                              ng-show="vm.lazyloaderdashboard">
                             <img alt="export" ng-if="!vm.nodata" src="../../images/icxlsx.png" />
                         </span>
                     </div>
-                    <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-8 col-md-4" ng-if="vm.sortbydrop">
+                    <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-8 col-md-4" 
+                         ng-if="vm.sortbydrop" ng-keydown="$event.keyCode==27?vm.sortbydrop=false:null">
                         <ul role="menu">
                             <li role="menuitem" aria-label="{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}" 
                                 ng-keydown="$event.keyCode==13?vm.sortyby('Relevant',vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text):null"

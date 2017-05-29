@@ -4,8 +4,8 @@
 (function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions', '$window', '$filter',
-        function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http, commonFunctions, $window, $filter) {
+    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions', '$window', '$filter','$anchorScroll',
+    function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http, commonFunctions, $window, $filter, $anchorScroll) {
             //#region For declaring variables.
             var vm = this;
             vm.selected = undefined;
@@ -205,7 +205,7 @@
                 field: 'pin',
                 width: '6%',
                 displayName: 'Pin/Unpin',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img title={{row.entity.pinType}} src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img aria-label="This image button will allow the user to pin or unpin the current document" title={{row.entity.pinType}} src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
             });
@@ -1071,9 +1071,11 @@
             vm.showsortby = function ($event) {
                 $event.stopPropagation();
                 if (!vm.sortbydropvisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding context menu");
                     vm.sortbydrop = true;
                     vm.sortbydropvisible = true;
                 } else {
+                    jQuery.a11yfy.assertiveAnnounce("Collapsing context menu");
                     vm.sortbydrop = false;
                     vm.sortbydropvisible = false;
                 }
@@ -1240,6 +1242,7 @@
 
             //#region For Sorting by Alphebatical or Created date
             vm.FilterByType = function () {
+                vm.beforeSortingAccessibilityMessage(documentRequest);
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
@@ -1254,6 +1257,7 @@
                         if (response && response.length > 0) {
                             vm.documentGridOptions.data = response;
                             vm.getDocumentCounts();
+                            vm.beforeSortingAccessibilityMessage(documentRequest);
                         }
                         else {
                             vm.getDocumentCounts()
@@ -1270,6 +1274,7 @@
 
                         } else {
                             vm.showDocumentAsPinOrUnpin(response, documentRequest);
+                            vm.beforeSortingAccessibilityMessage(documentRequest);
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1431,6 +1436,7 @@
                                 vm.divuigrid = true;
                                 vm.displaypagination = true;
                                 $interval(function () { vm.setPaginationHeight() }, 300, vm.divuigrid);
+                                $anchorScroll();
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -1490,6 +1496,7 @@
                                 }
                                 vm.displaypagination = true;
                                 $interval(function () { vm.setPaginationHeight() }, 300, vm.divuigrid);
+                                $anchorScroll();
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -1640,7 +1647,9 @@
                 }
             }
             //#endregion
-
+            vm.ariaMessage = function (message) {
+                jQuery.a11yfy.assertiveAnnounce(message);
+            }
             //#region Exporting to Excel Test
             vm.export = function () {
                 var exportMatterSearchRequest = {
@@ -1772,7 +1781,20 @@
                 }
             });
 
-
+            vm.beforeSortingAccessibilityMessage = function (searchRequest) {
+                if (searchRequest.SearchObject.Sort.Direction == 0) {
+                    jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+                } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                    jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+                }
+            }
+            vm.afterSortingAccessibilityMessage = function (searchRequest) {
+                if (searchRequest.SearchObject.Sort.Direction == 0) {
+                    jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+                } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                    jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+                }
+            }
             //#region For removing the active class from the tabs that are not selected
             vm.hideTabs = function ($event) {
                 if (!vm.lazyloaderdashboard) {

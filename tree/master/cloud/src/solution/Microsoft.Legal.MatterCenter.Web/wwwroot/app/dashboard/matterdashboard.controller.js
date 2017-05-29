@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window', 'adalAuthenticationService',
-        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window, adalService) {
+    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window', 'adalAuthenticationService', '$anchorScroll',
+        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window, adalService, $anchorScroll) {
             //#region For declaring variables.
             var vm = this;
             vm.selectedRow = {
@@ -200,7 +200,7 @@
                 field: 'pin',
                 displayName: 'Pin',                
                 width: '50',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img title={{row.entity.pinType}} ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img aria-label="This image button will allow the user to pin or unpin the matter" alt="{{row.entity.pinType}}" title="{{row.entity.pinType}}" ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
             });
@@ -209,7 +209,7 @@
                 field: 'upload',
                 displayName: 'Upload',
                 width: '60',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0" showupload loginuser="' + vm.loginUser + '" hideupload={{row.entity.hideUpload}}><img title="upload" class="hideUploadImg" src="../Images/upload-666.png"/><img title="upload" class="showUploadImg" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" showupload loginuser="' + vm.loginUser + '" hideupload={{row.entity.hideUpload}}><img aria-label="This image button will allow the user to upload documents to the current matter" title="upload" class="hideUploadImg" src="../Images/upload-666.png"/><img title="upload" class="showUploadImg" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
                 enableColumnMenu: false,
                 position: 76
             });
@@ -749,6 +749,8 @@
                                 vm.pinMatterCount = 0;
                                 vm.getMatterCounts();
                             }
+                            $timeout(function () { angular.element('#myMatters').focus(); }, 1000);
+                            $anchorScroll();
                         });
                     }
                 });
@@ -926,9 +928,12 @@
             vm.showsortby = function ($event) {
                 $event.stopPropagation();
                 if (!vm.sortbydropvisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding context menu");
                     vm.sortbydrop = true;
                     vm.sortbydropvisible = true;
+                    $timeout(function () { angular.element('#menuSortBy').focus() }, 1000);
                 } else {
+                    jQuery.a11yfy.assertiveAnnounce("Collapsing context menu");
                     vm.sortbydrop = false;
                     vm.sortbydropvisible = false;
                 }
@@ -1736,11 +1741,13 @@
 
             //#region For Sorting by Alphebatical or Created date
             vm.FilterByType = function () {
+                vm.beforeSortingAccessibilityMessage(jsonMatterSearchRequest);
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.displaypagination = false;
                 vm.nodata = false;
                 if (vm.tabClicked === "Pinned Matters") {
+                    
                     jsonMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(jsonMatterSearchRequest, function (response) {
                         if (response == "" || response.length == 0) {
@@ -1768,6 +1775,7 @@
                             vm.divuigrid = true;
                             vm.lazyloaderdashboard = true;
                             vm.displaypagination = true;
+                            vm.afterSortingAccessibilityMessage(jsonMatterSearchRequest);
                         }
                     });
                 }
@@ -1782,6 +1790,7 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
+                            vm.afterSortingAccessibilityMessage(jsonMatterSearchRequest);
                         }
                     });
                 }
@@ -1936,6 +1945,7 @@
                                 }
                                 vm.displaypagination = true;
                                 $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                                $anchorScroll();
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -2007,6 +2017,7 @@
                                 }
                                 vm.displaypagination = true;
                                 $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                                $anchorScroll();
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -2447,6 +2458,22 @@
                 }
             }
 
+            vm.beforeSortingAccessibilityMessage = function (searchRequest) {
+                if (searchRequest.SearchObject.Sort.Direction == 0) {
+                    jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+                } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                    jQuery.a11yfy.assertiveAnnounce("sorting data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+                }
+            }
+            vm.afterSortingAccessibilityMessage = function (searchRequest) {
+                if (searchRequest.SearchObject.Sort.Direction == 0) {
+                    jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in ascending order");
+                } else if (searchRequest.SearchObject.Sort.Direction == 1) {
+                    jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
+                }
+            }
+
+
             //#region to set the dynamic min-width to the pagination div
             vm.setWidthtoPagination = function () {
                 var txt = vm.fromtopage;
@@ -2482,7 +2509,9 @@
                 jQuery.a11yfy.assertiveAnnounce("Matters dashboard page loaded successfully");
             }
             //#endregion
-
+            vm.ariaMessage = function (message) {
+                jQuery.a11yfy.assertiveAnnounce(message);                
+            }
 
             //#region for additional matter properties
             vm.addtionalPropertiesAvaialbleForMatter = false;

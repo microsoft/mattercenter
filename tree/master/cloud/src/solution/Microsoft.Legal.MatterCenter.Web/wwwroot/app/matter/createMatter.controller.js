@@ -450,6 +450,7 @@
 
             getTaxonomyData();
             cm.selectMatterType = function (value) {
+                jQuery.a11yfy.assertiveAnnounce("matter type popup modal opened. Add or remove matter types");
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
                 cm.successBanner = false;
@@ -3488,6 +3489,9 @@
                         cm.popupContainerBackground = "hide";
                         cm.popupContainer = "hide";
                         angular.element('#myModal').modal("hide");
+                        jQuery.a11yfy.assertiveAnnounce("matter type popup modal closed.");
+                      
+                      
                     });
 
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;

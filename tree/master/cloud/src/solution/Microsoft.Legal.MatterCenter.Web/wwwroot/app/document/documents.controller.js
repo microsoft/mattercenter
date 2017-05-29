@@ -239,7 +239,7 @@
         //#endregion
 
         //#region To get the column schema and populate in column collection for grid with sorting of column display
-        $templateCache.put('coldefheadertemplate.html', "<div style='overflow: hidden; -ms-text-overflow: ellipsis; max-width: 160px;' role='columnheader' style='height: 30px; padding-top:3px;margin-top: 4px;' col-index='renderIndex'><span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding' tabindex='0' ng-focus='grid.appScope.vm.ariaMessage(\"Click to sort by \" ) '   title='Column name'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div>");
+        $templateCache.put('coldefheadertemplate.html', "<div style='overflow: hidden; -ms-text-overflow: ellipsis; max-width: 160px;'  tabindex='0' ng-focus='grid.appScope.vm.ariaMessage(\"Click to sort by \" ) ' role='columnheader' style='height: 30px; padding-top:3px;margin-top: 4px;' col-index='renderIndex'><span class='ui-grid-cell-contents ui-grid-header-cell-primary-focus ui-grid-header-cell-label ng-binding'   title='Column name'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div>");
 
         //Declaring column collection object.
         // Collection requires as columns defination will be read through appsettings files and - 

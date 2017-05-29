@@ -56,7 +56,7 @@
             <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
                     <input type="text" tabindex="0" role="textbox" aria-label="{{vm.documentConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                    <span class="input-group-addon cursor" tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <span class="input-group-addon cursor" tabindex="0" alt="searchDocuments"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i alt="searchDocuments" class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
                 </div>
@@ -65,7 +65,7 @@
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" alt="searchDocuments"  class="btn btn-default" ng-click="vm.search()"><i  alt="searchDocuments" class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></div>
                     </div>
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>

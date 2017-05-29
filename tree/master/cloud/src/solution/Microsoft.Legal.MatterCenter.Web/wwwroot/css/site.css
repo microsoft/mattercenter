@@ -1385,7 +1385,7 @@ textarea {
 
 .navtabs ul li {
     z-index: 3;
-    outline: none !important;
+    /*outline: none !important;*/
 }
 
     .navtabs ul li a {
@@ -1615,4 +1615,11 @@ input[type=checkbox]:focus, input[type=radio]:focus,a.ms-Button:focus, button:fo
 
 .height222 {
     height: 222px !important;
+}
+.tabActive{
+   outline: 1px black !important;
+}
+
+.tabInActive{
+   outline: none !important;
 }
