@@ -114,7 +114,7 @@
                 </div>
             </div>
             <div tabindex="0" id="ProfileSwitcher"  ng-keydown="$event.keyCode==27?$root.dispPersonal($event):null" ng-click="$root.dispPersonal($event)">
-                <img  class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
+                <img tabindex="-1"  class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
             </div>
             <div tabindex="0" class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();" role="region">
                 <div class="PersonaContainer">
