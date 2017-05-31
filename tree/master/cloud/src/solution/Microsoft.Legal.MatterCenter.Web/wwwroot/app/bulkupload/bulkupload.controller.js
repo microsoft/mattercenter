@@ -1530,7 +1530,7 @@
                 } else {
                     searchMatterRequest.SearchObject.Filters.FilterByMe = 0;
                 }
-                return matterResource.get(searchMatterRequest).$promise;
+                return bulkuploadResource.get(searchMatterRequest).$promise;
             }
             //#endregion
 
