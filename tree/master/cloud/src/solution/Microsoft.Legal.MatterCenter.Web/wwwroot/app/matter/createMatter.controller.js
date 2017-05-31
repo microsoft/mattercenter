@@ -873,7 +873,7 @@
                         cm.errorBorder = "";
                         if (response.code != 200) {
                             if (cm.iCurrentPage == 1) {
-                                cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
+                                cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;                                
                                         //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                 cm.errorBorder = "mattername"; showErrorNotification("mattername");
                                 cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
@@ -1597,6 +1597,7 @@
 
                     cm.sectionName = "snCreateAndShare";
                     if (localStorage.getItem("iLivePage") == 4) {
+                        cm.nextButtonDisabled = false;
                         cm.iCurrentPage = 4; $timeout(function () { angular.element('#divTab4').focus(); }, 500);
                         cm.sectionName = "snConfigSection";
                     }
@@ -2935,7 +2936,7 @@
                     }
                     else {
                         cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamOrClient1;
-                            //"Select a client for this matter ";
+                        //"Select a client for this matter ";
                         cm.errorBorder = "client";
                         showErrorNotification("client");
                         cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
@@ -2967,7 +2968,7 @@
                             }
                             else {
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityDate;
-                                    //"Enter the date on which the conflict check was performed ";
+                                //"Enter the date on which the conflict check was performed ";
                                 cm.errorBorder = "cdate"; showErrorNotification("cdate");
                                 cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                             }
@@ -3038,7 +3039,7 @@
                 else {
                     cm.errTextMsg = cm.createContent.ErrorMessageEntityDescription;
                     //"Enter a description for this matter.";
-                    showErrorNotification("matterdescription");
+                    showErrorNotification("matterdescription");                   
                     cm.errorBorder = "matterdescription";
                     cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                 }
@@ -3419,6 +3420,7 @@
                             documentType.levelFiveTermName = cm.activeLevelFiveItem.termName;
                             documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
                         }
+                        jQuery.a11yfy.assertiveAnnounce(documentType.termName+"matter type is added.");
                         cm.documentTypeLawTerms.push(documentType);
                         cm.activeDocumentTypeLawTerm = null;
                     }
@@ -3459,6 +3461,7 @@
                 if (cm.removeDTItem) {
                     var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
                     makeEnableSelectedItemInColumn(cm.activeDocumentTypeLawTerm);
+                    jQuery.a11yfy.assertiveAnnounce(cm.activeDocumentTypeLawTerm.termName + "matter type is removed.");
                     cm.documentTypeLawTerms.splice(index, 1);
                     cm.removeDTItem = false;
                     cm.primaryMatterType = false;
@@ -3490,6 +3493,8 @@
                         cm.popupContainer = "hide";
                         angular.element('#myModal').modal("hide");
                         jQuery.a11yfy.assertiveAnnounce("matter type popup modal closed.");
+                        
+                        $timeout(function () { angular.element('#addOrRemoveTypesLink').focus(); }, 500);
                       
                       
                     });

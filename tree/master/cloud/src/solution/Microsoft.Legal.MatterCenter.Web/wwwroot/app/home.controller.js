@@ -75,11 +75,14 @@
                     if ($rootScope.pageIndex == 4 && $window.innerWidth < 675) {
                         angular.element('.zindex6').css('z-index', '2');
                     }
+                    jQuery.a11yfy.assertiveAnnounce("Profile information popup opened with signout button");
                     $rootScope.displayinfo = true;
                     $rootScope.dispinner = false;
                 } else {
                     $rootScope.displayinfo = false;
                     $rootScope.dispinner = true;
+                    jQuery.a11yfy.assertiveAnnounce("Profile information popup closed ");
+                    $timeout(function () { angular.element('#ProfileSwitcher').focus(); }, 500);
                     if ($rootScope.pageIndex == 4 && $window.innerWidth < 675) {
                         angular.element('.zindex6').css('z-index', '6');
                     }

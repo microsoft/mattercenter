@@ -108,7 +108,7 @@
 
                 <div class="gutter"></div>
                 <div class="addmatterType">
-                    <a id="" tabindex="0" aria-label="add or remove types"
+                    <a id="addOrRemoveTypesLink" tabindex="0" aria-label="add or remove types"
                        title="{{cm.createContent.TitleAddRemoveType}}"
                        href="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}"
                        ng-click="cm.selectMatterType()"
@@ -136,7 +136,7 @@
             <div class="sectionContent">
                 <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox"
+                        <input id="chkConflictCheck" type="checkbox" alt="conflict check conducted"
                                role="checkbox"
                                aria-live="assertive"
                                aria-atomic="true"
@@ -162,6 +162,7 @@
                            role="combobox"
                            class="medium clear ui-autocomplete-input"
                            id="txtConflictCheckBy"
+                           alt="Enter the user who conducted the conflict check?"
                            ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-min-length='3' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
@@ -221,6 +222,7 @@
                                aria-live="assertive"
                                aria-atomic="true"
                                typeahead-focus-first=true
+                               alt="Enter the  conflicted users"
                                role="textbox" class="medium clear ui-autocomplete-input"
                                id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}"
                                ng-model="cm.conflictUsers.assignedUser"
@@ -479,6 +481,7 @@
              alt="{{cm.createContent.AriaLabelCloseButton}}"
              src="/../../Images/close-666.png"
              tabindex="0"
+             ng-keydown="$event.keyCode==13?cm.selectMatterTypePopUpClose():null"
              ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="alignCenter" id="instructions">
             <h2 alt="Select a {{cm.createContent.ColumnName1}}" tabindex="0" id="matterTypeDialog" class="popUpFloatLeft"
@@ -642,7 +645,7 @@
                           class="defaultMessageLevel3">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 
-                <button ng-click="cm.saveDocumentTemplates()"
+                <button ng-click="cm.saveDocumentTemplates()" ng-keydown="$event.keyCode==13?cm.saveDocumentTemplates():null"
                         tabindex="0" alt="saveMatterType"
                         role="button"
                         title="{{cm.createContent.Tab1ButtonSaveSelectiponText}}"
