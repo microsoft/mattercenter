@@ -79,6 +79,8 @@
                 $event.stopPropagation();
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
+                $timeout(function () { angular.element('#matterClients').focus(); }, 500);
+                
             }
 
             vm.collapseDateControls = function () {
@@ -1043,10 +1045,12 @@
             //#region This event is going to fire when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type, $event) {
                 $event.stopPropagation();
+                var checkAnnounc = checkAll ? "checked" : "unchecked";
                 if (type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;
                     });
+                    jQuery.a11yfy.assertiveAnnounce("all clients are " + checkAnnounc);
                 }
             }
             //#endregion
@@ -1057,6 +1061,8 @@
                 vm.searchdrop = true;
                 vm.downwarddrop = false;
                 vm.upwarddrop = true;
+                jQuery.a11yfy.assertiveAnnounce("Collapsing advance search section");
+                $timeout(function () { angular.element('#matterClients').focus(); }, 500);
             }
 
             vm.showdownward = function ($event) {
@@ -1064,6 +1070,8 @@
                 vm.searchdrop = false;
                 vm.upwarddrop = false;
                 vm.downwarddrop = true;
+                jQuery.a11yfy.assertiveAnnounce("Exapnding advance search section");
+
             }
             //#endregion
 
@@ -1074,10 +1082,12 @@
                     jQuery.a11yfy.assertiveAnnounce("Expanding context menu");
                     vm.sortbydrop = true;
                     vm.sortbydropvisible = true;
+                    $timeout(function () { angular.element('#menuSortBy').focus() }, 500);
                 } else {
                     jQuery.a11yfy.assertiveAnnounce("Collapsing context menu");
                     vm.sortbydrop = false;
                     vm.sortbydropvisible = false;
+                    $timeout(function () { angular.element('#sortIconCombo').focus() }, 500);
                 }
             }
             //#endregion
@@ -1179,12 +1189,15 @@
             vm.showclientdrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding the clients list popup");
                     if (vm.clients === undefined) {
+                        jQuery.a11yfy.assertiveAnnounce("Loading the clients");
                         vm.lazyloaderdocumentclient = false;
                         getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
                             vm.clients = response.clientTerms;
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
+                            jQuery.a11yfy.assertiveAnnounce("clients list loaded");
                             if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
                                 vm.customSelection(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText);
                             }
@@ -1201,6 +1214,7 @@
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText);
                 } else {
+                    jQuery.a11yfy.assertiveAnnounce("Collapsing the clients list popup");
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.lazyloaderdocumentclient = true;
@@ -1217,6 +1231,7 @@
                         angular.forEach(selectdClients, function (clientInput) {
                             if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
                                 client.Selected = true;
+                                jQuery.a11yfy.assertiveAnnounce(client.name + "checked");
                             }
                         })
                     });

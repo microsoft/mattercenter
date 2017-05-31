@@ -199,13 +199,18 @@
                 vm.showClose = false;
                 vm.showHeaderFlyout = false;
                 vm.showHeaderBackground = false;
+                jQuery.a11yfy.assertiveAnnounce("Collapsing menu");
+                $timeout(function () { angular.element('#hamburgerConatiner').focus(); }, 500);
             }
 
             vm.showCloseIcon = function () {
+                
                 vm.showHamburger = true;
                 vm.showClose = true;
                 vm.showHeaderFlyout = true;
                 vm.showHeaderBackground = true;
+                jQuery.a11yfy.assertiveAnnounce("Expanding menu");
+                $timeout(function () { angular.element('#menuMatterDashboardItem').focus(); }, 500);
             }
             //#endregion
 

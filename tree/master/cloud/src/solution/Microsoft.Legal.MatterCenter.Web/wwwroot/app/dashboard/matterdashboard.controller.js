@@ -914,6 +914,9 @@
                 vm.searchdrop = true;
                 vm.downwarddrop = false;
                 vm.upwarddrop = true;
+                jQuery.a11yfy.assertiveAnnounce("Exapnding advance search section");
+                $timeout(function () { angular.element('#matterClients').focus(); }, 500);
+
             }
 
             vm.showdownward = function ($event) {
@@ -921,21 +924,23 @@
                 vm.searchdrop = false;
                 vm.upwarddrop = false;
                 vm.downwarddrop = true;
+                jQuery.a11yfy.assertiveAnnounce("Collapsing advance search section");
             }
             //#endregion
 
             //#region Showing and Hiding the sortby dropdown
-            vm.showsortby = function ($event) {
+            vm.showsortby = function ($event) {               
                 $event.stopPropagation();
                 if (!vm.sortbydropvisible) {
                     jQuery.a11yfy.assertiveAnnounce("Expanding context menu");
                     vm.sortbydrop = true;
                     vm.sortbydropvisible = true;
-                    $timeout(function () { angular.element('#menuSortBy').focus() }, 1000);
+                    $timeout(function () { angular.element('#menuSortBy').focus() }, 500);
                 } else {
                     jQuery.a11yfy.assertiveAnnounce("Collapsing context menu");
                     vm.sortbydrop = false;
-                    vm.sortbydropvisible = false;
+                    vm.sortbydropvisible = false; 
+                    $timeout(function () { angular.element('#sortIconCombo').focus() }, 500);
                 }
             }
             //#endregion
@@ -987,7 +992,14 @@
             //#region Functionality to get result as per selection of created date
             vm.changeOnCreateDate = function ($event) {
                 if ($event.keyCode == '13' || $event.keyCode == '9') {
-
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
                     var modelValue = $event.target.attributes['ng-model'].value;
 
                     if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
@@ -1035,12 +1047,15 @@
             vm.showClientDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding the clients list popup");
                     if (vm.clients === undefined) {
+                        jQuery.a11yfy.assertiveAnnounce("Loading the clients");
                         vm.lazyloaderclient = false;
                         getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
                             vm.clients = response.clientTerms;
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
+                            jQuery.a11yfy.assertiveAnnounce("clients list loaded");
                             if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
                             }
@@ -1064,6 +1079,7 @@
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
                 } else {
+                    jQuery.a11yfy.assertiveAnnounce("Collapsing the clients list popup");
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -1081,10 +1097,11 @@
             vm.showPracticegroupDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.pgdropvisible) {
-
+                    jQuery.a11yfy.assertiveAnnounce("Expanding the practice group list popup");
                     if (!vm.globalSettings.isBackwardCompatible) {
                         if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                             vm.lazyloaderpg = false;
+                        jQuery.a11yfy.assertiveAnnounce("Loading the practice groups");
                             getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                                 vm.practiceGroups = response.level1;
                                 vm.aolTerms = [];
@@ -1101,6 +1118,7 @@
                                         });
                                     });
                                 });
+                                jQuery.a11yfy.assertiveAnnounce("practice groups lists loaded");
                                 vm.pgdrop = true;
                                 vm.pgdropvisible = true;
                                 if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
@@ -1155,6 +1173,7 @@
                 } else if (vm.pgdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                 } else {
+                    jQuery.a11yfy.assertiveAnnounce("collapsing practice groups popup");
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -1172,9 +1191,11 @@
             vm.showAreaofLawDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.aoldropvisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding the Area of law popup");
                     if (!vm.globalSettings.isBackwardCompatible) {
                         if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                             vm.lazyloaderaol = false;
+                            jQuery.a11yfy.assertiveAnnounce(" Area of law terms are loading");
                             getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                                 vm.practiceGroups = response.level1;
                                 vm.aolTerms = [];
@@ -1185,6 +1206,7 @@
                                 })
                                 vm.aoldrop = true;
                                 vm.aoldropvisible = true;
+                                jQuery.a11yfy.assertiveAnnounce(" Area of law terms are loaded");
                                 if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
                                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                                 }
@@ -1234,6 +1256,7 @@
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                 }
                 else {
+                    jQuery.a11yfy.assertiveAnnounce("collapsing Area of law terms popup");
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -1251,8 +1274,10 @@
             vm.showSubAreaofLawDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.subAolDropVisible) {
+                    jQuery.a11yfy.assertiveAnnounce("Expanding the sub area of law term list popup");
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined) && (vm.subAolTerms === undefined)) {
                         vm.lazyloadersubaol = false;
+                        jQuery.a11yfy.assertiveAnnounce("sub area of law term sare loading");
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
@@ -1266,6 +1291,7 @@
                             })
                             vm.subAoldrop = true;
                             vm.subAolDropVisible = true;
+                            jQuery.a11yfy.assertiveAnnounce("sub area of law terms list loaded");
                             if (vm.selectedSubAOLs !== undefined && vm.selectedSubAOLs.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
                             }
@@ -1290,6 +1316,7 @@
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
                 }
                 else {
+                    jQuery.a11yfy.assertiveAnnounce("collapsing sub area of law terms popup");
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -1313,6 +1340,7 @@
                         angular.forEach(selectdClients, function (clientInput) {
                             if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
                                 client.Selected = true;
+                                jQuery.a11yfy.assertiveAnnounce(client.name+"checked");
                             }
                         })
                     });
@@ -1324,6 +1352,7 @@
                         angular.forEach(selectdPGs, function (pgInput) {
                             if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
                                 pgGroup.Selected = true;
+                                jQuery.a11yfy.assertiveAnnounce(pgGroup.termName + "checked");
                             }
                         })
                     });
@@ -1336,6 +1365,7 @@
                             angular.forEach(selectedAOLs, function (aolInput) {
                                 if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
                                     aol.Selected = true;
+                                    jQuery.a11yfy.assertiveAnnounce(aol.termName + "checked");
                                 }
                             })
                         }
@@ -1343,6 +1373,7 @@
                             angular.forEach(selectedAOLs, function (aolInput) {
                                 if (aolInput.toString().length > 0 && aol.name.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
                                     aol.Selected = true;
+                                    jQuery.a11yfy.assertiveAnnounce(aol.name + "checked");
                                 }
                             })
                         }
@@ -1355,6 +1386,7 @@
                         angular.forEach(selectdSubAreaofLaws, function (subAreaOfLawInput) {
                             if (subAreaOfLawInput.toString().length > 0 && subAreaOfLaw.termName.toString().toLowerCase().indexOf(subAreaOfLawInput.toString().toLowerCase()) !== -1) {
                                 subAreaOfLaw.Selected = true;
+                                jQuery.a11yfy.assertiveAnnounce(subAreaOfLaw.termName + "checked");
                             }
                         })
                     });
@@ -1365,25 +1397,30 @@
             //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type, $event) {
                 $event.stopPropagation();
+                var checkAnnounc=checkAll?"checked":"unchecked";
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;
                     });
+                    jQuery.a11yfy.assertiveAnnounce("all clients are"+checkAnnounc);
                 }
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     angular.forEach(vm.practiceGroups, function (pg) {
                         pg.Selected = checkAll;
                     });
+                    jQuery.a11yfy.assertiveAnnounce("all practice groups  are" + checkAnnounc);
                 }
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = checkAll;
                     });
+                    jQuery.a11yfy.assertiveAnnounce("all area of law terms  are" + checkAnnounc);
                 }
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
                     angular.forEach(vm.subAolTerms, function (subAol) {
                         subAol.Selected = checkAll;
                     });
+                    jQuery.a11yfy.assertiveAnnounce("all sub area of law terms  are" + checkAnnounc);
                 }
             }
             //#endregion

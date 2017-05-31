@@ -919,6 +919,10 @@ textarea {
     top: 82px;
     padding: 0;
 }
+.docsortbydashboard{
+    left: -30px ;
+    top:36px ;
+}
 
 .sortbymatters {
     position: absolute;
@@ -1455,7 +1459,7 @@ textarea {
 
 .docDashboardInnerLoader {
     position: absolute;
-    top: 28%;
+    top: 31%;
     left: 40%;
 }
 
