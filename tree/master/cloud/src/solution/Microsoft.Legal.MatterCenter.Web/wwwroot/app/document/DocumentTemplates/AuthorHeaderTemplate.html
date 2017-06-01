@@ -10,7 +10,7 @@
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
 
-        <span class='sorticon keep-open'  
+        <span class='sorticon keep-open' tabindex="0"  
               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header):null"
                
@@ -18,13 +18,13 @@
             <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible"
                ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header):null"
-               type='button' data-toggle='dropdown'>
+               type='button' data-toggle='dropdown' tabindex="-1">
                 <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
             </a>
             <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible"
                ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header):null"
-               type='button' data-toggle='dropdown'>
+               type='button' data-toggle='dropdown' tabindex="-1">
                 <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png' tabindex="0" />
 
             </a>

@@ -11,12 +11,12 @@
         <span class='sorticon keep-open' 
               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn2Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn2Header):null"               
-              style='float:right;' 
+              style='float:right;' tabindex="0"
                ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'>
-            <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor'
+            <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' tabindex="-1"
                ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn2Header)"
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn2Header):null"
-               type='button'>
+               type='button' >
                 <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image  " src='/../../images/icon-combobox.png'  />
             </a>
         </span>

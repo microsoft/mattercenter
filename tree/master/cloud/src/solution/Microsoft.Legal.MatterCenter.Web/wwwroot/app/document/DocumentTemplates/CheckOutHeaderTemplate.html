@@ -9,11 +9,11 @@
         <span class="headerfilter" ng-if="grid.appScope.vm.checkoutfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
         <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
     </span>
-    <span class='sorticon keep-open'
+    <span class='sorticon keep-open' tabindex="0"
           ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn7Header)"
           ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn7Header):null"
           ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor'
+        <a href='javascript:;' class='prisma-header-dropdown-anchor' tabindex="-1"
            ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn7Header)"
            ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn7Header):null"
            type='button'>

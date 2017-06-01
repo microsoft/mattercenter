@@ -24,7 +24,7 @@
            ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header)"
            ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn1Header):null;$event.stopPropagation();"
            class='prisma-header-dropdown-anchor'
-           type='button'>
+           type='button'  tabindex="-1">
             <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
         </a>
     </span>

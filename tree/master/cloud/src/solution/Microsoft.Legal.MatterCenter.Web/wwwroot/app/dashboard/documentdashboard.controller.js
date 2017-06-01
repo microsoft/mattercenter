@@ -661,6 +661,7 @@
 
             //#region Request for search documents object
             vm.searchDocument = function (val) {
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "block");
                 var searchUserRequest = {
                     Client: {
                         Url: configs.global.repositoryUrl
@@ -676,6 +677,7 @@
 
             //#region  Searching document files
             vm.searchDocumentFile = function (val) {
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "block");
                 var searchDocumentRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
@@ -1057,6 +1059,7 @@
 
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function ($event) {
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
                 $event.stopPropagation();
                 vm.searchdrop = true;
                 vm.downwarddrop = false;
