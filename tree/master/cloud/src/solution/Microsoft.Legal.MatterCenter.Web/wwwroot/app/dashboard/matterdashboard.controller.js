@@ -545,6 +545,7 @@
 
             //#region This earch function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "block");
                 var searchMattersSearchRequest = {
                     Client: {
                         Url: configs.global.repositoryUrl
@@ -639,6 +640,7 @@
             vm.searchText = "";
             vm.searchClicked = false;
             vm.searchByTerm = function () {
+                
                 vm.searchClicked = true;
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
@@ -916,6 +918,7 @@
                 vm.upwarddrop = true;
                 jQuery.a11yfy.assertiveAnnounce("Exapnding advance search section");
                 $timeout(function () { angular.element('#matterClients').focus(); }, 500);
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
 
             }
 

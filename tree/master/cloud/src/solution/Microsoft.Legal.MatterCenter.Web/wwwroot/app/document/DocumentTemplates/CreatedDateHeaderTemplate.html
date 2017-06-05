@@ -11,16 +11,16 @@
         <span role='button' class='sorticon keep-open'               
               ng-focus='grid.appScope.vm.ariaMessage("click this column to filter search results based on "+col.colDef.field+" column ")'
               ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header):null"
-               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)"
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)" tabindex="0"
               >
             <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" type='button'
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header):null"
-               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)">
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn8Header)" tabindex="-1">
                 <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
             </a>
             <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" type='button'
                ng-keydown="$event.keyCode==13?grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header):null"
-               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)">
+               ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)" tabindex="-1">
                 <img alt="filter dropdown image {{col.colDef.field}}" title="filter dropdown image" src='/../../images/icon-combobox.png'  />
             </a>
         </span>

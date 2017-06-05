@@ -16,33 +16,41 @@
 <!--<div class="container-fluid">   -->
 <div ng-click="vm.closealldrops()" ng-esc="closeHeaderPopup()">
     <!--ng-class="{'mainMatter':vm.lazyloader}"-->
-    <div class="row">
-        <div class="row" tabindex="0" id="mainmenu">
-            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
-                <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
-                    <div class="input-group-btn zindex6" id="comboDocumentsOpt" ng-keydown="vm.documentsCombobox($event,0)">
-                        <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
-                            <span role="listitem" class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
+    <div class="row" >
+        <div class="row"  id="mainmenu">
+            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0" >
+                <div tabindex="-1"  class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
+                    <div tabindex="-1" class="input-group-btn zindex6" id="comboDocumentsOpt" 
+                         ng-keydown="vm.documentsCombobox($event,0)">
+                        <div tabindex="0"  class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
+                            <span 
+                                  aria-label="The current selection is {{vm.documentname}}"
+                                  class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
                             <span class="caret"></span>
                         </div>
-                        <ul role="menu" tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                        <ul tabindex="0"  class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
                             <li>
-                                <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
-                                   role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item1}}"
+                                <a href="" tabindex="0" 
+                                   role="listitem" 
+                                   aria-label="Select {{vm.documentConfigContent.AriaLabelDropdown1Item1}} to get all documents which are uploaded by other users"
                                    class="searchPanelDropdown ms-font-weight-semilight"
                                    ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}"
                                    ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</a>
                             </li>
                             <li>
-                                <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
-                                   role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item2}}"
+                                <a href="" tabindex="0" 
+                                   role="listitem" 
+                                   aria-label="Select {{vm.documentConfigContent.AriaLabelDropdown1Item2}} to get documents which are uploaded by login user"
                                    class="searchPanelDropdown ms-font-weight-semilight"
                                    ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}"
                                    ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</a>
                             </li>
                             <li>
-                                <a href="" tabindex="0" aria-live="assertive" aria-atomic="true"
-                                   role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}"
+                                <a href="" tabindex="0" 
+                                   role="listitem" 
+                                   aria-label="select {{vm.documentConfigContent.AriaLabelDropdown1Item3}} to get all pinned documents" 
+                                   class="searchPanelDropdown ms-font-weight-semilight" 
+                                   ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}"
                                    ng-keydown="vm.documentsCombobox($event,3)"
                                    ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">
                                     {{vm.documentConfigContent.Dropdown1Item3}}
@@ -56,7 +64,7 @@
             <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs" role="region">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
                     <input type="text" tabindex="0" role="textbox" aria-label="{{vm.documentConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                    <span class="input-group-addon cursor" tabindex="0" alt="searchDocuments"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i alt="searchDocuments" class="glyphicon glyphicon-search"></i></span>
+                    <span class="input-group-addon cursor" tabindex="0" alt="searchDocuments"   aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i alt="searchDocuments" class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
                 </div>
@@ -65,7 +73,7 @@
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button tabindex="0" role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" alt="searchDocuments"  class="btn btn-default" ng-click="vm.search()"><i  alt="searchDocuments" class="glyphicon glyphicon-search"></i></button>
+                        <button tabindex="0"  aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" alt="searchDocuments"  class="btn btn-default" ng-click="vm.search()"><i  alt="searchDocuments" class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></div>
                     </div>
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
@@ -161,13 +169,13 @@
             <input aria-label="enter search criteria to filter by Practice group" tabindex="0" id="docPGFil"  role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.practiceGroupSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <input aria-label="enter search criteria to filter by checkout user name" tabindex="0" id="docDocCheckOutUser"  role="textbox" class='form-control' my-enter='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
-                <button tabindex="0" role="button" type='button' id="btnDocumentNameFilter" aria-label="filter by document name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by clients" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by matter name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header &&  vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header &&  !vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by practice groups" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button tabindex="0" role="button" type='button' aria-label="filter by checkout user name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' id="btnDocumentNameFilter" aria-label="filter by document name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by clients" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by matter name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header &&  vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by Author name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header &&  !vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by practice groups" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button tabindex="0"  type='button' aria-label="filter by checkout user name" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />
