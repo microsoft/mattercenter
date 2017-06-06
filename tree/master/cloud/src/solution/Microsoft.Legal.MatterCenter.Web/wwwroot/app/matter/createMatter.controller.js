@@ -3,7 +3,7 @@
 
     var app = angular.module("matterMain");
     app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', 'adalAuthenticationService', '$timeout',
-        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService,$timeout) {
+    function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService, $timeout) {
             ///All Variables
             var cm = this;
             $rootScope.pageIndex = "4";
@@ -447,14 +447,19 @@
                     });
                 });
             }
-
+            cm.textForAria = function (msg) {                
+                jQuery.a11yfy.assertiveAnnounce(msg);
+            }
             getTaxonomyData();
-            cm.selectMatterType = function (value) {
-                jQuery.a11yfy.assertiveAnnounce("matter type popup modal opened. Add or remove matter types");
+            cm.selectMatterType = function (value) {                
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
                 cm.successBanner = false;
-		         $timeout(function () { angular.element("#selectPG").focus(); }, 200);
+                $timeout(function () {
+                    jQuery.a11yfy.assertiveAnnounce("matter type popup modal opened. Add or remove matter types");
+                    angular.element("#selectPG").focus();                    
+                }, 200);              
+
             }
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {

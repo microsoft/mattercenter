@@ -65,9 +65,13 @@
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="clientId">{{cm.createContent.Tab1Textbox1Label}}</label>
                 <div>
-                    <select role="combobox" class="medium clear" id="selectClientCom"
+                    <select role="combobox" class="medium clear" id="selectClientCom" 
+                            aria-label="select a client for wich the matter is getting created"
                             ng-focus=""
-                            ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClient" ng-change="cm.getSelectedClientValue(cm.selectedClient)" ng-options='client.name for client in cm.clientNameList track by client.name' required>
+                            ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" 
+                            ng-model="cm.selectedClient" 
+                            ng-change="cm.getSelectedClientValue(cm.selectedClient)" 
+                            ng-options='client.name for client in cm.clientNameList track by client.name' required>
                         <option role="option" value="" label="- Select a {{cm.createContent.Tab1Textbox1LabelClientOrTeam1}}-"></option>
                     </select>
                 </div>
@@ -99,16 +103,14 @@
                          data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'
                          title="{{selectedDocumentTypeLawTerm.termChainName}}"
                          aria-label="{{selectedDocumentTypeLawTerm.termChainName}}">
-
                         {{selectedDocumentTypeLawTerm.termChainName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
                     </div>
                 </div>
                 <div class="gutter"></div>
-
-
                 <div class="gutter"></div>
                 <div class="addmatterType">
-                    <a id="addOrRemoveTypesLink" tabindex="0" aria-label="add or remove types"
+                    <a id="addOrRemoveTypesLink" tabindex="0" 
+                       aria-label="Click this button to open a modal window which allow the user to select matter type"
                        title="{{cm.createContent.TitleAddRemoveType}}"
                        href="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}"
                        ng-click="cm.selectMatterType()"
@@ -117,7 +119,6 @@
                         <span  alt="selectMatterType" class="glyphicon glyphicon-plus"></span>
                         {{cm.createContent.LabelAddOrRemoveTypes}}
                     </a>
-
                 </div>
                 <div class="loadingLookUp hide">
                     <img id="loadingLookupImage"
@@ -294,7 +295,22 @@
                                aria-required="true"
                                aria-label="{{cm.createContent.AriaLabelTeamUserName}}" assignteamkeydown confirm="false" uservalue=""
                                ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))"
-                               ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" typeahead-min-length='3' typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+                               ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" 
+                               ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' 
+                               class="medium clear inputAssignPerm ui-autocomplete-input commonspace" 
+                               ng-model="assignTeam.assignedUser" 
+                               uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" 
+                               typeahead-loading='loadingLocationsTeam' 
+                               typeahead-no-results='teamAssingnResults' 
+                               typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' 
+                               class="form-control" 
+                               id="txtAssign1" 
+                               spellcheck="true" 
+                               type="text" 
+                               placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" 
+                               typeahead-min-length='3' 
+                               typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" 
+                               autocomplete="off">
 
                         <div class="gutter">
                             <img ng-show="loadingLocationsTeam"
@@ -459,10 +475,20 @@
         <div id="space"></div>
         <div class="row clearBothSide ">
             <div class="col-xs-5">
-                <button tabindex="0" role="button" aria-label="Previous" class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-hide="cm.prevButtonDisabled" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button tabindex="0"  aria-label="Previous button to move to previous tab of matter provision" 
+                        class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" 
+                        ng-hide="cm.prevButtonDisabled" 
+                        ng-disabled="cm.prevButtonDisabled" 
+                        ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button tabindex="0" role="button" aria-label="Next" class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-hide="cm.nextButtonDisabled" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+                <button tabindex="0"  
+                        aria-label="Next button to move to next tab of matter provision" 
+                        class="buttonPrev pull-left marginTop10" 
+                        ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" 
+                        ng-hide="cm.nextButtonDisabled" 
+                        ng-disabled="cm.nextButtonDisabled" 
+                        ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
     </div>
@@ -519,15 +545,15 @@
                             <div class='popUpMDContent '
                                  style="padding:0px !important;"
                                  ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
-                                <div role="menu"
+                                <div role="list"
                                      ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}"
                                      ng-click='cm.selectLevelTwoItem(levelTwoItem)'
                                      ng-keydown="$event.keyCode==13?cm.selectLevelTwoItem(levelTwoItem):null"
                                      data-value='{{$index}}' documents=''
-                                     tabindex="0"
+                                     tabindex="-1"
                                      data-foldernamesaol='{{levelTwoItem.folderNames}}'
                                      data-areaoflaw-id='{{levelTwoItem.id}}'>
-                                    <a role="menuitem" title="{{levelTwoItem.termName}}"
+                                    <a role="listitem" title="{{levelTwoItem.termName}}"
                                        href=""
                                        aria-label="{{levelTwoItem.termName}}"
                                        class="pull-left contentTypeWidth visitedlink">{{levelTwoItem.termName}}</a>
@@ -554,7 +580,7 @@
                                 <div class="popUpSALContent "
                                      ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}'
                                      style="padding:0px !important;">
-                                    <div role="menu" tabindex="0"
+                                    <div role="menu" tabindex="-1"
                                          ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
                                         <a title="{{levelThreeItem.termName}}" href=""
                                            role="menuitem" tabindex="0"
@@ -571,34 +597,42 @@
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add"
+                        <img title="click this image to add selected sub area of law to the matter"
+                             ng-focus="cm.textForAria('click this image to add selected sub area of law to the matter')"
+                             role="link"
+                             aria-atomic="true"
+                             aria-live="assertive"
                              ng-click="cm.addToDocumentTemplate()"
                              ng-keydown="$event.keyCode==13?cm.addToDocumentTemplate():null"
                              class="iconForward iconForwardLevel3" style="margin:0px;"
-                             aria-label="{{cm.createContent.AriaLabelAddTypeButton}}"
-                             tabindex="0"
-                             role="button"
-                             alt="{{cm.createContent.AriaLabelAddTypeButton}}" src="/../../Images/forward_666.png" />
-                        <div ng-click="cm.addToDocumentTemplate()"
+                             tabindex="0"                             
+                             alt="{{cm.createContent.AriaLabelAddTypeButton}} button to add selected sub area of law to the matter" 
+                             src="/../../Images/forward_666.png" />
+                        <div ng-click="cm.addToDocumentTemplate()" 
                              ng-keydown="$event.keyCode==13?cm.addToDocumentTemplate():null"
-                             tabindex="0"
+                             tabindex="-1"
                              aria-label="{{cm.createContent.AriaLabelAddTypeButton}}"
                              role="button" class="addOrRemoveLabelMarginTop" style="float:right;">add</div>
                     </div>
-                    <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin"
+                    <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin" role="region"
                          style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
                         <img ng-click="cm.removeFromDocumentTemplate()"
+                             ng-focus="cm.textForAria('click this image to remove selected sub area of law from the matter')"
                              ng-keydown="$event.keyCode==13?cm.removeFromDocumentTemplate():null"
-                             tabindex="0"
-                             role="button"
-                             title="Remove" class="iconBack iconBackLevel3"
-                             aria-label="{{cm.createContent.AriaLabelRemoveTypeButton}}"
-                             alt="{{cm.createContent.AriaLabelRemoveTypeButton}}" src="/../../Images/back-666.png" />
+                             tabindex="0"   
+                             aria-atomic="true"
+                             aria-live="assertive"
+                             role="link"                         
+                             title="click this image to remove selected sub area of law from the matter" 
+                             class="iconBack iconBackLevel3"
+                             
+                             alt="{{cm.createContent.AriaLabelRemoveTypeButton}} button to remove selected sub area of law from the matter types list" 
+                             src="/../../Images/back-666.png" />
                         <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4"
                              ng-click="cm.removeFromDocumentTemplate()"
                              ng-keydown="$event.keyCode==13?cm.removeFromDocumentTemplate():null"
                              aria-label="{{cm.createContent.AriaLabelRemoveTypeButton}}"
-                             tabindex="0" role="none" style="float:left;">
+                             tabindex="-1" role="none" style="float:left;">
                             remove
                         </div>
                     </div>
@@ -638,16 +672,18 @@
                     </div>
                 </div>
                 
-                <div id="defaultMessageDiv" class="">
-                    <img id="infoImg" 
+                <div id="defaultMessageDiv" class="" tabindex="-1">
+                    <img id="infoImg" tabindex="-1"
+                         title="{{cm.createContent.AriaLabelInfoTypeButton}} "
                          alt="{{cm.createContent.AriaLabelInfoTypeButton}}" src="/../../Images/information-blue.png" />
-                    <span id="defaultMessage" 
+                    <span id="defaultMessage" tabindex="-1"
                           class="defaultMessageLevel3">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 
                 <button ng-click="cm.saveDocumentTemplates()" ng-keydown="$event.keyCode==13?cm.saveDocumentTemplates():null"
-                        tabindex="0" alt="saveMatterType"
-                        role="button"
+                        ng-focus="cm.textForAria('Click this button to associate the matters types to the matter that is getting created')"
+                        tabindex="0"                      
+                        
                         title="{{cm.createContent.Tab1ButtonSaveSelectiponText}}"
                         class="SavePopUpEntries saveDocButtonLevel3"
                         type="button">
@@ -757,7 +793,7 @@
                         <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel4" style="margin:0px;" alt="Left" src="/../../Images/forward_666.png"><div class="addOrRemoveLabelMarginTop removeMargin" ng-click="cm.addToDocumentTemplate()" style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin addOrRemoveBtnMarginLevel4 popRemoveLevel4 customRemoveBtnMargin" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel4" alt="Right" src="/../../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin removeMarginLevel4" style="float:left;">
+                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" alt="Remove" class="iconBack iconBackLevel4" alt="Right" src="/../../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin removeMarginLevel4" style="float:left;">
                             remove
                         </div>
                     </div>
@@ -787,7 +823,7 @@
 
 
                 <div id="defaultMessageDiv" class="defaultMessageDivLevel4">
-                    <img id="infoImg" class="infoImgLevel4" alt="info" src="/../../Images/information-blue.png">
+                    <img id="infoImg" class="infoImgLevel4" alt="info" title="info" src="/../../Images/information-blue.png">
                     <span id="defaultMessage" class="defaultMessageLevel4">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 
@@ -800,7 +836,7 @@
     <div class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" 
          ng-show="cm.taxonomyHierarchyLevels==5" 
          ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" aria-label="{{cm.createContent.AriaLabelCloseButton}" alt="{{cm.createContent.AriaLabelCloseButton}}" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="close" aria-label="{{cm.createContent.AriaLabelCloseButton}" alt="{{cm.createContent.AriaLabelCloseButton}}" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="matterAlignCenter">
             <div class="popUpHeader">
                 <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{cm.createContent.ColumnName1}}</div>
@@ -891,7 +927,9 @@
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popAddRemove" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin addMarginTop popAddWidth" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel5" style="margin:0px;" alt="Left" src="/../../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:right;">add</div>
+                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel5" 
+                             style="margin:0px;" 
+                             alt="Left" src="/../../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin popRemoveWidth" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
                         <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel5" alt="Right" src="/../../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:left;">
@@ -919,7 +957,7 @@
 
 
                 <div id="defaultMessageDiv" class="defaultMessage defaultMessageLevel5">
-                    <img id="infoImg" class="infoImg" alt="info" src="/../../Images/information-blue.png">
+                    <img id="infoImg" class="infoImg" alt="info" src="/../../Images/information-blue.png" title="default message">
                     <span id="defaultMessage" class="spanDefaultMessage spanDefaultMessageLevel5">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 

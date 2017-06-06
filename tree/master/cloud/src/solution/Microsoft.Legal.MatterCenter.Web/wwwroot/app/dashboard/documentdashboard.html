@@ -140,10 +140,23 @@
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
                     <div class="input-group" id="divDashboardSearch">
-                        <input type="text" ng-model="vm.selected" my-enter="vm.search()" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}"
+                        <input type="text" 
+                               aria-autocomplete="list" 
+                               aria-live="assertive"
+                               aria-atomic="true"
+                               aria-haspopup="true"
+                               aria-label="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" 
+                               ng-model="vm.selected" 
+                               my-enter="vm.search()" 
+                               placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}"
                                uib-typeahead="documentDataList.documentName+'.'+ documentDataList.documentExtension + ' ('+ documentDataList.docId + ')' for documentDataList in vm.searchDocumentFile($viewValue)"
-                               typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)'
-                               typeahead-no-results="noResults" class="form-control" aria-label="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}">
+                               typeahead-loading="loadingLocations" 
+                               typeahead-on-select='vm.typeheadselect($item, $model)'
+                               typeahead-no-results="noResults" 
+                               spellcheck="true"
+                               autocomplete="off"
+                               class="form-control" 
+                               aria-label="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}">
                         <span class="input-group-addon cursor"
                               id="basic-addon1" ng-click="vm.search()"  alt="Search Documents" 
                               title="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}"

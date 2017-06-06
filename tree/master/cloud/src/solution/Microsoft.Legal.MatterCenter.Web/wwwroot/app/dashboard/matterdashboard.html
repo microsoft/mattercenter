@@ -52,11 +52,20 @@
                 <div class="col-xs-12 padlf0">
                     <div class="input-group" id="divMatterDashboardSearch">
                         <input type="text" 
+                               aria-autocomplete="list" 
+                               aria-live="assertive"
+                               aria-atomic="true"
+                               aria-haspopup="true"
                                aria-label="{{vm.matterDashboardConfigs.SearchTextboxPlaceholderText}}" 
                                ng-model="vm.searchText" my-enter="vm.searchByTerm()" 
                                placeholder="{{vm.matterDashboardConfigs.SearchTextboxPlaceholderText}}"
                                uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatters($viewValue)"
-                               typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                               typeahead-loading="loadingLocations" 
+                               typeahead-no-results="noResults" 
+                               typeahead-on-select='vm.typeheadselect($item, $model)'                                
+                               spellcheck="true"
+                               autocomplete="off"
+                               class="form-control">
                         <span class="input-group-addon cursor" alt="searchmatter" id="basic-addon1" ng-click="vm.searchByTerm()">
                             <i alt="Search Matter" class="glyphicon glyphicon-search"></i>
                         </span>
