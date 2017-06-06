@@ -60,7 +60,24 @@
             </div>
             <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth" role="region">
                 <div class="input-group col-xs-12 zindex6">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" my-enter="vm.search()" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                    <input type="text" 
+                           aria-autocomplete="list" 
+                           aria-live="assertive"
+                           aria-atomic="true"
+                           aria-haspopup="true"
+                           ng-model="vm.selected" 
+                           ng-disabled="!vm.lazyloader" 
+                           my-enter="vm.search()" 
+                           placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" 
+                           uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" 
+                           typeahead-loading="loadingLocations" 
+                           typeahead-no-results="noResults" 
+                           typeahead-focus-first="true"
+                           typeahead-min-length='3'
+                           aria-label="{{vm.matterConfigContent.SearchPlaceholderText}}"
+                           spellcheck="true"
+                           autocomplete="off"
+                           class="form-control">
                     <div class="input-group-btn">
                         <button tabindex="0"  aria-label="{{vm.matterConfigContent.AriaLabelSearchMatterButton}}" class="btn btn-default" alt="searchmatter"  ng-click="vm.search()"><i alt="searchmatter"  class="glyphicon glyphicon-search"></i></button>
                         <div tabindex="0" role="combobox" class="btn btn-default" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)">

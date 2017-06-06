@@ -3410,6 +3410,17 @@
             }
 
 
+
+            function cleanArray(actual) {
+                var newArray = new Array();
+                for (var i = 0; i < actual.length; i++) {
+                    if (actual[i] && actual[i] != "") {
+                        newArray.push(actual[i]);
+                    }
+                }
+                return newArray;
+            }
+
             //#region for additional matter properties
              vm.addtionalPropertiesAvaialbleForMatter = false;
             //#region function to get content type name from the term
@@ -3420,35 +3431,44 @@
                 var levels = vm.taxonomyData.levels;
                 var termData = vm.taxonomyData.level1;
                 angular.forEach(termData, function (levelOneTerm) {
-                    if (levelOneTerm.termName == vm.currentRow.matterPracticeGroup) {
-                        angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
-                            if (levelTwoTerm.termName == vm.currentRow.matterAreaOfLaw) {
-                                angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
-                                    if (levels == 3) {
-                                        if (levelThreeTerm.termName == vm.currentRow.matterDefaultContentType) {
-                                            getExtraMatterProp = IsCustomPropertyPresentInTerm(levelThreeTerm);
-                                        }
+                    var practiceGroupItem = vm.currentRow.matterPracticeGroup.split(";");
+                    practiceGroupItem = cleanArray(practiceGroupItem);
+                    for (var i = 0; i < practiceGroupItem.length; i++) {
+                        if (levelOneTerm.termName.trim().toLowerCase() == practiceGroupItem[i].trim().toLowerCase()) {
+                            angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
+                                var areaOfLawItem = vm.currentRow.matterAreaOfLaw.split(";");
+                                areaOfLawItem = cleanArray(areaOfLawItem);
+                                for (var j = 0; j < areaOfLawItem.length; j++) {
+                                    if (levelTwoTerm.termName.trim().toLowerCase() == areaOfLawItem[j].trim().toLowerCase()) {
+                                        angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
+                                            if (levels == 3) {
+                                                if (levelThreeTerm.termName.trim().toLowerCase() == vm.currentRow.matterDefaultContentType.trim().toLowerCase()) {
+                                                    getExtraMatterProp = IsCustomPropertyPresentInTerm(levelThreeTerm);
+                                                }
 
-                                    } else if (levels == 4) {
-                                        angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
-                                            if (levelFourTerm.termName == vm.currentRow.matterDefaultContentType) {
-                                                getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFourTerm);
+                                            } else if (levels == 4) {
+                                                angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                                    if (levelFourTerm.termName.trim().toLowerCase() == vm.currentRow.matterDefaultContentType.trim().toLowerCase()) {
+                                                        getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFourTerm);
+                                                    }
+                                                });
+                                            }
+                                            else if (levels == 5) {
+                                                angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                                    angular.forEach(levelFourTerm.level5, function (levelFiveTerm) {
+                                                        if (levelFiveTerm.termName.trim().toLowerCase() == vm.currentRow.matterDefaultContentType.trim().toLowerCase()) {
+                                                            getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFiveTerm);
+                                                        }
+                                                    });
+                                                });
                                             }
                                         });
                                     }
-                                    else if (levels == 5) {
-                                        angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
-                                            angular.forEach(levelFourTerm.level5, function (levelFiveTerm) {
-                                                if (levelFiveTerm.termName == vm.currentRow.matterDefaultContentType) {
-                                                    getExtraMatterProp = IsCustomPropertyPresentInTerm(levelFiveTerm);
-                                                }
-                                            });
-                                        });
-                                    }
-                                });
-                            }
-                        });
+                                }
+                            });
+                        }
                     }
+                   
                 });
                 vm.addtionalPropertiesAvaialbleForMatter = getExtraMatterProp;
                 return getExtraMatterProp;
