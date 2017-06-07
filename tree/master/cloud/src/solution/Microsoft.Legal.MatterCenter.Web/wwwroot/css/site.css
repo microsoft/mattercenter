@@ -1627,3 +1627,29 @@ input[type=checkbox]:focus, input[type=radio]:focus,a.ms-Button:focus, button:fo
 .tabInActive{
    outline: none !important;
 }
+
+a.skip-main {
+    left:-999px;
+    position:absolute;
+    top:auto;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+    z-index:-999;
+}
+a.skip-main:focus, a.skip-main:active {
+    color: #fff;
+    background-color:#0072c6;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    overflow:auto;
+    margin: 10px 35%;
+    padding:5px;
+    border-radius: 0px;
+    border:px solid #2b579a;
+    text-align:center;
+    font-size:1.0em;
+    z-index:100000;
+}
