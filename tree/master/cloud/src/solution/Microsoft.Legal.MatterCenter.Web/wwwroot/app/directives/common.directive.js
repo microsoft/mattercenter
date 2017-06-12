@@ -681,7 +681,8 @@
                 $scope.dateOptions = {
 
                     formatYear: 'yy',
-                    startingDay: 1
+                    startingDay: 1,
+                    shortcutPropagation: true
                 };
                 $scope.opened = false;
             }
@@ -735,7 +736,8 @@
                 $scope.dateOptions = {
 
                     formatYear: 'yy',
-                    startingDay: 1
+                    startingDay: 1,
+                    shortcutPropagation: true
                 };
 
                 $scope.opened = false;

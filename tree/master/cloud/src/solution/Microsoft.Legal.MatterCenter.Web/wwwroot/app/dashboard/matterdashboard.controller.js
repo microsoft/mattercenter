@@ -951,12 +951,14 @@
             //#region For declaring startdate and enddate variable.
             vm.dateOptions = {
                 formatYear: 'yy',
-                maxDate: new Date()
+                maxDate: new Date(),
+                shortcutPropagation: true
             };
 
             vm.endDateOptions = {
                 formatYear: 'yy',
-                maxDate: new Date()
+                maxDate: new Date(),
+                shortcutPropagation: true
             }
 
             $scope.$watch('vm.startDate', function (newval, oldval) {

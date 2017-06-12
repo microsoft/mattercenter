@@ -1459,7 +1459,8 @@
                 formatYear: 'yy',
                 maxDate: new Date(),
                 // minDate: new Date(),
-                startingDay: 1
+                startingDay: 1,
+                shortcutPropagation: true
             };
 
             cm.open1 = function ($event) {

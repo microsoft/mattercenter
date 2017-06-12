@@ -1580,12 +1580,14 @@
         //#region For declaring modifiedstartdate and modifiedenddate variable.
         vm.modDateOptions = {
             formatYear: 'yy',
-            maxDate: new Date()
+            maxDate: new Date(),
+            shortcutPropagation: true
         };
 
         vm.modEndDateOptions = {
             formatYear: 'yy',
-            maxDate: new Date()
+            maxDate: new Date(),
+            shortcutPropagation: true
         }
 
         $scope.$watch('vm.modStartDate', function (newval, oldval) {
@@ -1669,12 +1671,14 @@
         //Start
         vm.dateOptions = {
             formatYear: 'yy',
-            maxDate: new Date()
+            maxDate: new Date(),
+            shortcutPropagation: true
         };
 
         vm.endDateOptions = {
             formatYear: 'yy',
-            maxDate: new Date()
+            maxDate: new Date(),
+            shortcutPropagation: true
         }
 
         $scope.$watch('vm.startDate', function (newval, oldval) {
