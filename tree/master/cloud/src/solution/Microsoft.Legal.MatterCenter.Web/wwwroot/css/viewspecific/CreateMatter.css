@@ -1624,6 +1624,42 @@ left: -19px;
 .settingsLabelTeam{
     min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px
 }
+@media (max-width: 860px) {
+    .taxonomyPopUpModal {
+        height: 820px;
+        width:270px;
+        margin:auto;
+    }
+    .taxonomyPopUpModalLevel4{
+        height: 1030px;
+        width:270px;
+        margin:auto;
+    }
+     .taxonomyPopUpModalLevel5{
+        height: 1250px;
+        width:270px;
+        margin:auto;
+    }
+     
+}
+@media (min-width: 860px) {
+    .taxonomyPopUpModal {
+        height: 420px;
+    }
+     .taxonomyPopUpModalLevel4{
+      height: 420px;
+    }
+        .taxonomyPopUpModalLevel5{
+      height: 420px;
+    }
+        .alignlevel5Body{
+           margin:0 26px;
+        }
+         .alignlevel4Body{
+           margin:0 205px;
+        }
+        
+}
 
 
 
