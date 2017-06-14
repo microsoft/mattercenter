@@ -462,10 +462,9 @@
 
             }
             //function for closing the popup
-            cm.selectMatterTypePopUpClose = function () {
-                if (cm.popupContainer == "Show") {
-                    cm.saveDocumentTemplates();                
-                }
+            cm.selectMatterTypePopUpClose = function () {             
+                    cm.saveDocumentTemplates();               
+               
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {

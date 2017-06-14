@@ -544,7 +544,7 @@ h1.specificName {
 }
 
 .mandatory {
-    color: red;
+    color: #800000;
 }
 
 .selectDefaultContentTypeMessage {
@@ -571,7 +571,7 @@ h1.specificName {
     line-height: 15pt;
     min-width: 70px;
     text-align: center;
-    width: 110px;
+    width: 120px;
     margin-left: 485px;
 }
 
