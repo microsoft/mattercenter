@@ -499,7 +499,7 @@ textarea {
     top: 0px;
     background: #fff;
     border: 0px solid #d4d4d4;
-}
+} 
 
 .showExpandIcon:before {
     content: url("../Images/Column_Picker_Expand.png");
@@ -1403,11 +1403,15 @@ textarea {
 
 #matterMain div, #matterMain figure {
     outline: none !important;
-}
+} 
 
 #matterCenterHeader div :focus {
     outline: dotted !important;
 }
+.ui-grid-icon-container:focus{
+          border: 1px dashed !important;
+          speak-as:spell-out
+    }
 
 .mainsort {
     position: absolute;
