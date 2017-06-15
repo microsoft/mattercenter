@@ -1438,6 +1438,7 @@
                             }
                             jQuery.a11yfy.assertiveAnnounce("fetched documents which are uploaded by current login user");
                             vm.divuigrid = true;
+                            forExpandingGridMenu();
                             $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                             if (!vm.globalSettings.isBackwardCompatible) {
                                 $interval(function () { vm.showSortExp(); }, 3000, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
@@ -2437,6 +2438,19 @@
             } else if (searchRequest.SearchObject.Sort.Direction == 1) {
                 jQuery.a11yfy.assertiveAnnounce("sorted data by " + searchRequest.SearchObject.Sort.ByColumn + " in descending order");
             }
+        }
+        //#endregion
+
+        //#region for grid menu
+        function forExpandingGridMenu() {
+            $interval(function () {
+                var elem = $($('.ui-grid-icon-container')[0]);
+                elem.attr("title", "grid menu")
+                elem.on("focus", function () {
+                    jQuery.a11yfy.assertiveAnnounce("use shift enter key to expand grid menu");
+                });
+
+            }, 5000);
         }
         //#endregion
     }]);

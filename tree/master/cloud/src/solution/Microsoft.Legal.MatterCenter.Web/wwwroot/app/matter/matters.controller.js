@@ -2111,6 +2111,7 @@
                                 vm.lazyloader = true;
                                 vm.divuigrid = true;
                                 vm.nodata = false;
+                                forExpandingGridMenu();
                                 if (!vm.globalSettings.isBackwardCompatible) {
                                     $interval(function () { vm.showSortExp(); }, 2000, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                                 }
@@ -3571,7 +3572,17 @@
             }
 
             //#endregion
+            //#region for grid menu
+            function forExpandingGridMenu() {
+                $interval(function () {
+                    var elem = $($('.ui-grid-icon-container')[0]);
+                    elem.attr("title", "grid menu")
+                    elem.on("focus", function () {
+                        jQuery.a11yfy.assertiveAnnounce("use shift enter key to expand grid menu");
+                    });
 
+                }, 5000);
+            }
             //#endregion
 
         }]);
