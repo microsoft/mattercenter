@@ -1290,6 +1290,7 @@
                 if ($item && $item.name !== "No results found") {
                     if (value == "conflictcheckuser") {
                         cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
+                        cm.textForAria($item.name + ' has been selected');
                     }
 
                     if (value == "team" || value == "blockuser") {
@@ -1301,11 +1302,14 @@
                                 }
                                 $label.assignedAllUserNamesAndEmails = $label.assignedAllUserNamesAndEmails + $label.assignedUser;
                                 $label.assignedUser = $label.assignedAllUserNamesAndEmails;
+                                
                             } else {
                                 $label.assignedUser = $label.assignedAllUserNamesAndEmails;
                             }
+                            cm.textForAria($item.name + ' has been selected');
                         }
                         else {
+                            cm.textForAria($item.name + ' has been selected');
                             $label.assignedUser = $item.name + '(' + $item.email + ');';
                             $label.assignedAllUserNamesAndEmails = $item.name + '(' + $item.email + ');';
                         }
@@ -1341,6 +1345,7 @@
                                 });
                              var userNameAndEmailTxt = (userNames[i] == userEmails[i]) ? userEmails[i] : userNames[i] + "(" + userEmails[i] + ")";
                              userEmailTxt = userEmailTxt + userNameAndEmailTxt + ";";
+                             cm.textForAria(userEmailTxt);
                             }
                         }
                         angular.element('#txtUser' + $label.assigneTeamRowNumber).attr('uservalue', userEmailString);

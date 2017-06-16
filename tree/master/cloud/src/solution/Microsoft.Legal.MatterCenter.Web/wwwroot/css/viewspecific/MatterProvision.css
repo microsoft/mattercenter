@@ -508,8 +508,9 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
 }
 
 #chkConflictCheckParent {
-    min-width: 100%;
+    min-width: 90%;
     max-width: 100%;
+    margin-top:1px;
 }
 
 .appNames {
