@@ -68,13 +68,18 @@
          ng-class="{'divBlockAdj' :  (cm.configurableSection == true)}">
         <!-- Open matter section -->
         <section class="sectionStep" id="snOpenMatter" ng-show='cm.sectionName=="snOpenMatter"' style="display: block;">
-            <div class="sectionContent">           
+            <div class="sectionContent">
                 <label class="contentLabel medium" id="selectClient" aria-hidden="true" tabindex="-1">
-                    <span  tabindex="-1" class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Dropdown1Label}}
+                    <span tabindex="-1" class="mandatory">
+                        *&nbsp;
+                    </span>
+                    <span tabindex="-1">
+                        {{cm.createContent.Tab1Dropdown1Label}}
+                    </span>
                 </label>
                 <div class="gutter"></div>
-                <label class="contentLabel small" tabindex="-1" id="clientId"  for="selectClientCom"
-				aria-hidden="true">{{cm.createContent.Tab1Textbox1Label}}</label>
+                <label class="contentLabel small" tabindex="-1" id="clientId" for="selectClientCom"
+                       aria-hidden="true">{{cm.createContent.Tab1Textbox1Label}}</label>
                 <div>
                     <select role="combobox" class="medium clear" id="selectClientCom"
                             aria-label="select a client for wich the matter is getting created"
@@ -86,17 +91,33 @@
                         <option role="option" value="" label="- Select a {{cm.createContent.Tab1Textbox1LabelClientOrTeam1}}-"></option>
                     </select>
                 </div>
-                <div class="gutter"></div>                
-                <input title="{{cm.createContent.Tab1Textbox1Label}}" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
-                <label class="contentLabel medium clear" ng-class="{'enterMatterName' :  (cm.showMatterId == true)}" id="enterMatterName"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox2Label}}</label>
                 <div class="gutter"></div>
-                <label class="contentLabel small" id="enterMatterId" ng-show="cm.showMatterId"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox3Label}}</label>
+                <input title="{{cm.createContent.Tab1Textbox1Label}}"
+                       disabled="disabled" class="small" id="txtClientId"
+                       ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200);
+                        border-image: none;" type="text" placeholder="">
+                <label class="contentLabel medium clear"
+                       ng-class="{'enterMatterName' :  (cm.showMatterId == true)}"
+                       id="enterMatterName">
+                    <span class="mandatory">*&nbsp;</span><span>{{cm.createContent.Tab1Textbox2Label}}</span>
+                </label>
+                <div class="gutter"></div>
+                <label class="contentLabel small" id="enterMatterId"
+                       ng-show="cm.showMatterId">
+                    <span class="mandatory">*&nbsp;</span><span>{{cm.createContent.Tab1Textbox3Label}}</span>
+                </label>
                 <input title="{{cm.createContent.Tab1Textbox2Label}}" aria-required="true" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox2PlaceholderText}}" value="">
                 <div class="gutter"></div>
                 <input title="{{cm.createContent.Tab1Textbox3Label}}" class="small" id="txtMatterId" ng-show="cm.showMatterId" ng-disabled="cm.matterIdType!='Custom'" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox3PlaceholderText}}" value="">
-                <label class="contentLabel large clear"><span class="mandatory description" ng-show="cm.isMatterDescriptionMandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
+                <label class="contentLabel large clear">
+                    <span class="mandatory description"
+                          ng-show="cm.isMatterDescriptionMandatory">*&nbsp;</span>
+                    <span>{{cm.createContent.Tab1Textbox4Label}}</span>
+                </label>
                 <textarea title="{{cm.createContent.Tab1Textbox4Label}}" class="large clear" id="txtMatterDesc" aria-required="true" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
-                <label id="mattertype" class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox5Label}}</label>
+                <label id="mattertype" class="contentLabel large clear customDivCreate">
+                    <span class="mandatory">*&nbsp;</span><span>{{cm.createContent.Tab1Textbox5Label}}</span>
+                </label>
                 <div tabindex="0" class="large" id="documentTemplates">
                     <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' class="docuTemplates" ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style=""
                          data-value="{{$index}}"
@@ -123,7 +144,7 @@
                     <a id="addOrRemoveTypesLink" tabindex="0"
                        aria-label="Click this button to open a modal window which allow the user to select matter type"
                        title="{{cm.createContent.TitleAddRemoveType}}"
-                       href="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}"                      
+                       href="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}"
                        data-toggle="modal"
                        data-target="#myModal" alt="selectMatterType">
                         <span alt="selectMatterType" class="glyphicon glyphicon-plus"></span>
@@ -143,48 +164,68 @@
         </section>
         <!-- Conflict check section -->
         <section class="sectionStep" id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"'
-                 style="display: block;" role="form">
-            <div class="sectionContent" tabindex="-1">
-                <div id="conflictCheck" ng-show="cm.defaultConfilctCheck" tabindex="-1">
-                    <label tabindex="-1" class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox" tabindex="0"
-                               aria-required="true"
-                               checked="checked" ng-model="cm.chkConfilctCheck"
-                               value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
+                 style="display: block;">
+            <div class="sectionContent">
+                <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
+                    <input id="chkConflictCheck" type="checkbox"
+                           ng-focus="cm.textForAria('check this check box whether Conflict check conducted or not')"
+                           tabindex="0"
+                           
+                           aria-required="true" role="checkbox"
+                           checked="checked" ng-model="cm.chkConfilctCheck"
+                           value="Yes" />
+                    <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate"
+                           for="chkConflictCheck"
+                           id="chkConflictCheckParent" aria-hidden="true" tabindex="-1">                        
+                        <span tabindex="-1">{{cm.createContent.Tab2Checkbox1Lebal}}</span>
                     </label>
-                    <label class="contentLabel medium clear" id="conflictCheckBy" tabindex="-1" aria-hidden="true">
-                        <span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}
+                    <label tabindex="-1" class="contentLabel medium clear" id="conflictCheckBy" aria-hidden="true">
+                        <span tabindex="-1" class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}
                     </label>
                     <div class="gutter">
                         <img ng-show="conflictloadingLocations"
                              alt="loading data"
                              title="Loading data"
                              aria-label="loading data"
-                             class="glyphicon glyphicon-refresh loadingGlyphiconCCheck gly-spin pull-left" src="/../../images/loadingcirclests16.gif" />
+                             class="glyphicon glyphicon-refresh loadingGlyphiconCCheck gly-spin pull-left"
+                             src="/../../images/loadingcirclests16.gif" />
                     </div>
                     <div class="gutter"></div>
                     <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall dateConductedLbl" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
+                    <label class="contentLabel mediumSmall dateConductedLbl" id="checkedPerformedOn" aria-hidden="true">
+                        <span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}
+                    </label>
 
-                    <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
-                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                    <label class="contentLabel" aria-hidden="true" tabindex="-1" id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
+                    <span class="ui-helper-hidden-accessible" aria-hidden="true" tabindex="-1"></span>
                     <input aria-autocomplete="list"
-                           aria-expanded="true"
-                           aria-live="assertive"
-                           aria-atomic="true"
+                           ng-focus="cm.textForAria('Enter the user who conducted the conflict check?')"
+                           tabindex="0"
+                           aria-expanded="true"                           
                            typeahead-focus-first=true
                            role="combobox"
-                           class="medium clear ui-autocomplete-input"
-                           id="txtConflictCheckBy"
-                           alt="Enter the user who conducted the conflict check?"
-                           ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" 
-                           typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-min-length='3' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+                           class="form-control medium clear ui-autocomplete-input"
+                           id="txtConflictCheckBy"                           
+                           ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}"
+                           ng-model="cm.selectedConflictCheckUser"
+                           spellcheck="true"
+                           type="text"
+                           uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"
+                           typeahead-focus-on-select ="true"
+                           typeahead-loading="conflictloadingLocations"
+                           typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")'
+                           typeahead-min-length='3'
+                           typeahead-no-results="conflictUserResults"
+                           placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}"
+                           typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html"
+                           autocomplete="off">
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                     </div>
 
                     <div class="gutter"></div>
                     <input type="text" class="calendar form-control dateWidth"
+                           tabindex="0"
                            id="cdate"
                            aria-live="assertive"
                            aria-atomic="true"
@@ -233,19 +274,28 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input aria-autocomplete="list" aria-haspopup="true"
+                        <input aria-autocomplete="list" 
+                               aria-haspopup="true"
                                aria-live="assertive"
                                aria-atomic="true"
                                typeahead-focus-first=true
                                alt="Enter the  conflicted users"
-                               role="textbox" class="medium clear ui-autocomplete-input"
+                               role="textbox" 
+                               class="form-control medium clear ui-autocomplete-input"
                                id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}"
                                ng-model="cm.conflictUsers.assignedUser"
                                ng-blur='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","on-blurr",$event,cm.conflictUsers.assignedUser)'
                                uib-typeahead="users.name    for users in cm.searchUsers($viewValue)"
                                typeahead-loading="blockLoadingLocations"
                                typeahead-no-results="blockUserResults"
-                               typeahead-on-select='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","",$event,cm.conflictUsers.assignedUser)' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" typeahead-min-length='3' autocomplete="off">
+                               typeahead-on-select='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","",$event,cm.conflictUsers.assignedUser)' 
+                               typeahead-focus-on-select ="true"
+                               style="border: 1px solid rgb(200, 200, 200); border-image: none;" 
+                               spellcheck="true" type="text" 
+                               placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" 
+                               typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" 
+                               typeahead-min-length='3' 
+                               autocomplete="off">
                         <div class="gutter">
                             <img ng-show="blockLoadingLocations"
                                  aria-live="assertive"
@@ -385,7 +435,6 @@
                                  aria-live="assertive"
                                  aria-atomic="true"
                                  title="{{cm.createContent.ButtonDeleteText}}"
-                                 
                                  alt="{{cm.createContent.ButtonDeleteText}}" src="/../../Images/icon-delete.png">
                         </div>
                     </div>
@@ -418,10 +467,10 @@
 
         <!-- Create and share matter section -->
         <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
-            <div class="sectionContent">
+            <div class="sectionContent" role="region">
                 <div class="row customDivCreate">
-                    <div class="col-sm-12 createCol">
-                        {{cm.createContent.Tab3SectionText}}
+                    <div class="col-sm-12 createCol" tabindex="-1">
+                        <span tabindex="-1" aria-hidden="true">{{cm.createContent.Tab3SectionText}}</span>
                     </div>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
@@ -434,7 +483,7 @@
                            role="checkbox"
                            aria-label="{{cm.createContent.Tab3CheckBox3Text}}"
                            type="checkbox">
-                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
+                    <label aria-hidden="true" for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
@@ -445,12 +494,12 @@
                            class="ms-ChoiceField-input ms-checkBox"
                            aria-label="{{cm.createContent.Tab3CheckBox1Text}}"
                            type="checkbox">
-                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
+                    <label  aria-hidden="true" for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
                     <input role="checkbox" aria-label="{{cm.createContent.Tab3CheckBox4Text}}" id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
+                    <label  aria-hidden="true" for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
@@ -460,11 +509,11 @@
                            ng-model="cm.includeRssFeeds"
                            ng-init="cm.includeRssFeeds"
                            class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
+                    <label  aria-hidden="true" for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
                 </div>
                 <button class="button clear"
                         
-                        aria-label="{{cm.createButton}}"
+                        aria-label="{{cm.createButton}} to create matter and notify user after successful matter creation through email"
                         type="button" id="btnCreateMatter"
                         ng-click='cm.createMatterButton($event)'
                         ng-disabled="cm.createBtnDisabled"
