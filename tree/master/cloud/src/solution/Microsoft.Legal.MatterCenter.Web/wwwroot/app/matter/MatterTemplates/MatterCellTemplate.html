@@ -18,13 +18,15 @@
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 '
           role="region"  style="width:64px;"
          ng-keydown="grid.appScope.vm.openContextMenu($event, row.entity)"
+         ng-focus='grid.appScope.vm.ariaMessage("press enter key to expand context menu")'
          tabindex="0" id="matcoltemp" aria-live="polite" >
 
-        <div class='dropdown' tabindex="0" >
+        <div class='dropdown' tabindex="0"  >
             <a tabindex="0" class='btn btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a'
                 href=''  aria-label="Context Menu" 
            title="{{row.entity.matterName}} Context Menu"
-          aria-live="assertive"     aria-atomic="true"       
+          aria-live="assertive"     aria-atomic="true"    
+                 
                 ng-click="grid.appScope.vm.checkUrlExists(row.entity)" dropdown data-toggle='dropdown'></a>
             <ul class='dropdown-menu' >
                 <div ng-if="grid.appScope.vm.dropDownMenu">

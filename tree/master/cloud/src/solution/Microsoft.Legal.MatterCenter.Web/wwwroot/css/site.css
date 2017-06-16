@@ -1657,3 +1657,21 @@ a.skip-main:focus, a.skip-main:active {
     font-size:1.0em;
     z-index:100000;
 }
+
+::-webkit-input-placeholder { /* Chrome */
+      color:  #505050 !important;
+      opacity: 1;
+    }
+    :-ms-input-placeholder { /* IE 10+ */
+      color:  #505050 !important;
+      opacity: 1;
+    }
+    ::-moz-placeholder { /* Firefox 19+ */
+      color:  #505050 !important;
+      opacity: 1;
+    }
+    :-moz-placeholder { /* Firefox 4 - 18 */
+      color:  #505050 !important;
+      opacity: 1;
+    }
+
