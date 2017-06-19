@@ -20,11 +20,13 @@
     </div>
     <div class='col-xs-4 col-sm-3 col-md-3 col-lg-2 text-right'
          tabindex="0"  ng-keydown="grid.appScope.vm.openContextMenu($event, row.entity)"
-         role="region" aria-readonly="true"
+         role="region" aria-readonly="true"   ng-focus='grid.appScope.vm.ariaMessage("press enter key to expand context menu")'
           id="doccelltemp">
         <div class='dropdown'>
             <a tabindex="0" class='btn btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a'  dropdown  
-               data-toggle='dropdown' aria-live="assertive" title="context menu"    aria-atomic="true"></a>
+               data-toggle='dropdown' aria-live="assertive" title="context menu"  
+              
+                 aria-atomic="true"></a>
             <ul style='margin:0;padding:0' class='dropdown-menu'  >
 
                 <li class='ms-ContextualMenu-item'  >
