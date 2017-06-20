@@ -1,6 +1,6 @@
 ﻿<!--//adding template-->
 <div class='row' style="margin-right:0" role="gridcell">
-    <div role="region" aria-readonly="true" ng-keydown="grid.appScope.vm.openDocumentFlyout($event)" tabindex="0" class='col-xs-8 col-sm-9 col-md-9 col-lg-10' id='documentPopup' >
+    <div role="link" aria-readonly="true" ng-keydown="grid.appScope.vm.openDocumentFlyout($event)" tabindex="0" class='col-xs-8 col-sm-9 col-md-9 col-lg-10' id='documentPopup' >
         <a documentflyout tabindex="0"  role="link"   class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' title="{{row.entity.documentName}}"
            style='text-align: left;padding-left:0' details={{row.entity}} 
           >
@@ -20,7 +20,7 @@
     </div>
     <div class='col-xs-4 col-sm-3 col-md-3 col-lg-2 text-right'
          tabindex="0"  ng-keydown="grid.appScope.vm.openContextMenu($event, row.entity)"
-         role="region" aria-readonly="true"   ng-focus='grid.appScope.vm.ariaMessage("press enter key to expand context menu")'
+         role="link" aria-readonly="true"   ng-focus='grid.appScope.vm.ariaMessage("press enter key to expand context menu")'
           id="doccelltemp">
         <div class='dropdown'>
             <a tabindex="0" class='btn btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a'  dropdown  
