@@ -76,73 +76,7 @@
                 </span>
             </div>
         </div>
-        <div class="maincontentDiv commonContent marginTop20" id="matterCenterHeader">
-            <div class="row pad0 mainHeader">
-                <div class="col-xs-5 col-sm-5 col-lg-6 pad0">
-                    <div class="row pad0 margin0">
-                        <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
-                            <div class="floatLeft" id="hamburgerConatiner"
-                                 ng-click="vm.showCloseIcon()"
-                                 ng-keydown="$event.keyCode==13?vm.showCloseIcon():null"
-                                 aria-label="{{vm.header.ImageOpenHamburgerTitle}}"
-                                 role="button"
-                                 ng-show="vm.showHamburger">
-                                <img class="headerActions pull-left" tabindex="0"
-                                     title="{{vm.header.ImageOpenHamburgerTitle}}"
-                                     data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
-                            </div>
-                            <div class="closeIcon"
-                                 id="dbExpandedMenu"
-                                 ng-if="vm.showClose"
-                                 role="button"
-                                 aria-label="{{vm.header.ImageCloseHamburgerTitle}}"
-                                 ng-keydown="$event.keyCode==27||$event.keyCode==13?vm.showHamburgerIcon():null"
-                                 ng-click="vm.showHamburgerIcon()">
-                                <img class="headerActions pull-left"
-                                     title="{{vm.header.ImageCloseHamburgerTitle}}"
-                                     data-hamburger="1" id="closeHamburger"
-                                     ng-keypress="$event.keyCode==27?vm.showHamburgerIcon():null"
-                                     alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
-                            </div>
-                            <img class="floatLeft" id="matterCenterHome" title="{{vm.header.DashboardMenuImageUpperCaption}}" alt="" src="Images/MC_homepage_Logo.png" />
-                            <div class="floatLeft" style="color:#fff" id="divMatterHome" tabindex="0" aria-label="{{vm.header.DashboardMenuImageUpperCaption}} {{vm.header.DashboardMenuImageLowerCaption}}">
-                                <div class="upperSubText">{{vm.header.DashboardMenuImageUpperCaption}}</div>
-                                <div class="lowerSubText">{{vm.header.DashboardMenuImageLowerCaption}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-lg-5 mainSearch pad0">
-                    <input id="searchText" type="text" placeholder="{{vm.header.DashboardHeaderSearchPlaceholderText}}" my-enter="vm.mainHeaderClick()" ng-model="vm.mainheadersearch" />
-                    <div id="searchLink">
-                        <img class="searchIcon" title="{{vm.header.DashboardSearchIconTitle}}"
-                             alt="{{vm.header.DashboardSearchIconTitle}}" src="Images/search-15x15-666.png"
-                             ng-click="vm.mainHeaderClick()" />
-                    </div>
-                </div>
-                <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout" ng-keydown="$event.keyCode==27?vm.showHamburgerIcon():null">
-                    <div class="cur-pointer headerLinks" id="searchMatterTab">
-                        <span title="{{vm.header.Menu1Option2Text}}" id="menuMatterDashboardItem"
-                              ng-keydown="$event.keyCode==13?vm.navigateUrl('section=1'):null"
-                              ng-click="vm.navigateUrl('section=1')" aria-label="{{vm.header.Menu1Option2Text}} use tab to move to next item">
-                            {{vm.header.Menu1Option2Text}}
-                        </span>
-                    </div>
-                    <div class="cur-pointer headerLinks" id="searchDocumentTab">
-                        <span aria-label="{{vm.header.Menu1Option3Text}} use tab to move to next item"
-                              id="menuDocumentDashboardItem"
-                              ng-keydown="$event.keyCode==32?vm.navigateUrl('section=2'):null" title="{{vm.header.Menu1Option3Text}}" ng-click="vm.navigateUrl('section=2')">{{vm.header.Menu1Option3Text}}</span>
-                    </div>
-                    <div class="headerLinks">
-                        <a id="settingsLink">
-                            <span aria-label="{{vm.header.HamburgerMenuOption3Text}} use shift + tab to move to next item"
-                                  id="menuSettingsDashboardItem"
-                                  title="{{vm.header.HamburgerMenuOption3Text}}" ng-keydown="$event.keyCode==13?vm.navigateUrl(vm.header.HamburgerMenuOption3Text):null" ng-click="vm.navigateUrl(vm.header.HamburgerMenuOption3Text)">{{vm.header.HamburgerMenuOption3Text}}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="col-xs-2 col-sm-2 pad0 width25">
             <div class="pull-right">
                 <div  style="display:inline-block">
@@ -213,6 +147,74 @@
         </div>
     </div>
 
+
+    <div class="maincontentDiv commonContent marginTop20" id="matterCenterHeader">
+        <div class="row pad0 mainHeader">
+            <div class="col-xs-5 col-sm-5 col-lg-6 pad0">
+                <div class="row pad0 margin0">
+                    <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
+                        <div class="floatLeft" id="hamburgerConatiner"
+                             ng-click="vm.showCloseIcon()"
+                             ng-keydown="$event.keyCode==13?vm.showCloseIcon():null"
+                             aria-label="{{vm.header.ImageOpenHamburgerTitle}}"
+                             role="button"
+                             ng-show="vm.showHamburger">
+                            <img class="headerActions pull-left" tabindex="0"
+                                 title="{{vm.header.ImageOpenHamburgerTitle}}"
+                                 data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
+                        </div>
+                        <div class="closeIcon"
+                             id="dbExpandedMenu"
+                             ng-if="vm.showClose"
+                             role="button"
+                             aria-label="{{vm.header.ImageCloseHamburgerTitle}}"
+                             ng-keydown="$event.keyCode==27||$event.keyCode==13?vm.showHamburgerIcon():null"
+                             ng-click="vm.showHamburgerIcon()">
+                            <img class="headerActions pull-left"
+                                 title="{{vm.header.ImageCloseHamburgerTitle}}"
+                                 data-hamburger="1" id="closeHamburger"
+                                 ng-keypress="$event.keyCode==27?vm.showHamburgerIcon():null"
+                                 alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
+                        </div>
+                        <img class="floatLeft" id="matterCenterHome" title="{{vm.header.DashboardMenuImageUpperCaption}}" alt="" src="Images/MC_homepage_Logo.png" />
+                        <div class="floatLeft" style="color:#fff" id="divMatterHome" tabindex="0" aria-label="{{vm.header.DashboardMenuImageUpperCaption}} {{vm.header.DashboardMenuImageLowerCaption}}">
+                            <div class="upperSubText">{{vm.header.DashboardMenuImageUpperCaption}}</div>
+                            <div class="lowerSubText">{{vm.header.DashboardMenuImageLowerCaption}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-lg-5 mainSearch pad0">
+                <input id="searchText" type="text" placeholder="{{vm.header.DashboardHeaderSearchPlaceholderText}}" my-enter="vm.mainHeaderClick()" ng-model="vm.mainheadersearch" />
+                <div id="searchLink">
+                    <img class="searchIcon" title="{{vm.header.DashboardSearchIconTitle}}"
+                         alt="{{vm.header.DashboardSearchIconTitle}}" src="Images/search-15x15-666.png"
+                         ng-click="vm.mainHeaderClick()" />
+                </div>
+            </div>
+            <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout" ng-keydown="$event.keyCode==27?vm.showHamburgerIcon():null">
+                <div class="cur-pointer headerLinks" id="searchMatterTab">
+                    <span title="{{vm.header.Menu1Option2Text}}" id="menuMatterDashboardItem"
+                          ng-keydown="$event.keyCode==13?vm.navigateUrl('section=1'):null"
+                          ng-click="vm.navigateUrl('section=1')" aria-label="{{vm.header.Menu1Option2Text}} use tab to move to next item">
+                        {{vm.header.Menu1Option2Text}}
+                    </span>
+                </div>
+                <div class="cur-pointer headerLinks" id="searchDocumentTab">
+                    <span aria-label="{{vm.header.Menu1Option3Text}} use tab to move to next item"
+                          id="menuDocumentDashboardItem"
+                          ng-keydown="$event.keyCode==32?vm.navigateUrl('section=2'):null" title="{{vm.header.Menu1Option3Text}}" ng-click="vm.navigateUrl('section=2')">{{vm.header.Menu1Option3Text}}</span>
+                </div>
+                <div class="headerLinks">
+                    <a id="settingsLink">
+                        <span aria-label="{{vm.header.HamburgerMenuOption3Text}} use shift + tab to move to next item"
+                              id="menuSettingsDashboardItem"
+                              title="{{vm.header.HamburgerMenuOption3Text}}" ng-keydown="$event.keyCode==13?vm.navigateUrl(vm.header.HamburgerMenuOption3Text):null" ng-click="vm.navigateUrl(vm.header.HamburgerMenuOption3Text)">{{vm.header.HamburgerMenuOption3Text}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="matterCenterHeaderBackground" role="button"
          ng-if="vm.showHeaderBackground"
