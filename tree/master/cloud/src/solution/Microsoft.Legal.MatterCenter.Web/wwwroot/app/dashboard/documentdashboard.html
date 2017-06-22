@@ -1,7 +1,15 @@
 ﻿<style>
     .commonContent {
         display: block !important;
-    }    
+    }
+
+    .nav > li > a:focus {
+        border: 1px dotted black;
+    }
+
+    .navDiv:focus{
+         border: 1px dotted black;
+    }
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
@@ -190,7 +198,7 @@
 
             </div>
             <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdashboarddrop($event)'
-                 aria-atomic="true"
+                 aria-atomic="true"  style="z-index:10"
                   ng-keydown="$event.keyCode==27?vm.clientdrop?vm.hideinnerdashboarddrop($event):vm.showdownward($event):null"
                  aria-live="assertive"
                  ng-if="vm.searchdrop" role="region">
@@ -283,6 +291,7 @@
                                         <div class="filterOkButton">
                                             <button role="button"
                                                     tabindex="0"
+                                                    class="dashboardSearch dashboardCancelBtn"
                                                     aria-atomic="true"
                                                     aria-live="assertive"
                                                     aria-label="Cancel button to not filter client"
@@ -436,11 +445,11 @@
                            ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a>
                     </li>
                 </ul>
-                <span class="showDocDashboard displayDocTabs" ng-click="vm.showDocTabs($event)">...</span>
+                <span class="showDocDashboard displayDocTabs"  aria-label="click this ellipses to show more tabs" ng-keydown="$event.keyCode==13?vm.showDocTabs($event):null"  ng-click="vm.showDocTabs($event)">...</span>
                 <div class="switchHideTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
-                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount)">{{vm.documentDashboardConfigs.Tab1HeaderText}}</div>
-                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">{{vm.documentDashboardConfigs.Tab2HeaderText}}</div>
-                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">{{vm.documentDashboardConfigs.Tab3HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount):null"    ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount)">{{vm.documentDashboardConfigs.Tab1HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount):null"    ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">{{vm.documentDashboardConfigs.Tab2HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount):(!$event.shiftKey && $event.keyCode==9) ?vm.disableNavTab():null"    ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">{{vm.documentDashboardConfigs.Tab3HeaderText}}</div>
                 </div>
 
 
@@ -485,7 +494,7 @@
                         </div>
                         <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-8 col-md-4"
                              ng-if="vm.sortbydrop" ng-keydown="$event.keyCode==27?vm.showsortby($event):null">
-                            <ul role="menu">
+                            <ul role="menu" style="margin:0 auto; display:table; padding:10px">
                                 <li role="menuitem" 
                                     id="menuSortBy"
                                     aria-label="{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}"

@@ -2,6 +2,14 @@
     .commonContent {
         display: block !important;
     }
+
+    .nav>li>a:focus {
+    border: 1px dotted black;
+}
+
+    .navDiv:focus{
+         border: 1px dotted black;
+    }
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
@@ -87,7 +95,7 @@
             <div class="col-xs-12">
             </div>
             <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdrop($event)' ng-show="vm.searchdrop" id="dashboardDrop" 
-                 ng-keydown="$event.keyCode==27?vm.clientdrop?vm.hideinnerdrop($event):vm.showdownward($event):null">
+                 ng-keydown="$event.keyCode==27?vm.clientdrop?vm.hideinnerdrop($event):vm.showdownward($event):null" style="z-index:10">
                 <div class="col-xs-12 dashboarddropinner">
                     <!--Start Client Selection Dropdown-->
                     <div ng-keydown="$event.keyCode==27?vm.clientdrop?vm.hideinnerdrop($event):vm.showdownward($event):null">
@@ -177,7 +185,7 @@
                                             <div class="filterOkButton">
                                                 <button role="button"
                                                         tabindex="0"
-                                                        class="dashboardSearch"                                                       
+                                                        class="dashboardSearch dashboardCancelBtn"                                                       
                                                         aria-label="Cancel button to not filter client"
                                                         ng-click="vm.filterSearchCancel(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText)">
                                                     {{vm.matterDashboardConfigs.AdvSearchbuttonCancelText}}
@@ -277,7 +285,7 @@
                                             <div class="filterOkButton">
                                                 <button role="button"
                                                         tabindex="0"
-                                                        class="dashboardSearch"                                                        
+                                                        class="dashboardSearch dashboardCancelBtn"                                                        
                                                         aria-label="Cancel button to not filter practice group"
                                                         ng-click="vm.filterSearchCancel( vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText)">
                                                     {{vm.matterDashboardConfigs.AdvSearchbuttonCancelText}}
@@ -393,7 +401,7 @@
                                                         tabindex="0"
                                                         aria-atomic="true"
                                                         aria-live="assertive"
-                                                        class="dashboardSearch"
+                                                        class="dashboardSearch dashboardCancelBtn"
                                                         aria-label="Click Cancel button to not filter area of law"
                                                         ng-click="vm.filterSearchCancel( vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText)">
                                                     {{vm.matterDashboardConfigs.AdvSearchbuttonCancelText}}
@@ -495,7 +503,7 @@
                                             <div class="filterOkButton" aria-hidden="true">
                                                 <button role="button"
                                                         tabindex="0"
-                                                        class="dashboardSearch"
+                                                        class="dashboardSearch dashboardCancelBtn"
                                                         aria-atomic="true"
                                                         aria-live="assertive"
                                                         aria-label="Cancel button to not filter sub area of law"
@@ -618,11 +626,11 @@
                     </li>
                 </ul>
             </div>
-            <span class="showDocDashboard displayMatterTabs" ng-click="vm.showDocTabs($event)">...</span>
+            <span class="showDocDashboard displayMatterTabs" aria-label="click this ellipses to show more tabs" ng-keydown="$event.keyCode==13?vm.showDocTabs($event):null" ng-click="vm.showDocTabs($event)">...</span>
             <div class="switchHideMatterTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
-                <div class="navDiv" ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab1HeaderText,vm.myMatterCount)">{{vm.matterDashboardConfigs.Tab1HeaderText}}</div>
-                <div class="navDiv" ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab2HeaderText,vm.allMatterCount)">{{vm.matterDashboardConfigs.Tab2HeaderText}}</div>
-                <div class="navDiv" ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab3HeaderText,vm.pinMatterCount)">{{vm.matterDashboardConfigs.Tab3HeaderText}}</div>
+                <div class="navDiv " ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText" tabindex="0"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.matterDashboardConfigs.Tab1HeaderText,vm.myMatterCount):null" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab1HeaderText,vm.myMatterCount)">{{vm.matterDashboardConfigs.Tab1HeaderText}}</div>
+                <div class="navDiv " ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText"  tabindex="0"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.matterDashboardConfigs.Tab2HeaderText,vm.allMatterCount):null" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab2HeaderText,vm.allMatterCount)">{{vm.matterDashboardConfigs.Tab2HeaderText}}</div>
+                <div class="navDiv " ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText"  tabindex="0"  ng-keydown="$event.keyCode==13?vm.showSelectedTabs(vm.matterDashboardConfigs.Tab3HeaderText,vm.pinMatterCount):(!$event.shiftKey && $event.keyCode==9) ?vm.disableNavTab():null" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab3HeaderText,vm.pinMatterCount)">{{vm.matterDashboardConfigs.Tab3HeaderText}}</div>
             </div>
             <div class="col-xs-12 mainsort">
                 <div class="col-sm-offset-6 col-sm-6 sortbymatters" id="sortColumns">
@@ -649,7 +657,7 @@
                     
                     <div class="col-xs-offset-7 col-xs-5 col-sm-offset-8 col-sm-3 col-md-offset-9 col-sm-3"
                          ng-show="vm.sortbydrop" ng-keydown="$event.keyCode==27?vm.showsortby($event):null">
-                        <ul>
+                        <ul style="margin:0 auto; display:table; padding:10px">
                             <li
                                 id="menuSortBy"
                                 ng-keydown="$event.keyCode==13?vm.sortby('Relevant','None'):null"
@@ -681,7 +689,7 @@
                     <div class="tab-pane active" id="mattersGrid">
 
                         <div class="col-xs-12 pad0 padtop5" ng-if="vm.divuigrid">
-                            <div class="" id="grid1" ui-grid="vm.matterGridOptions" role="grid" tabindex="0" aria-sort="ascending" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
+                            <div class="" id="grid1" ui-grid="vm.matterGridOptions" role="grid" tabindex="0"  ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
                         </div>
                         <div class="col-xs-12 pad0 padtop5 text-center"
                              aria-label="{{vm.documentDashboardConfigs.NoSearchResultMsgText}}"

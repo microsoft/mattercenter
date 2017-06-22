@@ -2439,6 +2439,11 @@
                     vm.showInnerNav = false;
                 }
             }
+
+            vm.disableNavTab = function () {
+                vm.showNavTab = false;
+                vm.showInnerNav = true;;
+            }
             //#endregion
 
             //#region showing the hidden tabs in responsive
@@ -2453,6 +2458,8 @@
                 } else {
                     vm.getMatterPinned();
                 }
+                vm.showNavTab = false;
+                vm.showInnerNav = true;;
             }
             //#endregion
 
@@ -2554,7 +2561,7 @@
             vm.ariaMessage = function (message) {
                 jQuery.a11yfy.assertiveAnnounce(message);                
             }
-
+           
             //#region for additional matter properties
             vm.addtionalPropertiesAvaialbleForMatter = false;
             //#region function to get content type name from the term
@@ -2715,6 +2722,6 @@
             }
             return filteredresult;
         };
-    })
-    //#endregion
+    });
+    //#endregion   
 })();
