@@ -897,6 +897,9 @@ textarea {
     font-weight: 600;
     font-family: Segoe UI;
 }
+.dashboardCancelBtn{
+    margin-left:10px;
+}
 
 .clientdropinner {
     position: absolute;
@@ -1673,5 +1676,9 @@ a.skip-main:focus, a.skip-main:active {
     :-moz-placeholder { /* Firefox 4 - 18 */
       color:  #505050 !important;
       opacity: 1;
+    }
+
+    .showDocDashboard:focus{
+        border:1ps dotted black;
     }
 

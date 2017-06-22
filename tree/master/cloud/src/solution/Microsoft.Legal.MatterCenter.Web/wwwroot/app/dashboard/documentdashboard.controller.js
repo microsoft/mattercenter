@@ -1652,7 +1652,10 @@
                 }
             }
             //#endregion
-
+            vm.disableNavTab = function () {
+                vm.showNavTab = false;
+                vm.showInnerNav = true;;
+            }
             //#region To show selected tab
             vm.showSelectedTabs = function (name, count) {
                 vm.selectedTab = name;
@@ -1665,6 +1668,8 @@
                 } else {
                     vm.getPinnedDocuments();
                 }
+                vm.showNavTab = false;
+                vm.showInnerNav = true;;
             }
             //#endregion
             vm.ariaMessage = function (message) {
