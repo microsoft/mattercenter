@@ -77,8 +77,7 @@ Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $p
 Import-Module Azure -ErrorAction SilentlyContinue
 #Add-AzureAccount
 $subsc = Login-AzureRmAccount
-$global:TenantName = $subsc.Context.Tenant.Domain
-#$Tenant_id = $subsc.Context.Tenant.TenantId
+$global:TenantName = $subsc.Context.Tenant.Directory
 
 try {
  #   [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.8")
