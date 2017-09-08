@@ -471,7 +471,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
                 
                 string originalName = string.Empty;
-                bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
+                bool allowContentCheck = false;
+                bool.TryParse(Request.Form["AllowContentCheck"], out allowContentCheck);
                 Int16 isOverwrite = 3;     
                 //Input validation           
                 #region Error Checking                
