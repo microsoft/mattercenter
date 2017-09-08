@@ -273,9 +273,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         //Added MatterDefault Content type to part of Matter Search results.
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterDefaultContentType.ToLower())
                         {
+                            // due to a change in search schema, this is failing with a null reference exception unless a managed property is mapped manually in search settings
+                            // for more details see https://github.com/Microsoft/mattercenter/issues/759
+                            // check for null until this mapping issue is addressed
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterDefaultContentType").Key,
-                                searchResult[key].ToString());
+                                searchResult[key]?.ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToLower())
