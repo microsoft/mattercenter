@@ -50,6 +50,7 @@ Please find links to our additional resources:
 
 
 #Questions, Issues and Feedback
+
 Having trouble with Matter Center? Check-out [Issues] (https://github.com/Microsoft/mattercenter/issues) and if you don't see your issue, please open an [issue in GitHub](https://github.com/Microsoft/mattercenter/issues/new).
 
 Have feedback? Notice a bug? Submit through the Matter Center page on [UserVoice](http://mattercenter.uservoice.com).
@@ -85,6 +86,7 @@ There are currently the following [committers](https://github.com/Microsoft/matt
  
 1. Amitabh Mukherjee, [Amitabh.Mukherjee@microsoft.com](mailto:amitabhm@microsoft.com)
 2. Wilson Reddy Gajarla, [wilg@microsoft.com](mailto:wilg@microsoft.com)
+3. Aaron Isom, [aisom@microsoft.com](mailto:aisom@microsoft.com)
 
 Additional committers will be added later based on interest and deep technical involvement with the project.
 
