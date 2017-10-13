@@ -81,7 +81,7 @@ In addition to the priorities list, we bring Matter Center to GitHub with a weal
 
 We have already pushed these ideas to [UserVoice](http://mattercenter.uservoice.com) as well as to the [Issues list](https://github.com/Microsoft/mattercenter/issues). We encourage you to look to these two places.  
 
-#Committers
+# Committers
 There are currently the following [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
  
 1. Aaron Isom, [aisom@microsoft.com](mailto:aisom@microsoft.com)
