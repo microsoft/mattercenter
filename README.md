@@ -82,7 +82,7 @@ We have already pushed these ideas to [UserVoice](https://mattercenter.uservoice
 # Committers
 There are currently the following [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
  
-1. Aaron Isom, [aisom@microsoft.com](mailto:aisom@microsoft.com)
+1. TBD
 
 Additional committers will be added later based on interest and deep technical involvement with the project.
 
